@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="1280" viewBox="0 0 1280 1280" role="img" aria-labelledby="title desc">
+  <title id="title">FridgeO 로고</title>
+  <desc id="desc">초록색 원형 냉장고와 잎사귀, 흰색 문과 빨간 손잡이</desc>
+  <defs>
+    <linearGradient id="green" x1="280" y1="960" x2="930" y2="330" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#527e2d"/>
+      <stop offset=".55" stop-color="#57852f"/>
+      <stop offset="1" stop-color="#507b2b"/>
+    </linearGradient>
+    <linearGradient id="leaf" x1="744" y1="360" x2="927" y2="204" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#81a44e"/>
+      <stop offset="1" stop-color="#91af5e"/>
+    </linearGradient>
+    <linearGradient id="door" x1="714" y1="670" x2="895" y2="670" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#f8f7f4"/>
+      <stop offset=".7" stop-color="#f3f2f0"/>
+      <stop offset="1" stop-color="#faf9f6"/>
+    </linearGradient>
+    <linearGradient id="handle" x1="830" y1="665" x2="868" y2="678" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#ed706d"/>
+      <stop offset="1" stop-color="#dd635f"/>
+    </linearGradient>
+  </defs>
+  <path fill="url(#green)" fill-rule="evenodd" d="M727 314C660 292 582 293 516 315C359 366 255 502 255 671C255 878 420 1046 626 1046C833 1046 999 878 999 671C999 551 940 440 852 375C796 365 757 377 725 409C717 419 704 411 711 400C729 376 728 343 727 314ZM713 471C685 453 655 443 624 443C516 443 432 543 432 670C432 797 517 897 624 897C656 897 686 887 714 869C697 858 689 840 689 816V524C689 502 697 484 713 471Z"/>
+  <path fill="url(#leaf)" d="M738 365C733 308 753 259 792 232C833 204 881 219 934 198C942 251 924 308 887 338C852 365 805 361 760 368C780 327 814 293 854 271C805 285 765 321 738 365Z"/>
+  <path fill="url(#door)" d="M751 478L852 440C877 430 895 444 895 469V873C895 898 879 911 856 902L749 861C726 853 714 840 714 817V524C714 502 726 487 751 478Z"/>
+  <rect x="828.5" y="604.5" width="40" height="127" rx="20" fill="url(#handle)"/>
+</svg>
