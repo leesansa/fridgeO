@@ -47,7 +47,7 @@ const menus = [
 
 const Fridge = () => {
   const [keyword, setKeyword] = useState("");
-  const [sortBy, setSortBy] = useState("storage");
+  const [sortBy, setSortBy] = useState("expiry");
   const [viewMode, setViewMode] = useState("list");
 
   // 현재 대한민국 날짜
