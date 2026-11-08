@@ -3,7 +3,9 @@
 const Fridge = () => {
     return <><Box/></>
 }
-export default Fridge; */
+export default Fridge;
+
+*/
 
 import { useEffect, useState } from "react";
 import { Link, NavLink } from "react-router";
