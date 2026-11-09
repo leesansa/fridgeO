@@ -10,12 +10,10 @@ export default Fridge;
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router";
 
+import Header from "../components/Header";
 import Box from "../components/fridge/Box";
 import List from "../components/fridge/List";
 
-import logo from "../assets/Logo_FridgeO.svg";
-import backIcon from "../assets/lucide_chevron_left_icon.png";
-import searchIcon from "../assets/lucide_search_icon.png";
 import plusIcon from "../assets/lucide_circle_plus_icon.png";
 
 import "../styles/fridge.css";
@@ -67,27 +65,7 @@ const Fridge = () => {
 
   return (
     <div className="fridge-page">
-      <header className="fridge-header">
-        <Link to="/" className="fridge-back" aria-label="홈으로">
-          <img src={backIcon} alt="" />
-        </Link>
-
-        <Link to="/" className="fridge-logo" aria-label="FridgeO 홈">
-          <img src={logo} alt="FridgeO" />
-        </Link>
-
-        <label className="fridge-search">
-          <img src={searchIcon} alt="" />
-
-          <input
-            type="search"
-            aria-label="냉장고 안 재료 검색"
-            placeholder="냉장고 안 재료를 검색해보세요"
-            value={keyword}
-            onChange={(event) => setKeyword(event.target.value)}
-          />
-        </label>
-      </header>
+      <Header backTo="/" value={keyword} onChange={setKeyword} />
 
       <main className="fridge-main">
         <h1 className="fridge-sr-only">내 냉장고</h1>

@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import { useNavigate, useOutletContext } from "react-router";
 import "../styles/MainPage.css";
+import "../vendor/lucian-icons/bell.js";
 import FridgeAlerts from "../components/MainPage/FridgeAlerts.jsx";
 import Condiments from "../components/MainPage/Condiments.jsx";
 import Recommends from "../components/MainPage/Recommends.jsx";
