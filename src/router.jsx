@@ -5,7 +5,7 @@ import Fridge from "./pages/Fridge";
 import Ingredient from "./pages/Ingredient";
 import RecipeList from "./pages/RecipeList";
 import RecipeDetail from "./pages/RecipeDetail";
-import MyPage from "./pages/Mypage";
+import MyPage from "./pages/MyPage";
 
 const router = createBrowserRouter([
   {
