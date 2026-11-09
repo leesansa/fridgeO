@@ -23,7 +23,7 @@ dist-ssr
 *.sln
 *.sw?
 
-# lucian-icons 스킬과 이 스킬로 만든 파일 (Git에 올리지 않음)
-.agents/
-skills-lock.json
-src/vendor/lucian-icons/
+# # lucian-icons 스킬과 이 스킬로 만든 파일 (Git에 올리지 않음)
+# .agents/
+# skills-lock.json
+# src/vendor/lucian-icons/

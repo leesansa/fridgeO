@@ -1,0 +1,7047 @@
+{
+  "version": "2.0.13",
+  "base": "https://lucianlabs.dev/icons/",
+  "runtimeSha256": "282c709092ed2028539c9a66e976312fae967feffa6ffdc81dc87d28edc58783",
+  "categories": {
+    "files": {
+      "ko": "파일·문서",
+      "en": "Files",
+      "count": 24
+    },
+    "communication": {
+      "ko": "소통",
+      "en": "Communication",
+      "count": 15
+    },
+    "security": {
+      "ko": "보안",
+      "en": "Security",
+      "count": 8
+    },
+    "navigation": {
+      "ko": "탐색·기본",
+      "en": "Interface",
+      "count": 29
+    },
+    "editing": {
+      "ko": "편집·도구",
+      "en": "Editing",
+      "count": 16
+    },
+    "media": {
+      "ko": "미디어",
+      "en": "Media",
+      "count": 18
+    },
+    "devices": {
+      "ko": "기기",
+      "en": "Devices",
+      "count": 20
+    },
+    "data": {
+      "ko": "데이터·개발",
+      "en": "Data & Code",
+      "count": 12
+    },
+    "commerce": {
+      "ko": "쇼핑·금융",
+      "en": "Commerce",
+      "count": 15
+    },
+    "people": {
+      "ko": "사람",
+      "en": "People",
+      "count": 11
+    },
+    "travel": {
+      "ko": "이동·장소",
+      "en": "Travel",
+      "count": 15
+    },
+    "nature": {
+      "ko": "날씨·자연",
+      "en": "Nature",
+      "count": 13
+    },
+    "lifestyle": {
+      "ko": "생활",
+      "en": "Lifestyle",
+      "count": 15
+    }
+  },
+  "icons": [
+    {
+      "id": "trash",
+      "version": "2.0.13",
+      "order": 1,
+      "name": {
+        "ko": "쓰레기통",
+        "en": "Trash"
+      },
+      "keywords": [
+        "삭제",
+        "휴지통",
+        "지우기",
+        "버리기",
+        "delete",
+        "remove",
+        "bin",
+        "discard"
+      ],
+      "category": "files",
+      "description": {
+        "ko": "오른쪽 경첩을 축으로 뚜껑이 튀어 오르고, 닫힐 때 통이 살짝 눌립니다.",
+        "en": "The lid springs up on its right hinge and the can settles when it shuts."
+      },
+      "color": "#F05465",
+      "states": [
+        "closed",
+        "open"
+      ],
+      "defaultState": "closed",
+      "stateLabels": {
+        "ko": {
+          "closed": "닫힘",
+          "open": "열림"
+        },
+        "en": {
+          "closed": "Closed",
+          "open": "Open"
+        }
+      },
+      "progress": false,
+      "sha256": "91266164273c91268952cd44de93946e334413fe55e3a713db78cc210a03077c",
+      "codePath": "modules/trash.js"
+    },
+    {
+      "id": "folder",
+      "version": "2.0.13",
+      "order": 2,
+      "name": {
+        "ko": "폴더",
+        "en": "Folder"
+      },
+      "keywords": [
+        "파일",
+        "디렉터리",
+        "열기",
+        "프로젝트",
+        "directory",
+        "files",
+        "project",
+        "open"
+      ],
+      "category": "files",
+      "description": {
+        "ko": "열면 앞판이 앞으로 젖혀지고, 안에 든 문서 한 장이 살짝 올라옵니다.",
+        "en": "Opening tips the front panel forward and the document inside rises a little."
+      },
+      "color": "#F4AF2D",
+      "states": [
+        "closed",
+        "open"
+      ],
+      "defaultState": "closed",
+      "stateLabels": {
+        "ko": {
+          "closed": "닫힘",
+          "open": "열림"
+        },
+        "en": {
+          "closed": "Closed",
+          "open": "Open"
+        }
+      },
+      "progress": false,
+      "sha256": "05e039809c69a0e3bf7723c79df5e59e24cee197766bc459ccdbf6bef8230db2",
+      "codePath": "modules/folder.js"
+    },
+    {
+      "id": "download",
+      "version": "2.0.13",
+      "order": 3,
+      "name": {
+        "ko": "다운로드",
+        "en": "Download"
+      },
+      "keywords": [
+        "내려받기",
+        "저장",
+        "진행",
+        "완료",
+        "실패",
+        "download",
+        "save",
+        "progress",
+        "success",
+        "error"
+      ],
+      "category": "files",
+      "description": {
+        "ko": "화살표 몸통이 실제 진행률만큼 차오르고, 완료되면 체크가 그려집니다.",
+        "en": "The arrow shaft fills with measured progress, then a check draws in on success."
+      },
+      "color": "#43B966",
+      "states": [
+        "idle",
+        "progress",
+        "success",
+        "error"
+      ],
+      "defaultState": "idle",
+      "stateLabels": {
+        "ko": {
+          "idle": "대기",
+          "progress": "진행 중",
+          "success": "완료",
+          "error": "실패"
+        },
+        "en": {
+          "idle": "Idle",
+          "progress": "In progress",
+          "success": "Done",
+          "error": "Failed"
+        }
+      },
+      "progress": true,
+      "sha256": "c684d75d30185b71bceeda02107951ffa34636ec2fe398ecb011328ef5b8fb18",
+      "codePath": "modules/download.js"
+    },
+    {
+      "id": "upload",
+      "version": "2.0.13",
+      "order": 4,
+      "name": {
+        "ko": "업로드",
+        "en": "Upload"
+      },
+      "keywords": [
+        "올리기",
+        "전송",
+        "진행",
+        "완료",
+        "실패",
+        "upload",
+        "send",
+        "progress",
+        "success",
+        "error"
+      ],
+      "category": "files",
+      "description": {
+        "ko": "화살표가 아래에서 위로 차오르며 올라가고, 끝나면 체크나 경고로 바뀝니다.",
+        "en": "The arrow fills from the tray upward and resolves to a check or a warning."
+      },
+      "color": "#3093EC",
+      "states": [
+        "idle",
+        "progress",
+        "success",
+        "error"
+      ],
+      "defaultState": "idle",
+      "stateLabels": {
+        "ko": {
+          "idle": "대기",
+          "progress": "진행 중",
+          "success": "완료",
+          "error": "실패"
+        },
+        "en": {
+          "idle": "Idle",
+          "progress": "In progress",
+          "success": "Done",
+          "error": "Failed"
+        }
+      },
+      "progress": true,
+      "sha256": "539b926aed7406dec35ccc307e7e2986b61f1a87a965f41ef8e4b799fe0c46d8",
+      "codePath": "modules/upload.js"
+    },
+    {
+      "id": "document",
+      "version": "2.0.13",
+      "order": 5,
+      "name": {
+        "ko": "문서",
+        "en": "Document"
+      },
+      "keywords": [
+        "문서",
+        "파일",
+        "페이지",
+        "글",
+        "document",
+        "file",
+        "page",
+        "text"
+      ],
+      "category": "files",
+      "description": {
+        "ko": "종이가 살짝 들리고, 아래 줄부터 지워졌다가 위에서부터 다시 타이핑됩니다.",
+        "en": "The page lifts; the lines backspace from the bottom and type back in from the top."
+      },
+      "color": "#3093EC",
+      "states": [],
+      "progress": false,
+      "sha256": "0412828e4875b84c1499b99e6ee7e322e7a4f1ed4a4a8dada174d551148fcebe",
+      "codePath": "modules/document.js"
+    },
+    {
+      "id": "clipboard",
+      "version": "2.0.13",
+      "order": 6,
+      "name": {
+        "ko": "클립보드",
+        "en": "Clipboard"
+      },
+      "keywords": [
+        "클립보드",
+        "할일",
+        "체크",
+        "완료",
+        "붙여넣기",
+        "clipboard",
+        "task",
+        "checklist",
+        "done",
+        "paste"
+      ],
+      "category": "files",
+      "description": {
+        "ko": "집게가 한 번 눌리고, 완료 상태에서는 목록 대신 체크가 그려집니다.",
+        "en": "The clip clamps down; in the done state a check replaces the list."
+      },
+      "color": "#24B6A1",
+      "states": [
+        "idle",
+        "done"
+      ],
+      "defaultState": "idle",
+      "stateLabels": {
+        "ko": {
+          "idle": "목록",
+          "done": "완료"
+        },
+        "en": {
+          "idle": "List",
+          "done": "Done"
+        }
+      },
+      "progress": false,
+      "sha256": "129bf5304506cbf25b7521e7c6df3795fd2e216189fbe0c60a2c82968af2fcfa",
+      "codePath": "modules/clipboard.js"
+    },
+    {
+      "id": "archive",
+      "version": "2.0.13",
+      "order": 7,
+      "name": {
+        "ko": "보관함",
+        "en": "Archive"
+      },
+      "keywords": [
+        "보관",
+        "상자",
+        "저장",
+        "정리",
+        "archive",
+        "storage",
+        "box",
+        "store"
+      ],
+      "category": "files",
+      "description": {
+        "ko": "뚜껑이 한쪽으로 들리며 열리고, 닫힐 때 상자가 받아냅니다.",
+        "en": "The lid lifts on one side; the box catches it as it closes."
+      },
+      "color": "#F48D2F",
+      "states": [
+        "closed",
+        "open"
+      ],
+      "defaultState": "closed",
+      "stateLabels": {
+        "ko": {
+          "closed": "닫힘",
+          "open": "열림"
+        },
+        "en": {
+          "closed": "Closed",
+          "open": "Open"
+        }
+      },
+      "progress": false,
+      "sha256": "60878457fed4fce9af6195f5c2dde710891551bdc564ce449bb770ef77f772fd",
+      "codePath": "modules/archive.js"
+    },
+    {
+      "id": "inbox",
+      "version": "2.0.13",
+      "order": 8,
+      "name": {
+        "ko": "받은편지함",
+        "en": "Inbox"
+      },
+      "keywords": [
+        "수신함",
+        "트레이",
+        "받은편지",
+        "새메일",
+        "inbox",
+        "tray",
+        "received",
+        "mail"
+      ],
+      "category": "files",
+      "description": {
+        "ko": "새 문서가 위에서 떨어져 트레이에 꽂히고, 트레이가 무게를 받아 살짝 내려앉습니다.",
+        "en": "A new document drops in and tucks into the tray, which dips under its weight."
+      },
+      "color": "#26B7D3",
+      "states": [
+        "empty",
+        "received"
+      ],
+      "defaultState": "empty",
+      "stateLabels": {
+        "ko": {
+          "empty": "비어 있음",
+          "received": "새 항목"
+        },
+        "en": {
+          "empty": "Empty",
+          "received": "New item"
+        }
+      },
+      "progress": false,
+      "sha256": "38693a13de4388d8f24589cbfccc6193eb10f8942f4d940a842f46674fdb134b",
+      "codePath": "modules/inbox.js"
+    },
+    {
+      "id": "copy",
+      "version": "2.0.13",
+      "order": 9,
+      "name": {
+        "ko": "복사",
+        "en": "Copy"
+      },
+      "keywords": [
+        "복사",
+        "사본",
+        "복제",
+        "붙여넣기",
+        "copy",
+        "duplicate",
+        "clone",
+        "paste"
+      ],
+      "category": "files",
+      "description": {
+        "ko": "두 장이 벌어졌다 겹치고, 복사됨 상태에서는 앞장에 체크가 그려집니다.",
+        "en": "The two sheets part and rejoin; the copied state draws a check on the front sheet."
+      },
+      "color": "#5D73EA",
+      "states": [
+        "idle",
+        "copied"
+      ],
+      "defaultState": "idle",
+      "stateLabels": {
+        "ko": {
+          "idle": "대기",
+          "copied": "복사됨"
+        },
+        "en": {
+          "idle": "Idle",
+          "copied": "Copied"
+        }
+      },
+      "progress": false,
+      "sha256": "2100c2c0dcc3605d23170deb715b34d94a52ccc21ab09facc2e48038e099f86a",
+      "codePath": "modules/copy.js"
+    },
+    {
+      "id": "attachment",
+      "version": "2.0.13",
+      "order": 10,
+      "name": {
+        "ko": "첨부",
+        "en": "Attachment"
+      },
+      "keywords": [
+        "첨부",
+        "클립",
+        "파일",
+        "붙이기",
+        "attachment",
+        "paperclip",
+        "attach",
+        "file"
+      ],
+      "category": "files",
+      "description": {
+        "ko": "클립이 위쪽 고리를 축으로 크게 흔들렸다가 제자리에 멈춥니다.",
+        "en": "The paperclip swings from its top loop and settles back in place."
+      },
+      "color": "#8968F4",
+      "states": [],
+      "progress": false,
+      "sha256": "7a9a4318343d89f0e1511e2075da40f571690efff2d9009117737872eb5c7897",
+      "codePath": "modules/attachment.js"
+    },
+    {
+      "id": "link",
+      "version": "2.0.13",
+      "order": 11,
+      "name": {
+        "ko": "링크",
+        "en": "Link"
+      },
+      "keywords": [
+        "링크",
+        "연결",
+        "주소",
+        "고리",
+        "체인",
+        "link",
+        "url",
+        "chain",
+        "connect"
+      ],
+      "category": "files",
+      "description": {
+        "ko": "두 고리가 살짝 벌어졌다가 딸깍 다시 맞물립니다. 끊김 상태에서는 고리가 조금 떨어지고 끊긴 자리에 표시가 생깁니다.",
+        "en": "Two links pull apart a little and snap back; the broken state separates them slightly with break marks."
+      },
+      "color": "#3093EC",
+      "states": [
+        "linked",
+        "broken"
+      ],
+      "defaultState": "linked",
+      "stateLabels": {
+        "ko": {
+          "linked": "연결됨",
+          "broken": "끊김"
+        },
+        "en": {
+          "linked": "Linked",
+          "broken": "Broken"
+        }
+      },
+      "progress": false,
+      "sha256": "8224353708c91d92b7de5f8e5bdf7411477ede15b93ca4477ed8369f9fa52565",
+      "codePath": "modules/link.js"
+    },
+    {
+      "id": "bookmark",
+      "version": "2.0.13",
+      "order": 12,
+      "name": {
+        "ko": "북마크",
+        "en": "Bookmark"
+      },
+      "keywords": [
+        "저장",
+        "책갈피",
+        "나중에",
+        "읽기",
+        "bookmark",
+        "save",
+        "saved",
+        "later"
+      ],
+      "category": "files",
+      "description": {
+        "ko": "저장하면 리본이 위에서부터 채워지며 한 번 들썩입니다.",
+        "en": "Saving fills the ribbon from the top with a small lift."
+      },
+      "color": "#8968F4",
+      "states": [
+        "off",
+        "on"
+      ],
+      "defaultState": "off",
+      "stateLabels": {
+        "ko": {
+          "off": "꺼짐",
+          "on": "저장됨"
+        },
+        "en": {
+          "off": "Off",
+          "on": "Saved"
+        }
+      },
+      "progress": false,
+      "sha256": "2662e53424baf6c4f64d26ea927c6aa948b506fda95a1fd852326a27c44285ff",
+      "codePath": "modules/bookmark.js"
+    },
+    {
+      "id": "book",
+      "version": "2.0.13",
+      "order": 13,
+      "name": {
+        "ko": "책",
+        "en": "Book"
+      },
+      "keywords": [
+        "책",
+        "읽기",
+        "독서",
+        "페이지",
+        "가이드",
+        "book",
+        "read",
+        "reading",
+        "pages",
+        "guide"
+      ],
+      "category": "files",
+      "description": {
+        "ko": "오른쪽 페이지 두 장이 들리며 휘어지고, 등을 넘어 왼쪽으로 차례로 넘어갑니다.",
+        "en": "Two pages lift and curl from the right, then turn over the spine one after another."
+      },
+      "color": "#F0764F",
+      "states": [],
+      "progress": false,
+      "sha256": "9cc29b3288dabea6ce832434924841c839a5e6631aa718b7f934ee5d23a24dda",
+      "codePath": "modules/book.js"
+    },
+    {
+      "id": "notebook",
+      "version": "2.0.13",
+      "order": 14,
+      "name": {
+        "ko": "노트",
+        "en": "Notebook"
+      },
+      "keywords": [
+        "노트",
+        "공책",
+        "메모",
+        "기록",
+        "일지",
+        "notebook",
+        "journal",
+        "notes",
+        "diary"
+      ],
+      "category": "files",
+      "description": {
+        "ko": "표지가 스프링을 축으로 넘어가 사라지면 줄 쳐진 속지에 글줄이 써지고, 잠시 뒤 표지가 같은 속도로 돌아와 덮입니다.",
+        "en": "The cover swings round the spiral and out of sight, lines are written on the ruled page, then the cover swings back and closes at the same steady pace."
+      },
+      "color": "#98CB46",
+      "states": [],
+      "progress": false,
+      "sha256": "09bcce689e2cb27249cf65edcd99bcf0f70862f9d8dfb563ed58435d6ba3eb85",
+      "codePath": "modules/notebook.js"
+    },
+    {
+      "id": "tag",
+      "version": "2.0.13",
+      "order": 15,
+      "name": {
+        "ko": "태그",
+        "en": "Tag"
+      },
+      "keywords": [
+        "태그",
+        "라벨",
+        "가격",
+        "분류",
+        "tag",
+        "label",
+        "price",
+        "category"
+      ],
+      "category": "files",
+      "description": {
+        "ko": "못에 걸린 꼬리표가 줄을 축으로 시계추처럼 흔들리다 멈춥니다.",
+        "en": "The tag hangs from its string and swings like a pendulum before settling."
+      },
+      "color": "#F48D2F",
+      "states": [],
+      "progress": false,
+      "sha256": "e31ef87ae79d452393d3f55df2221213a55b2461ed2513d45000f0485f49ccf8",
+      "codePath": "modules/tag.js"
+    },
+    {
+      "id": "filezip",
+      "version": "2.0.13",
+      "order": 16,
+      "name": {
+        "ko": "압축 파일",
+        "en": "ZIP file"
+      },
+      "keywords": [
+        "압축",
+        "지퍼",
+        "묶음",
+        "파일",
+        "zip",
+        "archive",
+        "compressed",
+        "bundle"
+      ],
+      "category": "files",
+      "description": {
+        "ko": "지퍼 손잡이를 당기면 아래로 내려갔다가 대롱대롱 흔들리며 멈춥니다.",
+        "en": "A tug pulls the zipper tab down, then it dangles and settles."
+      },
+      "color": "#AC5CD7",
+      "states": [],
+      "progress": false,
+      "sha256": "e10c91156f5dce6c3e96f9c3710b494b39a11359b0e4861e8d1a421de6b67bfe",
+      "codePath": "modules/filezip.js"
+    },
+    {
+      "id": "receipt",
+      "version": "2.0.13",
+      "order": 17,
+      "name": {
+        "ko": "영수증",
+        "en": "Receipt"
+      },
+      "keywords": [
+        "영수증",
+        "결제",
+        "주문",
+        "내역",
+        "청구",
+        "receipt",
+        "payment",
+        "order",
+        "bill"
+      ],
+      "category": "files",
+      "description": {
+        "ko": "영수증이 아래 줄부터 지워지며 내려갔다가, 다시 밀려 나오며 줄이 위에서부터 차례로 찍힙니다.",
+        "en": "The lines clear from the bottom as the receipt dips, then it feeds out again and prints each line from the top."
+      },
+      "color": "#24B6A1",
+      "states": [],
+      "progress": false,
+      "sha256": "00ae577ac530163a3eb7d3d5656ac41964abc6144fb221134a75dce74f542ef5",
+      "codePath": "modules/receipt.js"
+    },
+    {
+      "id": "cloud",
+      "version": "2.0.13",
+      "order": 18,
+      "name": {
+        "ko": "클라우드",
+        "en": "Cloud"
+      },
+      "keywords": [
+        "클라우드",
+        "동기화",
+        "저장소",
+        "백업",
+        "cloud",
+        "sync",
+        "storage",
+        "backup"
+      ],
+      "category": "files",
+      "description": {
+        "ko": "동기화 중에는 화살표가 계속 떠오르고, 끝나면 체크가 그려집니다.",
+        "en": "While syncing an arrow keeps rising; a check draws in when finished."
+      },
+      "color": "#26B7D3",
+      "states": [
+        "idle",
+        "syncing",
+        "synced"
+      ],
+      "defaultState": "idle",
+      "stateLabels": {
+        "ko": {
+          "idle": "대기",
+          "syncing": "동기화 중",
+          "synced": "완료"
+        },
+        "en": {
+          "idle": "Idle",
+          "syncing": "Syncing",
+          "synced": "Synced"
+        }
+      },
+      "progress": false,
+      "sha256": "0e74c16c875d9889d0f7524c8c56ee9a937074b3e49b43b9088ef43b5d29f4a1",
+      "codePath": "modules/cloud.js"
+    },
+    {
+      "id": "save",
+      "version": "2.0.13",
+      "order": 19,
+      "name": {
+        "ko": "저장",
+        "en": "Save"
+      },
+      "keywords": [
+        "저장",
+        "디스크",
+        "플로피",
+        "보관",
+        "save",
+        "disk",
+        "floppy",
+        "store"
+      ],
+      "category": "files",
+      "description": {
+        "ko": "화살표가 디스크 라벨 안으로 쏙 들어가며 디스크가 살짝 눌리고, 저장됨 상태에서는 라벨에 체크가 그려집니다.",
+        "en": "An arrow drops into the disk label as the disk dips; the saved state draws a check on the label."
+      },
+      "color": "#5D73EA",
+      "states": [
+        "idle",
+        "saved"
+      ],
+      "defaultState": "idle",
+      "stateLabels": {
+        "ko": {
+          "idle": "대기",
+          "saved": "저장됨"
+        },
+        "en": {
+          "idle": "Idle",
+          "saved": "Saved"
+        }
+      },
+      "progress": false,
+      "sha256": "48bb582462027fd19e47e4859de342a93acbedb2d8ffaba6a19b5bd00c6f7bbd",
+      "codePath": "modules/save.js"
+    },
+    {
+      "id": "newspaper",
+      "version": "2.0.13",
+      "order": 20,
+      "name": {
+        "ko": "뉴스",
+        "en": "Newspaper"
+      },
+      "keywords": [
+        "뉴스",
+        "신문",
+        "기사",
+        "소식",
+        "news",
+        "newspaper",
+        "article",
+        "press"
+      ],
+      "category": "files",
+      "description": {
+        "ko": "신문이 펄럭이며 들리고, 사진이 바뀌듯 튀고 기사 줄이 다시 쓰입니다.",
+        "en": "The paper lifts with a flutter, the photo pops, and the article lines are rewritten."
+      },
+      "color": "#F0764F",
+      "states": [],
+      "progress": false,
+      "sha256": "57fb84a2b22a4c93de17c7c91ee44babb0f6d0179fece583582cf0a4e6e87f25",
+      "codePath": "modules/newspaper.js"
+    },
+    {
+      "id": "stickynote",
+      "version": "2.0.13",
+      "order": 21,
+      "name": {
+        "ko": "메모지",
+        "en": "Sticky note"
+      },
+      "keywords": [
+        "메모",
+        "포스트잇",
+        "노트",
+        "기억",
+        "sticky",
+        "note",
+        "memo",
+        "reminder"
+      ],
+      "category": "files",
+      "description": {
+        "ko": "메모지가 바람에 날리듯 한 번 흔들립니다.",
+        "en": "The note flutters once as if caught by a breeze."
+      },
+      "color": "#F2CF3B",
+      "states": [],
+      "progress": false,
+      "sha256": "1054925de7768947e9232051030c41ac267d74ebec616ee93c92953252d37742",
+      "codePath": "modules/stickynote.js"
+    },
+    {
+      "id": "history",
+      "version": "2.0.13",
+      "order": 22,
+      "name": {
+        "ko": "기록",
+        "en": "History"
+      },
+      "keywords": [
+        "기록",
+        "이력",
+        "최근",
+        "되돌아가기",
+        "history",
+        "recent",
+        "log",
+        "timeline"
+      ],
+      "category": "files",
+      "description": {
+        "ko": "시곗바늘이 거꾸로 한 바퀴 돌며 지난 시간으로 감깁니다.",
+        "en": "The hands rewind one full turn."
+      },
+      "color": "#8968F4",
+      "states": [],
+      "progress": false,
+      "sha256": "ae3d8e697ef9624e93c86b4c75ef632130fc51190abe824560a015802df8414f",
+      "codePath": "modules/history.js"
+    },
+    {
+      "id": "qrcode",
+      "version": "2.0.13",
+      "order": 23,
+      "name": {
+        "ko": "QR 코드",
+        "en": "QR code"
+      },
+      "keywords": [
+        "QR",
+        "코드",
+        "스캔",
+        "링크",
+        "결제",
+        "qr",
+        "code",
+        "scan",
+        "link",
+        "pay"
+      ],
+      "category": "files",
+      "description": {
+        "ko": "빛줄기가 코드를 위에서 아래로 훑습니다.",
+        "en": "A scan line sweeps the code from top to bottom."
+      },
+      "color": "#43B966",
+      "states": [],
+      "progress": false,
+      "sha256": "fa0f1bccad823136adf5b19ea014e60174835eb636fb230cf8b7ae287a71c9ec",
+      "codePath": "modules/qrcode.js"
+    },
+    {
+      "id": "signature",
+      "version": "2.0.13",
+      "order": 24,
+      "name": {
+        "ko": "서명",
+        "en": "Signature"
+      },
+      "keywords": [
+        "서명",
+        "사인",
+        "계약",
+        "승인",
+        "signature",
+        "sign",
+        "contract",
+        "approve"
+      ],
+      "category": "files",
+      "description": {
+        "ko": "서명이 한 획으로 다시 써집니다.",
+        "en": "The signature writes itself again in one stroke."
+      },
+      "color": "#3093EC",
+      "states": [],
+      "progress": false,
+      "sha256": "53f01e1a13d216f23f6804065bfd3c5ae3fa124ee918c68a5eecce1b5c2b22ab",
+      "codePath": "modules/signature.js"
+    },
+    {
+      "id": "envelope",
+      "version": "2.0.13",
+      "order": 25,
+      "name": {
+        "ko": "봉투",
+        "en": "Envelope"
+      },
+      "keywords": [
+        "메일",
+        "편지",
+        "이메일",
+        "메시지",
+        "받은편지",
+        "mail",
+        "email",
+        "letter",
+        "message"
+      ],
+      "category": "communication",
+      "description": {
+        "ko": "열면 봉인이 톡 떨어지고 덮개가 접혀 올라간 뒤 편지가 쏙 올라옵니다. 닫으면 편지가 들어가고 덮개가 내려와 다시 봉인됩니다.",
+        "en": "Opening pops the seal, folds the flap away and a letter slides up; closing tucks the letter in, brings the flap down and seals it."
+      },
+      "color": "#3093EC",
+      "states": [
+        "closed",
+        "open"
+      ],
+      "defaultState": "closed",
+      "stateLabels": {
+        "ko": {
+          "closed": "닫힘",
+          "open": "열림"
+        },
+        "en": {
+          "closed": "Closed",
+          "open": "Open"
+        }
+      },
+      "progress": false,
+      "sha256": "6f0f55bf1a385090546202789631e056ff105437b030ebdad8b15f4fd4286d24",
+      "codePath": "modules/envelope.js"
+    },
+    {
+      "id": "bell",
+      "version": "2.0.13",
+      "order": 26,
+      "name": {
+        "ko": "알림",
+        "en": "Bell"
+      },
+      "keywords": [
+        "알림",
+        "벨",
+        "종",
+        "새소식",
+        "notification",
+        "bell",
+        "alert",
+        "unread"
+      ],
+      "category": "communication",
+      "description": {
+        "ko": "새 알림이 오면 종이 흔들리고 추가 따라 움직인 뒤 점이 튀어나옵니다.",
+        "en": "A new notification swings the bell, the clapper follows, and a dot pops in."
+      },
+      "color": "#F48D2F",
+      "states": [
+        "idle",
+        "unread"
+      ],
+      "defaultState": "idle",
+      "stateLabels": {
+        "ko": {
+          "idle": "대기",
+          "unread": "새 알림"
+        },
+        "en": {
+          "idle": "Idle",
+          "unread": "Unread"
+        }
+      },
+      "progress": false,
+      "sha256": "33382e091788f19ef5e2c60f6f648b5be0152d50d2c24d177d62818a842cefd5",
+      "codePath": "modules/bell.js"
+    },
+    {
+      "id": "chat",
+      "version": "2.0.13",
+      "order": 27,
+      "name": {
+        "ko": "대화",
+        "en": "Chat"
+      },
+      "keywords": [
+        "대화",
+        "채팅",
+        "말풍선",
+        "입력중",
+        "chat",
+        "message",
+        "bubble",
+        "typing"
+      ],
+      "category": "communication",
+      "description": {
+        "ko": "입력 중에는 세 점이 차례로 통통 튀어 오릅니다.",
+        "en": "While typing, three dots bounce one after another."
+      },
+      "color": "#43B966",
+      "states": [
+        "idle",
+        "typing"
+      ],
+      "defaultState": "idle",
+      "stateLabels": {
+        "ko": {
+          "idle": "대기",
+          "typing": "입력 중"
+        },
+        "en": {
+          "idle": "Idle",
+          "typing": "Typing"
+        }
+      },
+      "progress": false,
+      "sha256": "9c094c0928072e174dbe7ee02f46cee89e42a11d9199fe52d4d9a9f0b597c300",
+      "codePath": "modules/chat.js"
+    },
+    {
+      "id": "messages",
+      "version": "2.0.13",
+      "order": 28,
+      "name": {
+        "ko": "메시지",
+        "en": "Messages"
+      },
+      "keywords": [
+        "메시지",
+        "대화",
+        "답장",
+        "스레드",
+        "messages",
+        "conversation",
+        "reply",
+        "thread"
+      ],
+      "category": "communication",
+      "description": {
+        "ko": "앞 말풍선이 꼬리 쪽에서 톡 튀어나오고 뒤 말풍선이 살짝 물러납니다.",
+        "en": "The front bubble pops from its tail while the back one steps away."
+      },
+      "color": "#24B6A1",
+      "states": [],
+      "progress": false,
+      "sha256": "75bfedcef494c63e05c358bba6c438af63ec7f17a5a5e43480f20e3fa6195f27",
+      "codePath": "modules/messages.js"
+    },
+    {
+      "id": "send",
+      "version": "2.0.13",
+      "order": 29,
+      "name": {
+        "ko": "보내기",
+        "en": "Send"
+      },
+      "keywords": [
+        "보내기",
+        "전송",
+        "종이비행기",
+        "제출",
+        "send",
+        "submit",
+        "paper",
+        "plane"
+      ],
+      "category": "communication",
+      "description": {
+        "ko": "종이비행기가 오른쪽 위로 날아갔다가 반대편에서 다시 들어옵니다.",
+        "en": "The paper plane flies off to the top right and glides back in from the other side."
+      },
+      "color": "#3093EC",
+      "states": [],
+      "progress": false,
+      "sha256": "b2231533cad106e22fa6a530a567b1a80f56854b57b4ae373c0662f60f063c6b",
+      "codePath": "modules/send.js"
+    },
+    {
+      "id": "phone",
+      "version": "2.0.13",
+      "order": 30,
+      "name": {
+        "ko": "전화",
+        "en": "Phone"
+      },
+      "keywords": [
+        "전화",
+        "통화",
+        "수화기",
+        "연락",
+        "phone",
+        "call",
+        "handset",
+        "ring"
+      ],
+      "category": "communication",
+      "description": {
+        "ko": "전화가 오면 수화기가 떨리고 소리 물결이 퍼집니다.",
+        "en": "When ringing the handset buzzes and sound waves pulse."
+      },
+      "color": "#43B966",
+      "states": [
+        "idle",
+        "ringing"
+      ],
+      "defaultState": "idle",
+      "stateLabels": {
+        "ko": {
+          "idle": "대기",
+          "ringing": "수신 중"
+        },
+        "en": {
+          "idle": "Idle",
+          "ringing": "Ringing"
+        }
+      },
+      "progress": false,
+      "sha256": "8036869ecbdee21dd70ba6311e6dbf8119f691dde7bc6eb0e014b8dd20b0c244",
+      "codePath": "modules/phone.js"
+    },
+    {
+      "id": "videochat",
+      "version": "2.0.13",
+      "order": 31,
+      "name": {
+        "ko": "영상 통화",
+        "en": "Video call"
+      },
+      "keywords": [
+        "영상",
+        "통화",
+        "카메라",
+        "회의",
+        "화상",
+        "video",
+        "call",
+        "camera",
+        "meeting"
+      ],
+      "category": "communication",
+      "description": {
+        "ko": "렌즈가 줌인하듯 앞으로 늘어났다 돌아오고, 녹화 점이 깜빡입니다.",
+        "en": "The lens zooms out and back and the recording dot blinks."
+      },
+      "color": "#F0764F",
+      "states": [
+        "on",
+        "off"
+      ],
+      "defaultState": "on",
+      "stateLabels": {
+        "ko": {
+          "on": "켜짐",
+          "off": "꺼짐"
+        },
+        "en": {
+          "on": "On",
+          "off": "Off"
+        }
+      },
+      "progress": false,
+      "sha256": "bd4b8cdd4652dce06b24acb10ad9a0309b4522522460e078c06c8339994f20d0",
+      "codePath": "modules/videochat.js"
+    },
+    {
+      "id": "megaphone",
+      "version": "2.0.13",
+      "order": 32,
+      "name": {
+        "ko": "확성기",
+        "en": "Megaphone"
+      },
+      "keywords": [
+        "확성기",
+        "공지",
+        "발표",
+        "홍보",
+        "megaphone",
+        "announce",
+        "broadcast",
+        "promote"
+      ],
+      "category": "communication",
+      "description": {
+        "ko": "확성기가 한 번 들썩이고, 소리 물결 두 줄이 차례로 퍼져 나갑니다.",
+        "en": "The megaphone jolts and two sound waves travel out one after the other."
+      },
+      "color": "#E662A8",
+      "states": [],
+      "progress": false,
+      "sha256": "b0c2d200617e7345bf042d347d1312fd9448b95d72426c09b8e2f20f645a6fb3",
+      "codePath": "modules/megaphone.js"
+    },
+    {
+      "id": "at",
+      "version": "2.0.13",
+      "order": 33,
+      "name": {
+        "ko": "멘션",
+        "en": "Mention"
+      },
+      "keywords": [
+        "골뱅이",
+        "멘션",
+        "이메일",
+        "주소",
+        "at",
+        "mention",
+        "email",
+        "address"
+      ],
+      "category": "communication",
+      "description": {
+        "ko": "바깥 고리가 한 바퀴 휘감기며 다시 그려집니다.",
+        "en": "The outer loop sweeps around and redraws itself."
+      },
+      "color": "#5D73EA",
+      "states": [],
+      "progress": false,
+      "sha256": "e46d36ea037592d6a742584e56d662f607dedb7d52c7de780f77388ccce400dc",
+      "codePath": "modules/at.js"
+    },
+    {
+      "id": "hashtag",
+      "version": "2.0.13",
+      "order": 34,
+      "name": {
+        "ko": "해시태그",
+        "en": "Hashtag"
+      },
+      "keywords": [
+        "해시태그",
+        "태그",
+        "채널",
+        "번호",
+        "hashtag",
+        "tag",
+        "channel",
+        "number"
+      ],
+      "category": "communication",
+      "description": {
+        "ko": "기울어진 두 기둥이 반동을 주며 한 번 더 기웁니다.",
+        "en": "The slanted bars lean further and spring back."
+      },
+      "color": "#AC5CD7",
+      "states": [],
+      "progress": false,
+      "sha256": "a3bc0ae891bcf9b6c129ea625e59d468c6d8fc68159418e5852e93a2cb2230f1",
+      "codePath": "modules/hashtag.js"
+    },
+    {
+      "id": "rss",
+      "version": "2.0.13",
+      "order": 35,
+      "name": {
+        "ko": "구독 피드",
+        "en": "RSS feed"
+      },
+      "keywords": [
+        "RSS",
+        "피드",
+        "구독",
+        "방송",
+        "rss",
+        "feed",
+        "subscribe",
+        "broadcast"
+      ],
+      "category": "communication",
+      "description": {
+        "ko": "점에서 시작해 두 물결이 차례로 퍼집니다.",
+        "en": "Two arcs light up one after another from the dot."
+      },
+      "color": "#F48D2F",
+      "states": [],
+      "progress": false,
+      "sha256": "73192617cf7ae0f56c7e33d92098700a6b2c8dddb8f963008c4091e022765713",
+      "codePath": "modules/rss.js"
+    },
+    {
+      "id": "quote",
+      "version": "2.0.13",
+      "order": 36,
+      "name": {
+        "ko": "인용",
+        "en": "Quote"
+      },
+      "keywords": [
+        "인용",
+        "따옴표",
+        "후기",
+        "말",
+        "quote",
+        "citation",
+        "testimonial"
+      ],
+      "category": "communication",
+      "description": {
+        "ko": "따옴표 두 개가 차례로 통통 튀어 오릅니다.",
+        "en": "The two marks hop one after the other."
+      },
+      "color": "#F4AF2D",
+      "states": [],
+      "progress": false,
+      "sha256": "203e869cc617259489178d8b8fc7f5c3a451277a86f267d3fbd9943d1864dc52",
+      "codePath": "modules/quote.js"
+    },
+    {
+      "id": "translate",
+      "version": "2.0.13",
+      "order": 37,
+      "name": {
+        "ko": "번역",
+        "en": "Translate"
+      },
+      "keywords": [
+        "번역",
+        "언어",
+        "다국어",
+        "한영",
+        "translate",
+        "language",
+        "locale",
+        "i18n"
+      ],
+      "category": "communication",
+      "description": {
+        "ko": "A가 먼저 살짝 튀고, 화살표가 꼬리부터 쭉 그려지며 끝에 화살촉이 생긴 뒤 가가 이어서 튀어 오릅니다.",
+        "en": "The A bobs, the arrow draws itself from its tail and its head appears at the tip, then the 가 bobs in reply."
+      },
+      "color": "#3093EC",
+      "states": [],
+      "progress": false,
+      "sha256": "0fb39b4030df3a3998f463243a90bc0eef354f5f201d7322779c9a46d71c3f41",
+      "codePath": "modules/translate.js"
+    },
+    {
+      "id": "smile",
+      "version": "2.0.13",
+      "order": 38,
+      "name": {
+        "ko": "미소",
+        "en": "Smile"
+      },
+      "keywords": [
+        "미소",
+        "이모지",
+        "웃음",
+        "반응",
+        "기분",
+        "smile",
+        "emoji",
+        "happy",
+        "reaction",
+        "mood"
+      ],
+      "category": "communication",
+      "description": {
+        "ko": "한쪽 눈을 찡긋하며 입꼬리가 올라갑니다.",
+        "en": "A wink, and the smile widens."
+      },
+      "color": "#F2CF3B",
+      "states": [],
+      "progress": false,
+      "sha256": "215597537bad8e4924bc6187daa1875b082d0376b542e8a4b345ed66ee29ecde",
+      "codePath": "modules/smile.js"
+    },
+    {
+      "id": "thumbsup",
+      "version": "2.0.13",
+      "order": 39,
+      "name": {
+        "ko": "좋아요",
+        "en": "Thumbs up"
+      },
+      "keywords": [
+        "좋아요",
+        "추천",
+        "승인",
+        "엄지",
+        "like",
+        "thumbs",
+        "up",
+        "approve",
+        "upvote"
+      ],
+      "category": "communication",
+      "description": {
+        "ko": "엄지가 들어 올려지며 손이 아래쪽부터 채워집니다.",
+        "en": "The thumb lifts as the hand fills from the bottom."
+      },
+      "color": "#3093EC",
+      "states": [
+        "off",
+        "on"
+      ],
+      "defaultState": "off",
+      "stateLabels": {
+        "ko": {
+          "off": "꺼짐",
+          "on": "눌림"
+        },
+        "en": {
+          "off": "Off",
+          "on": "On"
+        }
+      },
+      "progress": false,
+      "sha256": "c5242b5b27e723ed4882686622d81f1be1a3e557fedb87767c88529d3908f884",
+      "codePath": "modules/thumbsup.js"
+    },
+    {
+      "id": "lock",
+      "version": "2.0.13",
+      "order": 40,
+      "name": {
+        "ko": "자물쇠",
+        "en": "Lock"
+      },
+      "keywords": [
+        "잠금",
+        "보안",
+        "비밀번호",
+        "해제",
+        "lock",
+        "secure",
+        "password",
+        "unlock",
+        "private"
+      ],
+      "category": "security",
+      "description": {
+        "ko": "고리가 들렸다가 옆으로 돌아 열리고, 잠글 때는 내려와 딸깍 걸립니다.",
+        "en": "The shackle lifts and swings open; locking drops it back with a click."
+      },
+      "color": "#F4AF2D",
+      "states": [
+        "locked",
+        "unlocked"
+      ],
+      "defaultState": "locked",
+      "stateLabels": {
+        "ko": {
+          "locked": "잠김",
+          "unlocked": "열림"
+        },
+        "en": {
+          "locked": "Locked",
+          "unlocked": "Unlocked"
+        }
+      },
+      "progress": false,
+      "sha256": "2d198c1c46eb4898351c09d6fb458239a050400a765b62868a73494a65761afc",
+      "codePath": "modules/lock.js"
+    },
+    {
+      "id": "shield",
+      "version": "2.0.13",
+      "order": 41,
+      "name": {
+        "ko": "방패",
+        "en": "Shield"
+      },
+      "keywords": [
+        "방패",
+        "보호",
+        "보안",
+        "안전",
+        "경고",
+        "shield",
+        "protect",
+        "security",
+        "safe",
+        "warning"
+      ],
+      "category": "security",
+      "description": {
+        "ko": "보호 상태에서는 체크가 나타나고, 경고 상태에서는 방패가 비워지며 흔들리고 빨간 느낌표가 나타납니다.",
+        "en": "Protected shows a check; on alert the shield empties, shakes and shows a red exclamation mark."
+      },
+      "color": "#43B966",
+      "states": [
+        "protected",
+        "alert"
+      ],
+      "defaultState": "protected",
+      "stateLabels": {
+        "ko": {
+          "protected": "보호됨",
+          "alert": "경고"
+        },
+        "en": {
+          "protected": "Protected",
+          "alert": "Alert"
+        }
+      },
+      "progress": false,
+      "sha256": "f869a0ccdc37091ee94ee92fdb1d4761aff4929fbc33b06d31b2d6f395200a48",
+      "codePath": "modules/shield.js"
+    },
+    {
+      "id": "key",
+      "version": "2.0.13",
+      "order": 42,
+      "name": {
+        "ko": "열쇠",
+        "en": "Key"
+      },
+      "keywords": [
+        "열쇠",
+        "키",
+        "접근",
+        "권한",
+        "비밀번호",
+        "key",
+        "access",
+        "permission",
+        "password"
+      ],
+      "category": "security",
+      "description": {
+        "ko": "열쇠가 천천히 꽂히듯 들어간 뒤 한 번 돌아가고, 잠시 머물렀다가 빠져나옵니다.",
+        "en": "The key slides in slowly, turns once, holds a moment, and backs out."
+      },
+      "color": "#F2CF3B",
+      "states": [],
+      "progress": false,
+      "sha256": "5af64a6b8aea6d99b230f830b7871481677a8395b3e4bc55ebe9248779d36869",
+      "codePath": "modules/key.js"
+    },
+    {
+      "id": "fingerprint",
+      "version": "2.0.13",
+      "order": 43,
+      "name": {
+        "ko": "지문",
+        "en": "Fingerprint"
+      },
+      "keywords": [
+        "지문",
+        "생체",
+        "인증",
+        "로그인",
+        "fingerprint",
+        "biometric",
+        "auth",
+        "touch",
+        "id"
+      ],
+      "category": "security",
+      "description": {
+        "ko": "인식 중에는 빛줄기가 오르내리고, 마우스를 올리면 가운데부터 바깥으로 지문 결이 다시 그려집니다.",
+        "en": "While scanning a light line sweeps; hovering redraws the ridges from the centre outward."
+      },
+      "color": "#AC5CD7",
+      "states": [
+        "idle",
+        "scanning"
+      ],
+      "defaultState": "idle",
+      "stateLabels": {
+        "ko": {
+          "idle": "대기",
+          "scanning": "인식 중"
+        },
+        "en": {
+          "idle": "Idle",
+          "scanning": "Scanning"
+        }
+      },
+      "progress": false,
+      "sha256": "6326574d774241d2f11e7acc5e95a2e1183726ba1b6536d78d49bd5ace3317c2",
+      "codePath": "modules/fingerprint.js"
+    },
+    {
+      "id": "scanface",
+      "version": "2.0.13",
+      "order": 44,
+      "name": {
+        "ko": "얼굴 인식",
+        "en": "Face scan"
+      },
+      "keywords": [
+        "얼굴",
+        "인식",
+        "페이스아이디",
+        "생체",
+        "인증",
+        "face",
+        "id",
+        "scan",
+        "biometric",
+        "unlock"
+      ],
+      "category": "security",
+      "description": {
+        "ko": "모서리 틀이 얼굴 쪽으로 좁혀졌다 벌어지고 빛줄기가 훑고 지나갑니다.",
+        "en": "The corner frame closes in on the face as a scan line passes."
+      },
+      "color": "#43B966",
+      "states": [],
+      "progress": false,
+      "sha256": "ffe534b689e81ad664d0346927339c61a0cab9366314a11972f2ba57d2e871f5",
+      "codePath": "modules/scanface.js"
+    },
+    {
+      "id": "password",
+      "version": "2.0.13",
+      "order": 45,
+      "name": {
+        "ko": "비밀번호",
+        "en": "Password"
+      },
+      "keywords": [
+        "비밀번호",
+        "암호",
+        "입력",
+        "로그인",
+        "password",
+        "passcode",
+        "pin",
+        "login"
+      ],
+      "category": "security",
+      "description": {
+        "ko": "가려진 글자가 하나씩 입력되고 커서가 깜빡입니다.",
+        "en": "Masked characters type in one by one while the caret blinks."
+      },
+      "color": "#8968F4",
+      "states": [],
+      "progress": false,
+      "sha256": "7248930b1633894d6b6c848e91457c6129a283645e401834d59907149478cdaf",
+      "codePath": "modules/password.js"
+    },
+    {
+      "id": "verified",
+      "version": "2.0.13",
+      "order": 46,
+      "name": {
+        "ko": "인증됨",
+        "en": "Verified"
+      },
+      "keywords": [
+        "인증",
+        "공식",
+        "확인",
+        "배지",
+        "verified",
+        "official",
+        "badge",
+        "check",
+        "trust"
+      ],
+      "category": "security",
+      "description": {
+        "ko": "물결 배지가 살짝 돌고 체크가 다시 그려집니다.",
+        "en": "The scalloped badge rotates a notch and the check redraws."
+      },
+      "color": "#3093EC",
+      "states": [],
+      "progress": false,
+      "sha256": "1982d8dbbff61c8f96c0d02eff1a7fcac5d81ff5db1c3869d3eef8bb9a5882af",
+      "codePath": "modules/verified.js"
+    },
+    {
+      "id": "siren",
+      "version": "2.0.13",
+      "order": 47,
+      "name": {
+        "ko": "경광등",
+        "en": "Siren"
+      },
+      "keywords": [
+        "경광등",
+        "경보",
+        "비상",
+        "알람",
+        "siren",
+        "alarm",
+        "emergency",
+        "alert"
+      ],
+      "category": "security",
+      "description": {
+        "ko": "켜져 있는 동안 빛살이 번갈아 깜빡입니다.",
+        "en": "While on, the light rays flash in alternation."
+      },
+      "color": "#F05465",
+      "states": [
+        "off",
+        "on"
+      ],
+      "defaultState": "off",
+      "stateLabels": {
+        "ko": {
+          "off": "꺼짐",
+          "on": "켜짐"
+        },
+        "en": {
+          "off": "Off",
+          "on": "On"
+        }
+      },
+      "progress": false,
+      "sha256": "b612c9f84c81bcded8796787daa46a184527556bd80f3b86affa4c4132f35540",
+      "codePath": "modules/siren.js"
+    },
+    {
+      "id": "search",
+      "version": "2.0.13",
+      "order": 48,
+      "name": {
+        "ko": "검색",
+        "en": "Search"
+      },
+      "keywords": [
+        "검색",
+        "찾기",
+        "돋보기",
+        "조회",
+        "search",
+        "find",
+        "magnifier",
+        "lookup",
+        "query"
+      ],
+      "category": "navigation",
+      "description": {
+        "ko": "검색 중에는 돋보기가 주변을 훑듯 원을 그리며 움직입니다.",
+        "en": "While searching, the lens circles as if scanning the page."
+      },
+      "color": "#8968F4",
+      "states": [
+        "idle",
+        "searching"
+      ],
+      "defaultState": "idle",
+      "stateLabels": {
+        "ko": {
+          "idle": "대기",
+          "searching": "검색 중"
+        },
+        "en": {
+          "idle": "Idle",
+          "searching": "Searching"
+        }
+      },
+      "progress": false,
+      "sha256": "d991bc6cbf5407334f9f2c85bfab2c3e3c25095b3b9ca20837de51f5e934a443",
+      "codePath": "modules/search.js"
+    },
+    {
+      "id": "cursor",
+      "version": "2.0.13",
+      "order": 49,
+      "name": {
+        "ko": "커서",
+        "en": "Cursor"
+      },
+      "keywords": [
+        "커서",
+        "포인터",
+        "클릭",
+        "선택",
+        "cursor",
+        "pointer",
+        "click",
+        "select"
+      ],
+      "category": "navigation",
+      "description": {
+        "ko": "화살표가 눌리며 끝에서 클릭 빛살이 튀어나옵니다.",
+        "en": "The pointer presses and click rays burst from its tip."
+      },
+      "color": "#5D73EA",
+      "states": [],
+      "progress": false,
+      "sha256": "28092ef3b45d3997149d0260c1385245770a9b8bbcc2708b4ab9f4a9fdf3b1d3",
+      "codePath": "modules/cursor.js"
+    },
+    {
+      "id": "home",
+      "version": "2.0.13",
+      "order": 50,
+      "name": {
+        "ko": "홈",
+        "en": "Home"
+      },
+      "keywords": [
+        "홈",
+        "집",
+        "처음",
+        "메인",
+        "home",
+        "house",
+        "start",
+        "main"
+      ],
+      "category": "navigation",
+      "description": {
+        "ko": "현관문이 경첩을 축으로 안쪽으로 열려 어두운 실내가 보였다가, 탁 닫힙니다.",
+        "en": "The front door swings in on its hinge to show the dark inside, then shuts."
+      },
+      "color": "#F48D2F",
+      "states": [],
+      "progress": false,
+      "sha256": "e64735ac015705812cb69d013fe455727fb28d18827df1190afede798c1d8490",
+      "codePath": "modules/home.js"
+    },
+    {
+      "id": "menu",
+      "version": "2.0.13",
+      "order": 51,
+      "name": {
+        "ko": "메뉴",
+        "en": "Menu"
+      },
+      "keywords": [
+        "메뉴",
+        "햄버거",
+        "열기",
+        "닫기",
+        "탐색",
+        "menu",
+        "hamburger",
+        "navigation",
+        "open",
+        "close"
+      ],
+      "category": "navigation",
+      "description": {
+        "ko": "세 줄이 가운데로 모였다가 X로 돌아갑니다.",
+        "en": "Three lines gather in the middle, then rotate into an X."
+      },
+      "color": "#8968F4",
+      "states": [
+        "closed",
+        "open"
+      ],
+      "defaultState": "closed",
+      "stateLabels": {
+        "ko": {
+          "closed": "닫힘",
+          "open": "열림"
+        },
+        "en": {
+          "closed": "Closed",
+          "open": "Open"
+        }
+      },
+      "progress": false,
+      "sha256": "b5393cd96ac198644b9c2f717f4f933d6ae399de77ca0148daecd6109a5f8700",
+      "codePath": "modules/menu.js"
+    },
+    {
+      "id": "settings",
+      "version": "2.0.13",
+      "order": 52,
+      "name": {
+        "ko": "설정",
+        "en": "Settings"
+      },
+      "keywords": [
+        "설정",
+        "톱니",
+        "환경설정",
+        "옵션",
+        "settings",
+        "gear",
+        "preferences",
+        "options"
+      ],
+      "category": "navigation",
+      "description": {
+        "ko": "톱니바퀴가 두 칸만큼 돌고 살짝 되돌아오며 맞물립니다.",
+        "en": "The gear turns two teeth and settles back into mesh."
+      },
+      "color": "#24B6A1",
+      "states": [],
+      "progress": false,
+      "sha256": "aa347a3909d1dd8dd5a13e6162d20a00f3d715b15f38cb2ecccd28498adae37d",
+      "codePath": "modules/settings.js"
+    },
+    {
+      "id": "sliders",
+      "version": "2.0.13",
+      "order": 53,
+      "name": {
+        "ko": "조절",
+        "en": "Sliders"
+      },
+      "keywords": [
+        "조절",
+        "슬라이더",
+        "옵션",
+        "필터",
+        "설정",
+        "sliders",
+        "adjust",
+        "controls",
+        "tune"
+      ],
+      "category": "navigation",
+      "description": {
+        "ko": "손잡이 세 개가 모두 같은 쪽으로 차례로 밀렸다가 천천히 제자리로 돌아옵니다.",
+        "en": "All three knobs slide the same way, one after another, then ease back."
+      },
+      "color": "#3093EC",
+      "states": [],
+      "progress": false,
+      "sha256": "ee31f051bd81d003539218f74b610d9053952dd8df05f2906a7298e16489c5bc",
+      "codePath": "modules/sliders.js"
+    },
+    {
+      "id": "filter",
+      "version": "2.0.13",
+      "order": 54,
+      "name": {
+        "ko": "필터",
+        "en": "Filter"
+      },
+      "keywords": [
+        "필터",
+        "거르기",
+        "조건",
+        "깔때기",
+        "filter",
+        "funnel",
+        "refine",
+        "narrow"
+      ],
+      "category": "navigation",
+      "description": {
+        "ko": "알갱이 세 개가 깔때기 안으로 모여 들어가고 끝에서 한 방울만 떨어집니다. 적용 상태에서는 깔때기가 차오릅니다.",
+        "en": "Three grains gather into the funnel and a single drop falls from the spout; the applied state fills the funnel."
+      },
+      "color": "#26B7D3",
+      "states": [
+        "off",
+        "on"
+      ],
+      "defaultState": "off",
+      "stateLabels": {
+        "ko": {
+          "off": "꺼짐",
+          "on": "적용됨"
+        },
+        "en": {
+          "off": "Off",
+          "on": "Applied"
+        }
+      },
+      "progress": false,
+      "sha256": "cccfd96a69e945925baba7521a435059e31708560431f87d1459ff5b1776db4c",
+      "codePath": "modules/filter.js"
+    },
+    {
+      "id": "sort",
+      "version": "2.0.13",
+      "order": 55,
+      "name": {
+        "ko": "정렬",
+        "en": "Sort"
+      },
+      "keywords": [
+        "정렬",
+        "순서",
+        "오름차순",
+        "내림차순",
+        "sort",
+        "order",
+        "ascending",
+        "descending"
+      ],
+      "category": "navigation",
+      "description": {
+        "ko": "화살표가 뒤집히고 막대 길이가 반대로 바뀝니다.",
+        "en": "The arrow flips and the bar lengths reverse."
+      },
+      "color": "#5D73EA",
+      "states": [
+        "desc",
+        "asc"
+      ],
+      "defaultState": "desc",
+      "stateLabels": {
+        "ko": {
+          "desc": "내림차순",
+          "asc": "오름차순"
+        },
+        "en": {
+          "desc": "Descending",
+          "asc": "Ascending"
+        }
+      },
+      "progress": false,
+      "sha256": "0ccdb3f7394e5d43c27615b4f6cf66a9e1f69ae65ca8c69305f31fff9555ec50",
+      "codePath": "modules/sort.js"
+    },
+    {
+      "id": "layout",
+      "version": "2.0.13",
+      "order": 56,
+      "name": {
+        "ko": "레이아웃",
+        "en": "Layout"
+      },
+      "keywords": [
+        "레이아웃",
+        "사이드바",
+        "패널",
+        "화면",
+        "layout",
+        "sidebar",
+        "panel",
+        "window"
+      ],
+      "category": "navigation",
+      "description": {
+        "ko": "사이드바가 좁은 아이콘 막대로 부드럽게 접히고 다시 펼쳐지며, 메뉴 줄이 점으로 줄었다가 늘어납니다.",
+        "en": "The sidebar folds smoothly into a narrow rail and back, its menu lines shrinking to dots and growing again."
+      },
+      "color": "#8968F4",
+      "states": [
+        "open",
+        "collapsed"
+      ],
+      "defaultState": "open",
+      "stateLabels": {
+        "ko": {
+          "open": "펼침",
+          "collapsed": "접힘"
+        },
+        "en": {
+          "open": "Open",
+          "collapsed": "Collapsed"
+        }
+      },
+      "progress": false,
+      "sha256": "0fb66a9351b7cde94750f36c903189a564d3beac5c9b7badb4e7f9c551e6b3d9",
+      "codePath": "modules/layout.js"
+    },
+    {
+      "id": "grid",
+      "version": "2.0.13",
+      "order": 57,
+      "name": {
+        "ko": "그리드",
+        "en": "Grid"
+      },
+      "keywords": [
+        "그리드",
+        "격자",
+        "바둑판",
+        "타일",
+        "보기",
+        "grid",
+        "tiles",
+        "view",
+        "gallery"
+      ],
+      "category": "navigation",
+      "description": {
+        "ko": "네 칸이 물결처럼 차례로 톡톡 튀어 오릅니다.",
+        "en": "The four tiles pop one after another like a ripple."
+      },
+      "color": "#3093EC",
+      "states": [],
+      "progress": false,
+      "sha256": "ce09ff7b43fc4342f0778380c8ca6a054777bf0ac51f7eb55df5dcda63c1a26c",
+      "codePath": "modules/grid.js"
+    },
+    {
+      "id": "list",
+      "version": "2.0.13",
+      "order": 58,
+      "name": {
+        "ko": "목록",
+        "en": "List"
+      },
+      "keywords": [
+        "목록",
+        "리스트",
+        "항목",
+        "글머리",
+        "list",
+        "items",
+        "bullets",
+        "rows"
+      ],
+      "category": "navigation",
+      "description": {
+        "ko": "글머리 점이 튀고 각 줄이 차례로 다시 그려집니다.",
+        "en": "The bullets pop and each row redraws in turn."
+      },
+      "color": "#43B966",
+      "states": [],
+      "progress": false,
+      "sha256": "8993ab9e3bca7014b28c1741026549257d5ecab2ccc42ce2c288aed3902be29f",
+      "codePath": "modules/list.js"
+    },
+    {
+      "id": "expand",
+      "version": "2.0.13",
+      "order": 59,
+      "name": {
+        "ko": "확대",
+        "en": "Expand"
+      },
+      "keywords": [
+        "확대",
+        "전체화면",
+        "펼치기",
+        "최대화",
+        "expand",
+        "fullscreen",
+        "maximize",
+        "enlarge"
+      ],
+      "category": "navigation",
+      "description": {
+        "ko": "두 화살표가 바깥쪽으로 뻗었다가 돌아옵니다.",
+        "en": "Both arrows reach outward and spring back."
+      },
+      "color": "#24B6A1",
+      "states": [],
+      "progress": false,
+      "sha256": "0f1fa872b5328c54f3d5dbbd6c650c47ad3baaac9eab1e951e257f998a743c6e",
+      "codePath": "modules/expand.js"
+    },
+    {
+      "id": "collapse",
+      "version": "2.0.13",
+      "order": 60,
+      "name": {
+        "ko": "축소",
+        "en": "Collapse"
+      },
+      "keywords": [
+        "축소",
+        "접기",
+        "최소화",
+        "창모드",
+        "collapse",
+        "minimize",
+        "shrink",
+        "exit",
+        "fullscreen"
+      ],
+      "category": "navigation",
+      "description": {
+        "ko": "두 화살표가 가운데로 모였다가 돌아옵니다.",
+        "en": "Both arrows draw toward the center and spring back."
+      },
+      "color": "#24B6A1",
+      "states": [],
+      "progress": false,
+      "sha256": "b37492aa0f2b5affb5594f2948e36d127f88e6412dd9008791f5520656a8dbbd",
+      "codePath": "modules/collapse.js"
+    },
+    {
+      "id": "refresh",
+      "version": "2.0.13",
+      "order": 61,
+      "name": {
+        "ko": "새로고침",
+        "en": "Refresh"
+      },
+      "keywords": [
+        "새로고침",
+        "다시",
+        "불러오기",
+        "동기화",
+        "회전",
+        "refresh",
+        "reload",
+        "sync",
+        "rotate"
+      ],
+      "category": "navigation",
+      "description": {
+        "ko": "한 바퀴 돌며 새로고침하고, 불러오는 중에는 계속 돕니다.",
+        "en": "One full turn on hover; it keeps turning while loading."
+      },
+      "color": "#43B966",
+      "states": [
+        "idle",
+        "loading"
+      ],
+      "defaultState": "idle",
+      "stateLabels": {
+        "ko": {
+          "idle": "대기",
+          "loading": "불러오는 중"
+        },
+        "en": {
+          "idle": "Idle",
+          "loading": "Loading"
+        }
+      },
+      "progress": false,
+      "sha256": "6767553316506418ecfd31e18ef52f924f0a85d136bd026bee42d772b661a267",
+      "codePath": "modules/refresh.js"
+    },
+    {
+      "id": "plus",
+      "version": "2.0.13",
+      "order": 62,
+      "name": {
+        "ko": "추가",
+        "en": "Plus"
+      },
+      "keywords": [
+        "추가",
+        "더하기",
+        "새로",
+        "만들기",
+        "plus",
+        "add",
+        "new",
+        "create"
+      ],
+      "category": "navigation",
+      "description": {
+        "ko": "더하기 표시가 90도 돌며 튕깁니다.",
+        "en": "The plus spins a quarter turn with a spring."
+      },
+      "color": "#43B966",
+      "states": [],
+      "progress": false,
+      "sha256": "3e33a8163877afdd27433325c24a058db0d7619dd878ee5b3717dbcf736fd505",
+      "codePath": "modules/plus.js"
+    },
+    {
+      "id": "minus",
+      "version": "2.0.13",
+      "order": 63,
+      "name": {
+        "ko": "빼기",
+        "en": "Minus"
+      },
+      "keywords": [
+        "빼기",
+        "제거",
+        "줄이기",
+        "축소",
+        "minus",
+        "remove",
+        "subtract",
+        "less"
+      ],
+      "category": "navigation",
+      "description": {
+        "ko": "선이 양쪽에서 줄었다가 늘어나며 제자리를 찾습니다.",
+        "en": "The bar shrinks from both ends, then stretches back."
+      },
+      "color": "#F0764F",
+      "states": [],
+      "progress": false,
+      "sha256": "5eef2a86072ccd2cf23f6d859cfb3b2fce104d20740c5773bdb918eecca94891",
+      "codePath": "modules/minus.js"
+    },
+    {
+      "id": "close",
+      "version": "2.0.13",
+      "order": 64,
+      "name": {
+        "ko": "닫기",
+        "en": "Close"
+      },
+      "keywords": [
+        "닫기",
+        "취소",
+        "엑스",
+        "삭제",
+        "close",
+        "cancel",
+        "x",
+        "dismiss"
+      ],
+      "category": "navigation",
+      "description": {
+        "ko": "X가 90도 돌며 작아졌다 커집니다.",
+        "en": "The X turns a quarter and bounces back to size."
+      },
+      "color": "#F05465",
+      "states": [],
+      "progress": false,
+      "sha256": "1261f800024ad73f3a0167c9f70a63075fcf94a8aa38ae85c2f9096cb6ecc2ac",
+      "codePath": "modules/close.js"
+    },
+    {
+      "id": "check",
+      "version": "2.0.13",
+      "order": 65,
+      "name": {
+        "ko": "확인",
+        "en": "Check"
+      },
+      "keywords": [
+        "확인",
+        "체크",
+        "완료",
+        "선택",
+        "check",
+        "done",
+        "confirm",
+        "ok"
+      ],
+      "category": "navigation",
+      "description": {
+        "ko": "체크 표시가 한 번에 다시 그어집니다.",
+        "en": "The check mark draws itself again in one stroke."
+      },
+      "color": "#43B966",
+      "states": [],
+      "progress": false,
+      "sha256": "b36ea626454b7bedc34eacd7f4226d6ea882fc0aa2b97ccffcf37d419827182e",
+      "codePath": "modules/check.js"
+    },
+    {
+      "id": "arrow",
+      "version": "2.0.13",
+      "order": 66,
+      "name": {
+        "ko": "화살표",
+        "en": "Arrow"
+      },
+      "keywords": [
+        "화살표",
+        "다음",
+        "이동",
+        "오른쪽",
+        "arrow",
+        "next",
+        "forward",
+        "right",
+        "go"
+      ],
+      "category": "navigation",
+      "description": {
+        "ko": "화살표가 오른쪽으로 빠져나갔다가 왼쪽에서 다시 들어옵니다.",
+        "en": "The arrow exits to the right and re-enters from the left."
+      },
+      "color": "#3093EC",
+      "states": [],
+      "progress": false,
+      "sha256": "9ae15a5c371c73eba16a8cde0f19a6754b42452ae3fcd42102c898186390aa7c",
+      "codePath": "modules/arrow.js"
+    },
+    {
+      "id": "chevron",
+      "version": "2.0.13",
+      "order": 67,
+      "name": {
+        "ko": "펼침 화살표",
+        "en": "Chevron"
+      },
+      "keywords": [
+        "펼치기",
+        "접기",
+        "드롭다운",
+        "아코디언",
+        "chevron",
+        "dropdown",
+        "expand",
+        "collapse",
+        "accordion"
+      ],
+      "category": "navigation",
+      "description": {
+        "ko": "펼치면 꺾쇠가 스프링처럼 반 바퀴 뒤집힙니다.",
+        "en": "Expanding flips the chevron with a spring."
+      },
+      "color": "#5D73EA",
+      "states": [
+        "collapsed",
+        "expanded"
+      ],
+      "defaultState": "collapsed",
+      "stateLabels": {
+        "ko": {
+          "collapsed": "접힘",
+          "expanded": "펼침"
+        },
+        "en": {
+          "collapsed": "Collapsed",
+          "expanded": "Expanded"
+        }
+      },
+      "progress": false,
+      "sha256": "c85991316c7c42175bda345d31edb50452916b991414b2881ff8abf68518def0",
+      "codePath": "modules/chevron.js"
+    },
+    {
+      "id": "share",
+      "version": "2.0.13",
+      "order": 68,
+      "name": {
+        "ko": "공유",
+        "en": "Share"
+      },
+      "keywords": [
+        "공유",
+        "보내기",
+        "연결",
+        "퍼뜨리기",
+        "share",
+        "send",
+        "network",
+        "spread"
+      ],
+      "category": "navigation",
+      "description": {
+        "ko": "한 점에서 두 갈래로 연결선이 뻗고 점들이 차례로 튑니다.",
+        "en": "Lines branch from one node and the nodes pop in turn."
+      },
+      "color": "#E662A8",
+      "states": [],
+      "progress": false,
+      "sha256": "eab5d55941efb6738a7454313e5935faf737efc6bb8533b05019ed9d1388061f",
+      "codePath": "modules/share.js"
+    },
+    {
+      "id": "more",
+      "version": "2.0.13",
+      "order": 69,
+      "name": {
+        "ko": "더보기",
+        "en": "More"
+      },
+      "keywords": [
+        "더보기",
+        "옵션",
+        "메뉴",
+        "점세개",
+        "more",
+        "options",
+        "ellipsis",
+        "overflow"
+      ],
+      "category": "navigation",
+      "description": {
+        "ko": "세 점이 파도처럼 차례로 튀어 오릅니다.",
+        "en": "Three dots bounce one after another like a wave."
+      },
+      "color": "#8968F4",
+      "states": [],
+      "progress": false,
+      "sha256": "1fc8a9e52f731120bcce971a6cda24e711f22bc25c0068371862ef7a734c18d0",
+      "codePath": "modules/more.js"
+    },
+    {
+      "id": "info",
+      "version": "2.0.13",
+      "order": 70,
+      "name": {
+        "ko": "정보",
+        "en": "Info"
+      },
+      "keywords": [
+        "정보",
+        "안내",
+        "도움",
+        "설명",
+        "info",
+        "information",
+        "about",
+        "details"
+      ],
+      "category": "navigation",
+      "description": {
+        "ko": "테두리에서 알림 고리가 퍼져 나가고, 점이 튀어 올랐다가 글자 위에 내려앉습니다.",
+        "en": "A ring ripples out from the edge and the dot hops up, then lands back on the letter."
+      },
+      "color": "#3093EC",
+      "states": [],
+      "progress": false,
+      "sha256": "5e6663a001cf76fa87901dfc0f44c0acaeda4cce4c1f3285c1bca9b9721949b7",
+      "codePath": "modules/info.js"
+    },
+    {
+      "id": "alert",
+      "version": "2.0.13",
+      "order": 71,
+      "name": {
+        "ko": "경고",
+        "en": "Alert"
+      },
+      "keywords": [
+        "경고",
+        "주의",
+        "위험",
+        "오류",
+        "alert",
+        "warning",
+        "caution",
+        "danger"
+      ],
+      "category": "navigation",
+      "description": {
+        "ko": "삼각형이 좌우로 흔들리며 주의를 끕니다.",
+        "en": "The triangle shakes side to side to get attention."
+      },
+      "color": "#F4AF2D",
+      "states": [],
+      "progress": false,
+      "sha256": "061178d5356f195a05a763ea6110d3a2d81378f62511e6738f0150f6e8b13998",
+      "codePath": "modules/alert.js"
+    },
+    {
+      "id": "help",
+      "version": "2.0.13",
+      "order": 72,
+      "name": {
+        "ko": "도움말",
+        "en": "Help"
+      },
+      "keywords": [
+        "도움말",
+        "질문",
+        "물음표",
+        "지원",
+        "help",
+        "question",
+        "support",
+        "faq"
+      ],
+      "category": "navigation",
+      "description": {
+        "ko": "물음표가 고개를 갸웃하듯 기울었다 돌아옵니다.",
+        "en": "The question mark tilts its head and comes back."
+      },
+      "color": "#8968F4",
+      "states": [],
+      "progress": false,
+      "sha256": "5324509cdc923786bbac45ab6c4124e1971da4dd651ef227033b25823ee46451",
+      "codePath": "modules/help.js"
+    },
+    {
+      "id": "star",
+      "version": "2.0.13",
+      "order": 73,
+      "name": {
+        "ko": "별",
+        "en": "Star"
+      },
+      "keywords": [
+        "별",
+        "즐겨찾기",
+        "평점",
+        "중요",
+        "star",
+        "favorite",
+        "rating",
+        "important"
+      ],
+      "category": "navigation",
+      "description": {
+        "ko": "켜면 별이 한 바퀴 돌며 채워지고 반짝임이 퍼집니다.",
+        "en": "Turning on spins the star as it fills, with a little sparkle."
+      },
+      "color": "#F2CF3B",
+      "states": [
+        "off",
+        "on"
+      ],
+      "defaultState": "off",
+      "stateLabels": {
+        "ko": {
+          "off": "꺼짐",
+          "on": "켜짐"
+        },
+        "en": {
+          "off": "Off",
+          "on": "On"
+        }
+      },
+      "progress": false,
+      "sha256": "fe84d4bbc874060ab797da3aa19ac38b52ff5ba5bc899f4017e7d225ea141ad4",
+      "codePath": "modules/star.js"
+    },
+    {
+      "id": "sparkle",
+      "version": "2.0.13",
+      "order": 74,
+      "name": {
+        "ko": "반짝임",
+        "en": "Sparkle"
+      },
+      "keywords": [
+        "반짝",
+        "AI",
+        "마법",
+        "새로움",
+        "자동",
+        "sparkle",
+        "ai",
+        "magic",
+        "new",
+        "auto",
+        "generate"
+      ],
+      "category": "navigation",
+      "description": {
+        "ko": "큰 별빛이 돌며 커지고, 작은 별빛이 뒤따라 반짝입니다.",
+        "en": "The large sparkle twists and grows; a small one twinkles after."
+      },
+      "color": "#8968F4",
+      "states": [],
+      "progress": false,
+      "sha256": "b1ac0aead9cedc21d6d08045a5378c22a275bc871a7e882f0ff837149248fb3e",
+      "codePath": "modules/sparkle.js"
+    },
+    {
+      "id": "toggle",
+      "version": "2.0.13",
+      "order": 75,
+      "name": {
+        "ko": "스위치",
+        "en": "Toggle"
+      },
+      "keywords": [
+        "스위치",
+        "토글",
+        "켜기",
+        "끄기",
+        "설정",
+        "toggle",
+        "switch",
+        "on",
+        "off"
+      ],
+      "category": "navigation",
+      "description": {
+        "ko": "손잡이가 늘어나며 반대편으로 미끄러지고 트랙이 채워집니다.",
+        "en": "The knob stretches as it slides across and the track fills."
+      },
+      "color": "#43B966",
+      "states": [
+        "off",
+        "on"
+      ],
+      "defaultState": "off",
+      "stateLabels": {
+        "ko": {
+          "off": "꺼짐",
+          "on": "켜짐"
+        },
+        "en": {
+          "off": "Off",
+          "on": "On"
+        }
+      },
+      "progress": false,
+      "sha256": "46ff340a66ede522e614b18889c78a9cb4330f675b536490e2aa7a238def03c8",
+      "codePath": "modules/toggle.js"
+    },
+    {
+      "id": "login",
+      "version": "2.0.13",
+      "order": 76,
+      "name": {
+        "ko": "로그인",
+        "en": "Log in"
+      },
+      "keywords": [
+        "로그인",
+        "들어가기",
+        "입장",
+        "계정",
+        "login",
+        "sign",
+        "in",
+        "enter",
+        "account"
+      ],
+      "category": "navigation",
+      "description": {
+        "ko": "화살표가 문 쪽으로 천천히 들어갔다가 부드럽게 제자리로 돌아옵니다.",
+        "en": "The arrow eases into the doorway and gently comes back."
+      },
+      "color": "#3093EC",
+      "states": [],
+      "progress": false,
+      "sha256": "5e5aadff3cd22952c6390468f4e96f1120594cafc42101571de133841ca5107c",
+      "codePath": "modules/login.js"
+    },
+    {
+      "id": "undo",
+      "version": "2.0.13",
+      "order": 77,
+      "name": {
+        "ko": "실행 취소",
+        "en": "Undo"
+      },
+      "keywords": [
+        "실행취소",
+        "되돌리기",
+        "이전",
+        "뒤로",
+        "undo",
+        "revert",
+        "back",
+        "previous"
+      ],
+      "category": "editing",
+      "description": {
+        "ko": "화살표가 왼쪽으로 감기듯 당겨졌다가 돌아옵니다.",
+        "en": "The arrow pulls back to the left and springs into place."
+      },
+      "color": "#3093EC",
+      "states": [],
+      "progress": false,
+      "sha256": "0f14d973d23276c0e09bc4a190c454be558d9cbb72feda4df247f3a09cdc9d0a",
+      "codePath": "modules/undo.js"
+    },
+    {
+      "id": "redo",
+      "version": "2.0.13",
+      "order": 78,
+      "name": {
+        "ko": "다시 실행",
+        "en": "Redo"
+      },
+      "keywords": [
+        "다시실행",
+        "앞으로",
+        "반복",
+        "다음",
+        "redo",
+        "repeat",
+        "forward",
+        "next"
+      ],
+      "category": "editing",
+      "description": {
+        "ko": "화살표가 오른쪽으로 감기듯 당겨졌다가 돌아옵니다.",
+        "en": "The arrow pulls forward to the right and springs into place."
+      },
+      "color": "#3093EC",
+      "states": [],
+      "progress": false,
+      "sha256": "a221a7ffdf5e64225320af4fb1c442b3d1dc42e321aa8261e783d3d3d1865adf",
+      "codePath": "modules/redo.js"
+    },
+    {
+      "id": "edit",
+      "version": "2.0.13",
+      "order": 79,
+      "name": {
+        "ko": "편집",
+        "en": "Edit"
+      },
+      "keywords": [
+        "편집",
+        "연필",
+        "수정",
+        "쓰기",
+        "edit",
+        "pencil",
+        "write",
+        "modify"
+      ],
+      "category": "editing",
+      "description": {
+        "ko": "연필이 끄적이는 동안 아래 밑줄이 그어집니다.",
+        "en": "The pencil scribbles while the underline draws in."
+      },
+      "color": "#F2CF3B",
+      "states": [],
+      "progress": false,
+      "sha256": "1cfb211b7966728fffd9839598448452bef2f10485f02763ee7ff3ff63a5749c",
+      "codePath": "modules/edit.js"
+    },
+    {
+      "id": "brush",
+      "version": "2.0.13",
+      "order": 80,
+      "name": {
+        "ko": "붓",
+        "en": "Brush"
+      },
+      "keywords": [
+        "붓",
+        "칠하기",
+        "페인트",
+        "그리기",
+        "brush",
+        "paint",
+        "draw",
+        "art"
+      ],
+      "category": "editing",
+      "description": {
+        "ko": "붓이 좌우로 쓸리며 붓끝 아래에 물감 한 획이 칠해집니다.",
+        "en": "The brush sweeps side to side and paints a stroke under its tip."
+      },
+      "color": "#E662A8",
+      "states": [],
+      "progress": false,
+      "sha256": "cf508d982ca849114e615a4bc3caf2491da2f5a281a7950fcba38e058fc5e55a",
+      "codePath": "modules/brush.js"
+    },
+    {
+      "id": "palette",
+      "version": "2.0.13",
+      "order": 81,
+      "name": {
+        "ko": "팔레트",
+        "en": "Palette"
+      },
+      "keywords": [
+        "팔레트",
+        "색상",
+        "물감",
+        "테마",
+        "palette",
+        "color",
+        "paint",
+        "theme"
+      ],
+      "category": "editing",
+      "description": {
+        "ko": "물감 방울이 차례로 톡톡 튀어 오릅니다.",
+        "en": "The paint dabs pop one after another."
+      },
+      "color": "#F48D2F",
+      "states": [],
+      "progress": false,
+      "sha256": "87e832000a2e7165da32f407b5af95c0c89aa7356e930996584421ec448f62da",
+      "codePath": "modules/palette.js"
+    },
+    {
+      "id": "crop",
+      "version": "2.0.13",
+      "order": 82,
+      "name": {
+        "ko": "자르기",
+        "en": "Crop"
+      },
+      "keywords": [
+        "자르기",
+        "크롭",
+        "이미지",
+        "영역",
+        "crop",
+        "trim",
+        "image",
+        "frame"
+      ],
+      "category": "editing",
+      "description": {
+        "ko": "두 모서리가 안쪽으로 조여 들며 영역이 작아졌다가 돌아옵니다.",
+        "en": "The two corners close in and the crop area shrinks, then springs back."
+      },
+      "color": "#98CB46",
+      "states": [],
+      "progress": false,
+      "sha256": "4ccb63fb3bd6cd7e3963954a7051862edd8d042e0261a11f221e8f97ac9c01bd",
+      "codePath": "modules/crop.js"
+    },
+    {
+      "id": "layers",
+      "version": "2.0.13",
+      "order": 83,
+      "name": {
+        "ko": "레이어",
+        "en": "Layers"
+      },
+      "keywords": [
+        "레이어",
+        "겹",
+        "쌓기",
+        "순서",
+        "layers",
+        "stack",
+        "order",
+        "depth"
+      ],
+      "category": "editing",
+      "description": {
+        "ko": "맨 위 레이어가 떠오르며 층 사이가 벌어집니다.",
+        "en": "The top layer floats up and the stack spreads apart."
+      },
+      "color": "#5D73EA",
+      "states": [],
+      "progress": false,
+      "sha256": "8af78a4c6544dedff99a5c1f0a98b4c0cb19be9fe0f6d11fbf533f4e555b0056",
+      "codePath": "modules/layers.js"
+    },
+    {
+      "id": "ruler",
+      "version": "2.0.13",
+      "order": 84,
+      "name": {
+        "ko": "자",
+        "en": "Ruler"
+      },
+      "keywords": [
+        "자",
+        "측정",
+        "길이",
+        "치수",
+        "ruler",
+        "measure",
+        "length",
+        "size"
+      ],
+      "category": "editing",
+      "description": {
+        "ko": "자가 길이를 재듯 비스듬히 미끄러졌다가 제자리로 돌아옵니다.",
+        "en": "The ruler slides along its length as if measuring, then returns."
+      },
+      "color": "#F4AF2D",
+      "states": [],
+      "progress": false,
+      "sha256": "d4b51b3754ec770ded715c9dfb6518403b97be20623ad7ed06b3c433611a397f",
+      "codePath": "modules/ruler.js"
+    },
+    {
+      "id": "scissors",
+      "version": "2.0.13",
+      "order": 85,
+      "name": {
+        "ko": "가위",
+        "en": "Scissors"
+      },
+      "keywords": [
+        "가위",
+        "자르기",
+        "오리기",
+        "잘라내기",
+        "scissors",
+        "cut",
+        "snip",
+        "clip"
+      ],
+      "category": "editing",
+      "description": {
+        "ko": "두 날이 가운데 나사를 축으로 두 번 싹둑 오므렸다 벌어집니다.",
+        "en": "The blades snip shut twice around the pivot screw."
+      },
+      "color": "#26B7D3",
+      "states": [],
+      "progress": false,
+      "sha256": "1973c9dc38ad6608c4ec2e663e991c6553490f03fdfbd6a64b401b0866e0fe2f",
+      "codePath": "modules/scissors.js"
+    },
+    {
+      "id": "pen",
+      "version": "2.0.13",
+      "order": 86,
+      "name": {
+        "ko": "펜",
+        "en": "Pen"
+      },
+      "keywords": [
+        "펜",
+        "펜촉",
+        "벡터",
+        "디자인",
+        "도구",
+        "pen",
+        "nib",
+        "vector",
+        "design",
+        "tool"
+      ],
+      "category": "editing",
+      "description": {
+        "ko": "펜촉이 짧은 획을 긋듯 미끄러졌다 돌아옵니다.",
+        "en": "The nib glides as if drawing a short stroke."
+      },
+      "color": "#5D73EA",
+      "states": [],
+      "progress": false,
+      "sha256": "ca2ca4690a24959783cfe3403faf938fffa1467917e36ba250ee335ed8f4708b",
+      "codePath": "modules/pen.js"
+    },
+    {
+      "id": "eraser",
+      "version": "2.0.13",
+      "order": 87,
+      "name": {
+        "ko": "지우개",
+        "en": "Eraser"
+      },
+      "keywords": [
+        "지우개",
+        "지우기",
+        "삭제",
+        "정리",
+        "eraser",
+        "erase",
+        "clear",
+        "remove"
+      ],
+      "category": "editing",
+      "description": {
+        "ko": "지우개가 좌우로 문지르며 아래 선을 지웠다가 선이 다시 나타납니다.",
+        "en": "The eraser rubs back and forth and wipes out the line, which then returns."
+      },
+      "color": "#E662A8",
+      "states": [],
+      "progress": false,
+      "sha256": "f3c8fddd83589871704fb8cdf8da4af720332307156c8997d8d7d7e4298402cf",
+      "codePath": "modules/eraser.js"
+    },
+    {
+      "id": "text",
+      "version": "2.0.13",
+      "order": 88,
+      "name": {
+        "ko": "텍스트",
+        "en": "Text"
+      },
+      "keywords": [
+        "텍스트",
+        "글자",
+        "타이포",
+        "서체",
+        "text",
+        "type",
+        "font",
+        "typography"
+      ],
+      "category": "editing",
+      "description": {
+        "ko": "글자가 위에서 떨어지듯 내려앉고 커서가 깜빡입니다.",
+        "en": "The letter drops into place and the caret blinks."
+      },
+      "color": "#8968F4",
+      "states": [],
+      "progress": false,
+      "sha256": "1c1f51fcc082e2c77dfb1618e56066e6db51f6a1909f283a3e415891bf8ad2ab",
+      "codePath": "modules/text.js"
+    },
+    {
+      "id": "wand",
+      "version": "2.0.13",
+      "order": 89,
+      "name": {
+        "ko": "요술봉",
+        "en": "Magic wand"
+      },
+      "keywords": [
+        "요술봉",
+        "마법",
+        "자동",
+        "보정",
+        "AI",
+        "wand",
+        "magic",
+        "auto",
+        "enhance"
+      ],
+      "category": "editing",
+      "description": {
+        "ko": "요술봉이 살짝 기울고, 끝의 반짝임이 하나씩 차례로 은은하게 깜빡입니다.",
+        "en": "The wand tips slightly and the sparkles twinkle softly, one after another."
+      },
+      "color": "#AC5CD7",
+      "states": [],
+      "progress": false,
+      "sha256": "3563fbd3182fadeef4b8191ae2dc0653f08f966958bf0bf0621497b404558bc1",
+      "codePath": "modules/wand.js"
+    },
+    {
+      "id": "eyedropper",
+      "version": "2.0.13",
+      "order": 90,
+      "name": {
+        "ko": "스포이트",
+        "en": "Eyedropper"
+      },
+      "keywords": [
+        "스포이트",
+        "색추출",
+        "색상",
+        "선택",
+        "eyedropper",
+        "color",
+        "picker",
+        "sample"
+      ],
+      "category": "editing",
+      "description": {
+        "ko": "고무를 누르면 끝에서 색 방울이 한 방울 떨어집니다.",
+        "en": "Squeezing the bulb releases a single drop of color."
+      },
+      "color": "#24B6A1",
+      "states": [],
+      "progress": false,
+      "sha256": "fb0981f89a07080aca85dedd7e27dc8d482baf2ba50a17b009eb194cab04a08f",
+      "codePath": "modules/eyedropper.js"
+    },
+    {
+      "id": "wrench",
+      "version": "2.0.13",
+      "order": 91,
+      "name": {
+        "ko": "렌치",
+        "en": "Wrench"
+      },
+      "keywords": [
+        "렌치",
+        "도구",
+        "수리",
+        "설정",
+        "wrench",
+        "tool",
+        "fix",
+        "repair",
+        "settings"
+      ],
+      "category": "editing",
+      "description": {
+        "ko": "렌치가 볼트를 조이듯 머리를 축으로 돌렸다가 돌아옵니다.",
+        "en": "The wrench turns around its jaw as if tightening a bolt, then returns."
+      },
+      "color": "#3093EC",
+      "states": [],
+      "progress": false,
+      "sha256": "f6bf33fb3f850d41f8a90b6f947a136182ac1ca4ce07a18209f824b5a9ce00c5",
+      "codePath": "modules/wrench.js"
+    },
+    {
+      "id": "hammer",
+      "version": "2.0.13",
+      "order": 92,
+      "name": {
+        "ko": "망치",
+        "en": "Hammer"
+      },
+      "keywords": [
+        "망치",
+        "도구",
+        "만들기",
+        "빌드",
+        "hammer",
+        "tool",
+        "build",
+        "make"
+      ],
+      "category": "editing",
+      "description": {
+        "ko": "머리를 위로 들어 올렸다가 아래로 탕 내리치고, 맞는 순간 충격선이 퍼집니다.",
+        "en": "It lifts its head, strikes downward, and impact lines flash on contact."
+      },
+      "color": "#F48D2F",
+      "states": [],
+      "progress": false,
+      "sha256": "f9a4313e09f36d4506e246d76d5666ece0f7c09eb97105288548964897cfa97c",
+      "codePath": "modules/hammer.js"
+    },
+    {
+      "id": "play",
+      "version": "2.0.13",
+      "order": 93,
+      "name": {
+        "ko": "재생",
+        "en": "Play"
+      },
+      "keywords": [
+        "재생",
+        "시작",
+        "영상",
+        "음악",
+        "일시정지",
+        "play",
+        "start",
+        "video",
+        "music",
+        "pause",
+        "toggle"
+      ],
+      "category": "media",
+      "description": {
+        "ko": "재생하면 삼각형이 돌아 사라지고 일시정지 막대가 돌아 나옵니다.",
+        "en": "Playing spins the triangle out and the pause bars in."
+      },
+      "color": "#43B966",
+      "states": [
+        "paused",
+        "playing"
+      ],
+      "defaultState": "paused",
+      "stateLabels": {
+        "ko": {
+          "paused": "정지됨",
+          "playing": "재생 중"
+        },
+        "en": {
+          "paused": "Paused",
+          "playing": "Playing"
+        }
+      },
+      "progress": false,
+      "sha256": "df2d422eca70fce8c29cae1fba8d4ce59df7a997d56d8a9095a6c38920a7239e",
+      "codePath": "modules/play.js"
+    },
+    {
+      "id": "pause",
+      "version": "2.0.13",
+      "order": 94,
+      "name": {
+        "ko": "일시정지",
+        "en": "Pause"
+      },
+      "keywords": [
+        "일시정지",
+        "멈춤",
+        "대기",
+        "pause",
+        "hold",
+        "break"
+      ],
+      "category": "media",
+      "description": {
+        "ko": "두 막대가 번갈아 눌렸다 올라옵니다.",
+        "en": "The two bars press down in turn."
+      },
+      "color": "#F4AF2D",
+      "states": [],
+      "progress": false,
+      "sha256": "73097f90588db65bcc84eefbfabd86b9a6466fa2c7801c75a9acb737d2540a23",
+      "codePath": "modules/pause.js"
+    },
+    {
+      "id": "stop",
+      "version": "2.0.13",
+      "order": 95,
+      "name": {
+        "ko": "정지",
+        "en": "Stop"
+      },
+      "keywords": [
+        "정지",
+        "중지",
+        "끝",
+        "멈춤",
+        "stop",
+        "end",
+        "halt"
+      ],
+      "category": "media",
+      "description": {
+        "ko": "사각형이 꾹 눌렸다가 단단하게 돌아옵니다.",
+        "en": "The square squeezes in and firms back up."
+      },
+      "color": "#F05465",
+      "states": [],
+      "progress": false,
+      "sha256": "4432398531aeb51a1414b71bc84171d5887bb06b2cf414ef4fe8a648c1cac548",
+      "codePath": "modules/stop.js"
+    },
+    {
+      "id": "record",
+      "version": "2.0.13",
+      "order": 96,
+      "name": {
+        "ko": "녹화",
+        "en": "Record"
+      },
+      "keywords": [
+        "녹화",
+        "녹음",
+        "기록",
+        "라이브",
+        "record",
+        "recording",
+        "live",
+        "capture"
+      ],
+      "category": "media",
+      "description": {
+        "ko": "녹화 중에는 점이 숨 쉬고 바깥으로 파문이 퍼집니다.",
+        "en": "While recording the dot breathes and a ripple spreads."
+      },
+      "color": "#F05465",
+      "states": [
+        "idle",
+        "recording"
+      ],
+      "defaultState": "idle",
+      "stateLabels": {
+        "ko": {
+          "idle": "대기",
+          "recording": "녹화 중"
+        },
+        "en": {
+          "idle": "Idle",
+          "recording": "Recording"
+        }
+      },
+      "progress": false,
+      "sha256": "6706050c6f33971cabd2a0fa0ddae864027814a36bac037a2d205c8bb94ff75f",
+      "codePath": "modules/record.js"
+    },
+    {
+      "id": "music",
+      "version": "2.0.13",
+      "order": 97,
+      "name": {
+        "ko": "음악",
+        "en": "Music"
+      },
+      "keywords": [
+        "음악",
+        "음표",
+        "노래",
+        "오디오",
+        "music",
+        "note",
+        "song",
+        "audio"
+      ],
+      "category": "media",
+      "description": {
+        "ko": "음표가 박자에 맞춰 통통 튀고, 재생 중에는 좌우로 흔들립니다.",
+        "en": "The notes bounce on the beat and sway while playing."
+      },
+      "color": "#E662A8",
+      "states": [
+        "idle",
+        "playing"
+      ],
+      "defaultState": "idle",
+      "stateLabels": {
+        "ko": {
+          "idle": "대기",
+          "playing": "재생 중"
+        },
+        "en": {
+          "idle": "Idle",
+          "playing": "Playing"
+        }
+      },
+      "progress": false,
+      "sha256": "a163731a44569c6f4b9b6cf712e60b940deae5c5b78fa672fccd7de20ebfca21",
+      "codePath": "modules/music.js"
+    },
+    {
+      "id": "headphones",
+      "version": "2.0.13",
+      "order": 98,
+      "name": {
+        "ko": "헤드폰",
+        "en": "Headphones"
+      },
+      "keywords": [
+        "헤드폰",
+        "듣기",
+        "오디오",
+        "음악",
+        "headphones",
+        "listen",
+        "audio",
+        "music"
+      ],
+      "category": "media",
+      "description": {
+        "ko": "헤드폰이 음악에 맞춰 고개를 까딱입니다.",
+        "en": "The headphones nod along to the music."
+      },
+      "color": "#8968F4",
+      "states": [],
+      "progress": false,
+      "sha256": "579037629af203b7227dda030cf05360a62ae364ede627f5d5471db5e8f81cb9",
+      "codePath": "modules/headphones.js"
+    },
+    {
+      "id": "camera",
+      "version": "2.0.13",
+      "order": 99,
+      "name": {
+        "ko": "카메라",
+        "en": "Camera"
+      },
+      "keywords": [
+        "카메라",
+        "사진",
+        "촬영",
+        "찰칵",
+        "camera",
+        "photo",
+        "shoot",
+        "capture"
+      ],
+      "category": "media",
+      "description": {
+        "ko": "셔터를 누르면 렌즈가 조여지고 플래시가 번쩍입니다.",
+        "en": "The shutter fires: the iris closes and the flash pops."
+      },
+      "color": "#3093EC",
+      "states": [],
+      "progress": false,
+      "sha256": "fbee35b30789c2bbecfe682eaa760a55f28c75fc5e4ab7756c5a138bd63e3b8a",
+      "codePath": "modules/camera.js"
+    },
+    {
+      "id": "image",
+      "version": "2.0.13",
+      "order": 100,
+      "name": {
+        "ko": "이미지",
+        "en": "Image"
+      },
+      "keywords": [
+        "이미지",
+        "사진",
+        "그림",
+        "갤러리",
+        "image",
+        "photo",
+        "picture",
+        "gallery"
+      ],
+      "category": "media",
+      "description": {
+        "ko": "해가 떠오르고 산 능선이 다시 그려집니다.",
+        "en": "The sun rises and the ridge line redraws."
+      },
+      "color": "#24B6A1",
+      "states": [],
+      "progress": false,
+      "sha256": "e08f0bb9edb69c9e79397a468c7c7e1f7ec4c28c4d01f2eb43c0e70c0e72ac0b",
+      "codePath": "modules/image.js"
+    },
+    {
+      "id": "film",
+      "version": "2.0.13",
+      "order": 101,
+      "name": {
+        "ko": "영화",
+        "en": "Film"
+      },
+      "keywords": [
+        "영화",
+        "영상",
+        "촬영",
+        "슬레이트",
+        "film",
+        "movie",
+        "video",
+        "clapper"
+      ],
+      "category": "media",
+      "description": {
+        "ko": "슬레이트가 들렸다가 딱 소리 나게 내려칩니다.",
+        "en": "The clapper lifts and snaps shut."
+      },
+      "color": "#AC5CD7",
+      "states": [],
+      "progress": false,
+      "sha256": "7bf0e2d085ae7a85766beb0b2793d34b3539004e6d649b057fa616330f5486a1",
+      "codePath": "modules/film.js"
+    },
+    {
+      "id": "microphone",
+      "version": "2.0.13",
+      "order": 102,
+      "name": {
+        "ko": "마이크",
+        "en": "Microphone"
+      },
+      "keywords": [
+        "마이크",
+        "음성",
+        "녹음",
+        "말하기",
+        "음소거",
+        "microphone",
+        "voice",
+        "record",
+        "speak",
+        "mute"
+      ],
+      "category": "media",
+      "description": {
+        "ko": "말하듯 음량 막대가 오르내리고, 음소거하면 사선이 그어집니다.",
+        "en": "The level bar bounces like speech; muting draws a slash."
+      },
+      "color": "#F0764F",
+      "states": [
+        "on",
+        "muted"
+      ],
+      "defaultState": "on",
+      "stateLabels": {
+        "ko": {
+          "on": "켜짐",
+          "muted": "음소거"
+        },
+        "en": {
+          "on": "On",
+          "muted": "Muted"
+        }
+      },
+      "progress": false,
+      "sha256": "67627c1053fd4e8ce5e54f21ff87db3bc026b4824e51c0fa3671002a7b4e1a9b",
+      "codePath": "modules/microphone.js"
+    },
+    {
+      "id": "speaker",
+      "version": "2.0.13",
+      "order": 103,
+      "name": {
+        "ko": "스피커",
+        "en": "Speaker"
+      },
+      "keywords": [
+        "스피커",
+        "소리",
+        "볼륨",
+        "음소거",
+        "speaker",
+        "sound",
+        "volume",
+        "mute",
+        "audio"
+      ],
+      "category": "media",
+      "description": {
+        "ko": "음파가 차례로 퍼지고, 음소거하면 음파 대신 X가 나타납니다.",
+        "en": "Sound waves ripple out; muting swaps them for an X."
+      },
+      "color": "#3093EC",
+      "states": [
+        "on",
+        "muted"
+      ],
+      "defaultState": "on",
+      "stateLabels": {
+        "ko": {
+          "on": "켜짐",
+          "muted": "음소거"
+        },
+        "en": {
+          "on": "On",
+          "muted": "Muted"
+        }
+      },
+      "progress": false,
+      "sha256": "17990211baa43a25bcc501b9e82c38d8c474f0f078961c698aaf9a24e8db0141",
+      "codePath": "modules/speaker.js"
+    },
+    {
+      "id": "next",
+      "version": "2.0.13",
+      "order": 104,
+      "name": {
+        "ko": "다음 곡",
+        "en": "Next"
+      },
+      "keywords": [
+        "다음",
+        "건너뛰기",
+        "다음곡",
+        "앞으로",
+        "next",
+        "skip",
+        "forward",
+        "track"
+      ],
+      "category": "media",
+      "description": {
+        "ko": "삼각형이 뒤로 살짝 물러났다가 막대로 튀어 나가 부딪히고, 막대가 밀려납니다.",
+        "en": "The triangle draws back, dashes into the bar, and the bar gets knocked forward."
+      },
+      "color": "#43B966",
+      "states": [],
+      "progress": false,
+      "sha256": "fa9c8bf26640f6442b6610f9dda7558d63e0a8496e6d3bdf9e439267de9c75f7",
+      "codePath": "modules/next.js"
+    },
+    {
+      "id": "shuffle",
+      "version": "2.0.13",
+      "order": 105,
+      "name": {
+        "ko": "섞기",
+        "en": "Shuffle"
+      },
+      "keywords": [
+        "섞기",
+        "랜덤",
+        "무작위",
+        "셔플",
+        "shuffle",
+        "random",
+        "mix"
+      ],
+      "category": "media",
+      "description": {
+        "ko": "교차한 두 화살표가 카드를 섞듯 서로 반대 방향으로 벌어졌다 모입니다.",
+        "en": "The crossed arrows fan apart in opposite directions like shuffled cards, then rejoin."
+      },
+      "color": "#AC5CD7",
+      "states": [],
+      "progress": false,
+      "sha256": "6add44eb56c979dea841dfdbb98702cca3b9c4b7396d47d88edfa48d2a56b22d",
+      "codePath": "modules/shuffle.js"
+    },
+    {
+      "id": "repeat",
+      "version": "2.0.13",
+      "order": 106,
+      "name": {
+        "ko": "반복",
+        "en": "Repeat"
+      },
+      "keywords": [
+        "반복",
+        "루프",
+        "다시",
+        "재생",
+        "repeat",
+        "loop",
+        "again",
+        "cycle"
+      ],
+      "category": "media",
+      "description": {
+        "ko": "고리 전체가 한 바퀴 돌아 제자리로 돌아옵니다.",
+        "en": "The loop makes one full turn and lands where it began."
+      },
+      "color": "#26B7D3",
+      "states": [],
+      "progress": false,
+      "sha256": "059c6706ec4e433a60a36599005b3153d2e227476a6b33fef02e75ad71d0e75b",
+      "codePath": "modules/repeat.js"
+    },
+    {
+      "id": "radio",
+      "version": "2.0.13",
+      "order": 107,
+      "name": {
+        "ko": "라디오",
+        "en": "Radio"
+      },
+      "keywords": [
+        "라디오",
+        "방송",
+        "팟캐스트",
+        "소리",
+        "radio",
+        "broadcast",
+        "podcast",
+        "fm"
+      ],
+      "category": "media",
+      "description": {
+        "ko": "안테나가 흔들리고 스피커가 소리에 맞춰 두 번 울립니다.",
+        "en": "The antenna sways and the speaker thumps twice with the sound."
+      },
+      "color": "#F48D2F",
+      "states": [],
+      "progress": false,
+      "sha256": "9c40759a5a95c20ffc03cfaf05bcf9402e03c5ae448c802b043de298f7636aa0",
+      "codePath": "modules/radio.js"
+    },
+    {
+      "id": "tv",
+      "version": "2.0.13",
+      "order": 108,
+      "name": {
+        "ko": "TV",
+        "en": "TV"
+      },
+      "keywords": [
+        "TV",
+        "텔레비전",
+        "화면",
+        "방송",
+        "tv",
+        "television",
+        "screen",
+        "show"
+      ],
+      "category": "media",
+      "description": {
+        "ko": "켜면 화면 속 재생 표시가 퍼지고, 끄면 옛날 브라운관처럼 한 줄로 접힙니다.",
+        "en": "Turning on blooms the picture; turning off folds it like an old CRT."
+      },
+      "color": "#5D73EA",
+      "states": [
+        "on",
+        "off"
+      ],
+      "defaultState": "on",
+      "stateLabels": {
+        "ko": {
+          "on": "켜짐",
+          "off": "꺼짐"
+        },
+        "en": {
+          "on": "On",
+          "off": "Off"
+        }
+      },
+      "progress": false,
+      "sha256": "a5b11da30b9f4bcad4f3ea3e791fb29fc61277c9b5dffe9c793740c878c4d290",
+      "codePath": "modules/tv.js"
+    },
+    {
+      "id": "aperture",
+      "version": "2.0.13",
+      "order": 109,
+      "name": {
+        "ko": "조리개",
+        "en": "Aperture"
+      },
+      "keywords": [
+        "조리개",
+        "렌즈",
+        "사진",
+        "셔터",
+        "aperture",
+        "lens",
+        "photo",
+        "shutter"
+      ],
+      "category": "media",
+      "description": {
+        "ko": "휘어진 조리개 날이 돌며 가운데 구멍이 좁아졌다가 다시 열립니다.",
+        "en": "The curved blades turn and narrow the opening, then open it again."
+      },
+      "color": "#F4AF2D",
+      "states": [],
+      "progress": false,
+      "sha256": "fdb3ab290df329706c9592d37755741757fe970c075512632c330001c226d8b1",
+      "codePath": "modules/aperture.js"
+    },
+    {
+      "id": "disc",
+      "version": "2.0.13",
+      "order": 110,
+      "name": {
+        "ko": "음반",
+        "en": "Disc"
+      },
+      "keywords": [
+        "음반",
+        "레코드",
+        "CD",
+        "앨범",
+        "disc",
+        "record",
+        "vinyl",
+        "album"
+      ],
+      "category": "media",
+      "description": {
+        "ko": "음반이 한 바퀴 돌고, 재생 중에는 계속 돕니다.",
+        "en": "The disc spins once; while playing it keeps spinning."
+      },
+      "color": "#E662A8",
+      "states": [
+        "idle",
+        "playing"
+      ],
+      "defaultState": "idle",
+      "stateLabels": {
+        "ko": {
+          "idle": "대기",
+          "playing": "재생 중"
+        },
+        "en": {
+          "idle": "Idle",
+          "playing": "Playing"
+        }
+      },
+      "progress": false,
+      "sha256": "7c9db326d79dea180c7acb2e8ff30ebbbd5caa0a15571d213eeef451f6801e6a",
+      "codePath": "modules/disc.js"
+    },
+    {
+      "id": "power",
+      "version": "2.0.13",
+      "order": 111,
+      "name": {
+        "ko": "전원",
+        "en": "Power"
+      },
+      "keywords": [
+        "전원",
+        "켜기",
+        "끄기",
+        "시작",
+        "power",
+        "on",
+        "off",
+        "start"
+      ],
+      "category": "devices",
+      "description": {
+        "ko": "버튼이 눌리듯 막대가 내려갔다 올라오고 고리가 한 바퀴 그려집니다.",
+        "en": "The stem presses in and the ring draws itself around."
+      },
+      "color": "#43B966",
+      "states": [
+        "off",
+        "on"
+      ],
+      "defaultState": "off",
+      "stateLabels": {
+        "ko": {
+          "off": "꺼짐",
+          "on": "켜짐"
+        },
+        "en": {
+          "off": "Off",
+          "on": "On"
+        }
+      },
+      "progress": false,
+      "sha256": "e5c3a5e73194bb95be93dd561e65f936ffd8efea99d99eee7828d8c4e1f30477",
+      "codePath": "modules/power.js"
+    },
+    {
+      "id": "mouse",
+      "version": "2.0.13",
+      "order": 112,
+      "name": {
+        "ko": "마우스",
+        "en": "Mouse"
+      },
+      "keywords": [
+        "마우스",
+        "스크롤",
+        "클릭",
+        "입력",
+        "mouse",
+        "scroll",
+        "click",
+        "input"
+      ],
+      "category": "devices",
+      "description": {
+        "ko": "왼쪽 버튼이 딸깍딸깍 두 번 눌립니다.",
+        "en": "The left button clicks twice."
+      },
+      "color": "#3093EC",
+      "states": [],
+      "progress": false,
+      "sha256": "e3a0db6596f578c5a2f093b0305d6d0693db118c3dc376d2570846d50c5251f9",
+      "codePath": "modules/mouse.js"
+    },
+    {
+      "id": "monitor",
+      "version": "2.0.13",
+      "order": 113,
+      "name": {
+        "ko": "모니터",
+        "en": "Monitor"
+      },
+      "keywords": [
+        "모니터",
+        "데스크톱",
+        "화면",
+        "컴퓨터",
+        "monitor",
+        "desktop",
+        "screen",
+        "display"
+      ],
+      "category": "devices",
+      "description": {
+        "ko": "화면이 살짝 튀고 내용이 다시 그려집니다.",
+        "en": "The screen bounces and its content redraws."
+      },
+      "color": "#5D73EA",
+      "states": [],
+      "progress": false,
+      "sha256": "7430d0d9c9905166c7ff79bb6f69c601f87858028b7876717db3bb86e793d657",
+      "codePath": "modules/monitor.js"
+    },
+    {
+      "id": "laptop",
+      "version": "2.0.13",
+      "order": 114,
+      "name": {
+        "ko": "노트북",
+        "en": "Laptop"
+      },
+      "keywords": [
+        "노트북",
+        "랩톱",
+        "컴퓨터",
+        "화면",
+        "laptop",
+        "computer",
+        "notebook",
+        "screen"
+      ],
+      "category": "devices",
+      "description": {
+        "ko": "화면 속 글줄이 지워졌다가 한 줄씩 다시 쓰입니다.",
+        "en": "The lines on the screen clear and type back in, one after another."
+      },
+      "color": "#3093EC",
+      "states": [],
+      "progress": false,
+      "sha256": "776ee9392970b049e3716e8799c7678dd05aeb38caf8b7db7ee2185007878e95",
+      "codePath": "modules/laptop.js"
+    },
+    {
+      "id": "tablet",
+      "version": "2.0.13",
+      "order": 115,
+      "name": {
+        "ko": "태블릿",
+        "en": "Tablet"
+      },
+      "keywords": [
+        "태블릿",
+        "아이패드",
+        "화면",
+        "회전",
+        "tablet",
+        "ipad",
+        "screen",
+        "rotate"
+      ],
+      "category": "devices",
+      "description": {
+        "ko": "가로 모드로 바꾸면 스프링처럼 90도 돌아갑니다.",
+        "en": "Landscape rotates it a quarter turn with a spring."
+      },
+      "color": "#24B6A1",
+      "states": [
+        "portrait",
+        "landscape"
+      ],
+      "defaultState": "portrait",
+      "stateLabels": {
+        "ko": {
+          "portrait": "세로",
+          "landscape": "가로"
+        },
+        "en": {
+          "portrait": "Portrait",
+          "landscape": "Landscape"
+        }
+      },
+      "progress": false,
+      "sha256": "0dbcb76de73fa76e958a698edabfbc1db081f20b2a5e4753804cbf2b4507333e",
+      "codePath": "modules/tablet.js"
+    },
+    {
+      "id": "smartphone",
+      "version": "2.0.13",
+      "order": 116,
+      "name": {
+        "ko": "스마트폰",
+        "en": "Smartphone"
+      },
+      "keywords": [
+        "스마트폰",
+        "휴대폰",
+        "모바일",
+        "알림",
+        "smartphone",
+        "mobile",
+        "phone",
+        "notification"
+      ],
+      "category": "devices",
+      "description": {
+        "ko": "알림이 오면 화면 위로 배너가 내려오고 폰이 진동합니다.",
+        "en": "An alert slides a banner down and the phone buzzes."
+      },
+      "color": "#8968F4",
+      "states": [
+        "idle",
+        "alert"
+      ],
+      "defaultState": "idle",
+      "stateLabels": {
+        "ko": {
+          "idle": "대기",
+          "alert": "알림"
+        },
+        "en": {
+          "idle": "Idle",
+          "alert": "Alert"
+        }
+      },
+      "progress": false,
+      "sha256": "f96b302adf11ee37a9108129b2e73bd079aa56c64ee3110c72fa33d9b8599778",
+      "codePath": "modules/smartphone.js"
+    },
+    {
+      "id": "keyboard",
+      "version": "2.0.13",
+      "order": 117,
+      "name": {
+        "ko": "키보드",
+        "en": "Keyboard"
+      },
+      "keywords": [
+        "키보드",
+        "입력",
+        "타자",
+        "단축키",
+        "keyboard",
+        "typing",
+        "input",
+        "shortcut"
+      ],
+      "category": "devices",
+      "description": {
+        "ko": "자판이 타자 치듯 하나씩 쏙 눌렸다 올라오고, 마지막에 스페이스바가 눌립니다.",
+        "en": "Keys go down and up one at a time like typing, then the space bar is pressed."
+      },
+      "color": "#5D73EA",
+      "states": [],
+      "progress": false,
+      "sha256": "d343f45b9370e094ba8038f089700153b102749081f0fc46620ce5b7079a11b3",
+      "codePath": "modules/keyboard.js"
+    },
+    {
+      "id": "battery",
+      "version": "2.0.13",
+      "order": 118,
+      "name": {
+        "ko": "배터리",
+        "en": "Battery"
+      },
+      "keywords": [
+        "배터리",
+        "충전",
+        "전력",
+        "잔량",
+        "battery",
+        "charge",
+        "power",
+        "level"
+      ],
+      "category": "devices",
+      "description": {
+        "ko": "실제 잔량만큼 채워지고, 충전 중에는 번개와 함께 차오름이 반복됩니다.",
+        "en": "Fills to the measured level; charging shows a bolt and a repeating fill."
+      },
+      "color": "#43B966",
+      "states": [
+        "level",
+        "charging"
+      ],
+      "defaultState": "level",
+      "stateLabels": {
+        "ko": {
+          "level": "잔량",
+          "charging": "충전 중"
+        },
+        "en": {
+          "level": "Level",
+          "charging": "Charging"
+        }
+      },
+      "progress": true,
+      "sha256": "cb57f1591044ceafa3ff779a439e7c71eee266ae0eb86881eccc1fa4b70b899b",
+      "codePath": "modules/battery.js"
+    },
+    {
+      "id": "wifi",
+      "version": "2.0.13",
+      "order": 119,
+      "name": {
+        "ko": "와이파이",
+        "en": "Wi-Fi"
+      },
+      "keywords": [
+        "와이파이",
+        "무선",
+        "인터넷",
+        "연결",
+        "신호",
+        "wifi",
+        "wireless",
+        "internet",
+        "signal"
+      ],
+      "category": "devices",
+      "description": {
+        "ko": "연결됨은 물결 세 개가 모두 진하고, 연결 중에는 물결이 흐려진 채 안쪽부터 차례로 켜지기를 반복합니다. 연결되면 물결이 하나씩 켜집니다.",
+        "en": "Connected shows all three arcs solid; connecting dims them and lights them from the inside out, over and over; connecting finishes by lighting them one by one."
+      },
+      "color": "#3093EC",
+      "states": [
+        "connected",
+        "connecting"
+      ],
+      "defaultState": "connected",
+      "stateLabels": {
+        "ko": {
+          "connected": "연결됨",
+          "connecting": "연결 중"
+        },
+        "en": {
+          "connected": "Connected",
+          "connecting": "Connecting"
+        }
+      },
+      "progress": false,
+      "sha256": "912d5490ea770121a50f6e8548318ba6ceb3a2e7e18343bacb359057a8c47e24",
+      "codePath": "modules/wifi.js"
+    },
+    {
+      "id": "bluetooth",
+      "version": "2.0.13",
+      "order": 120,
+      "name": {
+        "ko": "블루투스",
+        "en": "Bluetooth"
+      },
+      "keywords": [
+        "블루투스",
+        "무선",
+        "연결",
+        "페어링",
+        "bluetooth",
+        "wireless",
+        "pair",
+        "connect"
+      ],
+      "category": "devices",
+      "description": {
+        "ko": "룬 모양 기호가 한 획으로 다시 그려집니다.",
+        "en": "The rune redraws itself in a single stroke."
+      },
+      "color": "#5D73EA",
+      "states": [],
+      "progress": false,
+      "sha256": "7cb4836305f079aecc32aca573272b1a158b79487c449dfe5a0137501bd57a27",
+      "codePath": "modules/bluetooth.js"
+    },
+    {
+      "id": "plug",
+      "version": "2.0.13",
+      "order": 121,
+      "name": {
+        "ko": "플러그",
+        "en": "Plug"
+      },
+      "keywords": [
+        "플러그",
+        "전원",
+        "연결",
+        "충전",
+        "plug",
+        "power",
+        "connect",
+        "charge"
+      ],
+      "category": "devices",
+      "description": {
+        "ko": "플러그가 위로 꽂히며 끝에서 작은 불꽃이 튑니다.",
+        "en": "The plug pushes up and a small spark jumps from the prongs."
+      },
+      "color": "#F4AF2D",
+      "states": [],
+      "progress": false,
+      "sha256": "2fea1aa658bad1d1a59a0f96fdd169e64c0aea4d7745593c1d69daf7542d4d94",
+      "codePath": "modules/plug.js"
+    },
+    {
+      "id": "bulb",
+      "version": "2.0.13",
+      "order": 122,
+      "name": {
+        "ko": "전구",
+        "en": "Light bulb"
+      },
+      "keywords": [
+        "전구",
+        "아이디어",
+        "빛",
+        "조명",
+        "bulb",
+        "idea",
+        "light",
+        "lamp"
+      ],
+      "category": "devices",
+      "description": {
+        "ko": "켜질 때 전구가 깜빡이며 차오르고, 전구에서 넉넉히 떨어진 빛줄기 다섯 개가 바깥으로 퍼집니다.",
+        "en": "Switching on flickers the bulb full, and five rays spread outward with clear space around the bulb."
+      },
+      "color": "#F2CF3B",
+      "states": [
+        "off",
+        "on"
+      ],
+      "defaultState": "off",
+      "stateLabels": {
+        "ko": {
+          "off": "꺼짐",
+          "on": "켜짐"
+        },
+        "en": {
+          "off": "Off",
+          "on": "On"
+        }
+      },
+      "progress": false,
+      "sha256": "5335ebbe6c438a0c22509ba5fd886fccaa26298bb1c409aeac77910456f43b41",
+      "codePath": "modules/bulb.js"
+    },
+    {
+      "id": "gamepad",
+      "version": "2.0.13",
+      "order": 123,
+      "name": {
+        "ko": "게임패드",
+        "en": "Gamepad"
+      },
+      "keywords": [
+        "게임패드",
+        "게임",
+        "컨트롤러",
+        "놀이",
+        "gamepad",
+        "game",
+        "controller",
+        "play"
+      ],
+      "category": "devices",
+      "description": {
+        "ko": "패드가 기울어지며 버튼이 차례로 눌립니다.",
+        "en": "The pad tilts while the buttons press in turn."
+      },
+      "color": "#AC5CD7",
+      "states": [],
+      "progress": false,
+      "sha256": "504643a3545df3c09f1109bef32e32165756e3c456b36ff3bacfb3bafc5344ae",
+      "codePath": "modules/gamepad.js"
+    },
+    {
+      "id": "printer",
+      "version": "2.0.13",
+      "order": 124,
+      "name": {
+        "ko": "프린터",
+        "en": "Printer"
+      },
+      "keywords": [
+        "프린터",
+        "인쇄",
+        "출력",
+        "종이",
+        "printer",
+        "print",
+        "output",
+        "paper"
+      ],
+      "category": "devices",
+      "description": {
+        "ko": "프린터가 덜컥이며 아래로 종이 한 장을 밀어냅니다.",
+        "en": "The printer rattles and pushes out a sheet."
+      },
+      "color": "#26B7D3",
+      "states": [],
+      "progress": false,
+      "sha256": "50c8be0e29df95b432f6aa0f247efe77a3e003000e722c4f6370574fdda95b33",
+      "codePath": "modules/printer.js"
+    },
+    {
+      "id": "scan",
+      "version": "2.0.13",
+      "order": 125,
+      "name": {
+        "ko": "문서 스캔",
+        "en": "Scan"
+      },
+      "keywords": [
+        "스캔",
+        "문서",
+        "인식",
+        "촬영",
+        "scan",
+        "document",
+        "capture",
+        "ocr"
+      ],
+      "category": "devices",
+      "description": {
+        "ko": "빛줄기가 문서 위를 위아래로 훑습니다.",
+        "en": "A light bar sweeps down the document and back."
+      },
+      "color": "#98CB46",
+      "states": [],
+      "progress": false,
+      "sha256": "65edb2f67aae182743e327574b9dc3ea8be7b94229edfb1b43e2aa994996d864",
+      "codePath": "modules/scan.js"
+    },
+    {
+      "id": "watch",
+      "version": "2.0.13",
+      "order": 126,
+      "name": {
+        "ko": "스마트워치",
+        "en": "Watch"
+      },
+      "keywords": [
+        "시계",
+        "스마트워치",
+        "손목",
+        "시간",
+        "watch",
+        "smartwatch",
+        "wrist",
+        "time"
+      ],
+      "category": "devices",
+      "description": {
+        "ko": "시곗바늘이 한 바퀴 빠르게 돌고 크라운이 눌립니다.",
+        "en": "The hands sweep a full turn and the crown clicks."
+      },
+      "color": "#F0764F",
+      "states": [],
+      "progress": false,
+      "sha256": "748e71639cfc24a05a665100da968c8f696eb6fcf0ccee175e610a875fe2a0fd",
+      "codePath": "modules/watch.js"
+    },
+    {
+      "id": "signal",
+      "version": "2.0.13",
+      "order": 127,
+      "name": {
+        "ko": "신호",
+        "en": "Signal"
+      },
+      "keywords": [
+        "신호",
+        "세기",
+        "셀룰러",
+        "안테나",
+        "signal",
+        "strength",
+        "cellular",
+        "bars"
+      ],
+      "category": "devices",
+      "description": {
+        "ko": "막대가 왼쪽부터 물결치듯 낮아졌다 올라오고, 검색 중에는 막대가 흐려진 채 왼쪽부터 차례로 켜지기를 반복합니다.",
+        "en": "A wave runs through the bars from the left; searching dims them and lights them left to right, over and over."
+      },
+      "color": "#43B966",
+      "states": [
+        "full",
+        "searching"
+      ],
+      "defaultState": "full",
+      "stateLabels": {
+        "ko": {
+          "full": "강함",
+          "searching": "검색 중"
+        },
+        "en": {
+          "full": "Full",
+          "searching": "Searching"
+        }
+      },
+      "progress": false,
+      "sha256": "6e8d4c3bb7b487a0ef6f980af91af9747de36fb109ebf22432d5e01ada20c3e4",
+      "codePath": "modules/signal.js"
+    },
+    {
+      "id": "router",
+      "version": "2.0.13",
+      "order": 128,
+      "name": {
+        "ko": "공유기",
+        "en": "Router"
+      },
+      "keywords": [
+        "공유기",
+        "라우터",
+        "네트워크",
+        "인터넷",
+        "router",
+        "network",
+        "internet",
+        "modem"
+      ],
+      "category": "devices",
+      "description": {
+        "ko": "전파가 안쪽부터 퍼지고 표시등이 깜빡입니다.",
+        "en": "Waves spread from the inside out and the lights blink."
+      },
+      "color": "#24B6A1",
+      "states": [],
+      "progress": false,
+      "sha256": "6e788e5d4ffc38d2b3247831997dd4d529bf466f8eb8fec5da1dbd4a1f00ddda",
+      "codePath": "modules/router.js"
+    },
+    {
+      "id": "usb",
+      "version": "2.0.13",
+      "order": 129,
+      "name": {
+        "ko": "USB",
+        "en": "USB drive"
+      },
+      "keywords": [
+        "USB",
+        "메모리",
+        "저장",
+        "연결",
+        "usb",
+        "drive",
+        "storage",
+        "stick"
+      ],
+      "category": "devices",
+      "description": {
+        "ko": "드라이브가 위쪽 포트로 꽂히듯 밀려 올라갔다 내려오고, 표시등이 두 번 깜빡입니다.",
+        "en": "The drive pushes up as if into a port, comes back, and its light blinks twice."
+      },
+      "color": "#5D73EA",
+      "states": [],
+      "progress": false,
+      "sha256": "ff4310ffddea0b5425787421e42c105ff7a210debe27f20c401af1905580716e",
+      "codePath": "modules/usb.js"
+    },
+    {
+      "id": "cast",
+      "version": "2.0.13",
+      "order": 130,
+      "name": {
+        "ko": "화면 전송",
+        "en": "Cast"
+      },
+      "keywords": [
+        "캐스트",
+        "미러링",
+        "화면공유",
+        "TV전송",
+        "cast",
+        "mirror",
+        "screen",
+        "share",
+        "airplay"
+      ],
+      "category": "devices",
+      "description": {
+        "ko": "모서리에서 전파가 차례로 퍼지고, 전송 중에는 계속 반복됩니다.",
+        "en": "Waves spread from the corner in turn; casting keeps them pulsing."
+      },
+      "color": "#26B7D3",
+      "states": [
+        "idle",
+        "casting"
+      ],
+      "defaultState": "idle",
+      "stateLabels": {
+        "ko": {
+          "idle": "대기",
+          "casting": "전송 중"
+        },
+        "en": {
+          "idle": "Idle",
+          "casting": "Casting"
+        }
+      },
+      "progress": false,
+      "sha256": "2b7ac85aa93168d860553107d26933703ba25b2dcca5486e13402953cf78faf9",
+      "codePath": "modules/cast.js"
+    },
+    {
+      "id": "database",
+      "version": "2.0.13",
+      "order": 131,
+      "name": {
+        "ko": "데이터베이스",
+        "en": "Database"
+      },
+      "keywords": [
+        "데이터베이스",
+        "저장소",
+        "DB",
+        "테이블",
+        "database",
+        "storage",
+        "db",
+        "table"
+      ],
+      "category": "data",
+      "description": {
+        "ko": "맨 위 뚜껑이 떠올랐다 내려앉고 가운데 띠가 다시 그려집니다.",
+        "en": "The top disc lifts and lands while the middle band redraws."
+      },
+      "color": "#F4AF2D",
+      "states": [],
+      "progress": false,
+      "sha256": "a4685b993242d2fe775fba511525fac02ac3604dce65b410addcdac9f44fe313",
+      "codePath": "modules/database.js"
+    },
+    {
+      "id": "server",
+      "version": "2.0.13",
+      "order": 132,
+      "name": {
+        "ko": "서버",
+        "en": "Server"
+      },
+      "keywords": [
+        "서버",
+        "랙",
+        "호스팅",
+        "클라우드",
+        "server",
+        "rack",
+        "hosting",
+        "infrastructure"
+      ],
+      "category": "data",
+      "description": {
+        "ko": "표시등이 번갈아 깜빡이고 아래 서랍이 살짝 밀려 나옵니다.",
+        "en": "The status lights blink in turn and the lower unit slides out a little."
+      },
+      "color": "#26B7D3",
+      "states": [],
+      "progress": false,
+      "sha256": "c281a387cc9f1c38476b6c4c3ed7a048627dbe16c056059ec8b3913678a74ffd",
+      "codePath": "modules/server.js"
+    },
+    {
+      "id": "chart",
+      "version": "2.0.13",
+      "order": 133,
+      "name": {
+        "ko": "막대 차트",
+        "en": "Bar chart"
+      },
+      "keywords": [
+        "차트",
+        "그래프",
+        "통계",
+        "분석",
+        "막대",
+        "chart",
+        "graph",
+        "stats",
+        "analytics",
+        "bar"
+      ],
+      "category": "data",
+      "description": {
+        "ko": "막대가 왼쪽부터 차례로 바닥에서 솟아오릅니다.",
+        "en": "The bars rise from the baseline one after another."
+      },
+      "color": "#3093EC",
+      "states": [],
+      "progress": false,
+      "sha256": "655d80398fba7ec2de513de7ebd2fed665b6fdc61885e382aca53dbca87ce095",
+      "codePath": "modules/chart.js"
+    },
+    {
+      "id": "code",
+      "version": "2.0.13",
+      "order": 134,
+      "name": {
+        "ko": "코드",
+        "en": "Code"
+      },
+      "keywords": [
+        "코드",
+        "개발",
+        "프로그래밍",
+        "HTML",
+        "code",
+        "develop",
+        "programming",
+        "html"
+      ],
+      "category": "data",
+      "description": {
+        "ko": "괄호가 바깥으로 벌어지고 가운데 사선이 흔들립니다.",
+        "en": "The brackets push outward and the slash rocks."
+      },
+      "color": "#8968F4",
+      "states": [],
+      "progress": false,
+      "sha256": "2f13655b77d56c15d9c4ae030314cf76b3923fb212add8910237c099504b916f",
+      "codePath": "modules/code.js"
+    },
+    {
+      "id": "terminal",
+      "version": "2.0.13",
+      "order": 135,
+      "name": {
+        "ko": "터미널",
+        "en": "Terminal"
+      },
+      "keywords": [
+        "터미널",
+        "콘솔",
+        "명령어",
+        "셸",
+        "terminal",
+        "console",
+        "command",
+        "shell",
+        "cli"
+      ],
+      "category": "data",
+      "description": {
+        "ko": "프롬프트가 앞으로 밀리고 커서가 두 번 깜빡입니다.",
+        "en": "The prompt nudges forward and the cursor blinks twice."
+      },
+      "color": "#43B966",
+      "states": [],
+      "progress": false,
+      "sha256": "7320e03dabd71b785357155707421290934f8ff1ed2ebebf70c5eaafcfac2e39",
+      "codePath": "modules/terminal.js"
+    },
+    {
+      "id": "bug",
+      "version": "2.0.13",
+      "order": 136,
+      "name": {
+        "ko": "버그",
+        "en": "Bug"
+      },
+      "keywords": [
+        "버그",
+        "오류",
+        "디버그",
+        "문제",
+        "bug",
+        "error",
+        "debug",
+        "issue"
+      ],
+      "category": "data",
+      "description": {
+        "ko": "무당벌레가 다리 여섯 개를 번갈아 저으며 앞으로 기어가고, 더듬이가 까딱입니다.",
+        "en": "The ladybug paddles its six legs in alternating steps as it crawls, and its feelers twitch."
+      },
+      "color": "#F05465",
+      "states": [],
+      "progress": false,
+      "sha256": "dcd6ee527bf416db229733b266ba25e2da616ffb9a6abfa2deec91b257c5a33f",
+      "codePath": "modules/bug.js"
+    },
+    {
+      "id": "branch",
+      "version": "2.0.13",
+      "order": 137,
+      "name": {
+        "ko": "브랜치",
+        "en": "Branch"
+      },
+      "keywords": [
+        "브랜치",
+        "깃",
+        "분기",
+        "버전",
+        "branch",
+        "git",
+        "fork",
+        "version"
+      ],
+      "category": "data",
+      "description": {
+        "ko": "갈래 선이 다시 뻗어 나가고 끝의 점이 튀어 오릅니다.",
+        "en": "The branch line grows out again and its node pops."
+      },
+      "color": "#F48D2F",
+      "states": [],
+      "progress": false,
+      "sha256": "de969165a672dd24954f8e39d20acd2c194c8d765cd9eed29972c00bf7da2b25",
+      "codePath": "modules/branch.js"
+    },
+    {
+      "id": "cpu",
+      "version": "2.0.13",
+      "order": 138,
+      "name": {
+        "ko": "프로세서",
+        "en": "Processor"
+      },
+      "keywords": [
+        "프로세서",
+        "칩",
+        "CPU",
+        "반도체",
+        "연산",
+        "cpu",
+        "chip",
+        "processor",
+        "compute"
+      ],
+      "category": "data",
+      "description": {
+        "ko": "코어가 한 번 맥동하고, 신호가 네 변의 핀을 따라 한 바퀴 돕니다.",
+        "en": "The core pulses once and a signal runs around the pins on all four sides."
+      },
+      "color": "#24B6A1",
+      "states": [],
+      "progress": false,
+      "sha256": "8f45e162d8f896bb53a50c0e01caa44b6dc8341bc7f40f848cdc7cefb53a59c5",
+      "codePath": "modules/cpu.js"
+    },
+    {
+      "id": "linechart",
+      "version": "2.0.13",
+      "order": 139,
+      "name": {
+        "ko": "선 그래프",
+        "en": "Line chart"
+      },
+      "keywords": [
+        "선그래프",
+        "추세",
+        "성장",
+        "통계",
+        "line",
+        "chart",
+        "trend",
+        "growth",
+        "analytics"
+      ],
+      "category": "data",
+      "description": {
+        "ko": "추세선이 왼쪽부터 다시 그려지고 끝점이 튀어 오릅니다.",
+        "en": "The trend line draws from the left and its end point pops."
+      },
+      "color": "#E662A8",
+      "states": [],
+      "progress": false,
+      "sha256": "909eccdb856af4f5d22a4a4232f7cfb0384285f140e1dad8c3a50ed9ade4fa23",
+      "codePath": "modules/linechart.js"
+    },
+    {
+      "id": "piechart",
+      "version": "2.0.13",
+      "order": 140,
+      "name": {
+        "ko": "원 그래프",
+        "en": "Pie chart"
+      },
+      "keywords": [
+        "원그래프",
+        "파이",
+        "비율",
+        "점유율",
+        "pie",
+        "chart",
+        "share",
+        "ratio"
+      ],
+      "category": "data",
+      "description": {
+        "ko": "조각 하나가 바깥으로 빠져나왔다가 다시 맞춰집니다.",
+        "en": "One slice slides out of the pie and fits back in."
+      },
+      "color": "#F2CF3B",
+      "states": [],
+      "progress": false,
+      "sha256": "9483481606da50279a035280ba04fa073e75160619c448fd6fe52ef6f5eda3f6",
+      "codePath": "modules/piechart.js"
+    },
+    {
+      "id": "calculator",
+      "version": "2.0.13",
+      "order": 141,
+      "name": {
+        "ko": "계산기",
+        "en": "Calculator"
+      },
+      "keywords": [
+        "계산기",
+        "계산",
+        "숫자",
+        "합계",
+        "calculator",
+        "math",
+        "numbers",
+        "sum"
+      ],
+      "category": "data",
+      "description": {
+        "ko": "숫자 키가 하나씩 눌리고, 마지막에 등호 키를 누르면 화면이 톡 바뀝니다.",
+        "en": "Number keys press one at a time, then the equals key goes down and the display pops."
+      },
+      "color": "#F0764F",
+      "states": [],
+      "progress": false,
+      "sha256": "0e4bfe52120fa1af9dd8143a3a0950bd0128a345dd9bb706742c4c594ffa9579",
+      "codePath": "modules/calculator.js"
+    },
+    {
+      "id": "percent",
+      "version": "2.0.13",
+      "order": 142,
+      "name": {
+        "ko": "퍼센트",
+        "en": "Percent"
+      },
+      "keywords": [
+        "퍼센트",
+        "할인",
+        "비율",
+        "세일",
+        "percent",
+        "discount",
+        "ratio",
+        "sale"
+      ],
+      "category": "data",
+      "description": {
+        "ko": "사선이 다시 그어지고 두 원이 엇갈려 튑니다.",
+        "en": "The slash redraws and the two circles bounce in turn."
+      },
+      "color": "#AC5CD7",
+      "states": [],
+      "progress": false,
+      "sha256": "b163f0406f63335da0b8434541f2cc921091f713f6d755891808a1255b7de412",
+      "codePath": "modules/percent.js"
+    },
+    {
+      "id": "cart",
+      "version": "2.0.13",
+      "order": 143,
+      "name": {
+        "ko": "장바구니",
+        "en": "Cart"
+      },
+      "keywords": [
+        "장바구니",
+        "쇼핑",
+        "카트",
+        "담기",
+        "구매",
+        "cart",
+        "shopping",
+        "basket",
+        "add",
+        "buy"
+      ],
+      "category": "commerce",
+      "description": {
+        "ko": "상품이 바구니에 쏙 떨어지고 카트가 앞으로 굴러갑니다.",
+        "en": "An item drops into the basket and the cart rolls forward."
+      },
+      "color": "#43B966",
+      "states": [
+        "empty",
+        "added"
+      ],
+      "defaultState": "empty",
+      "stateLabels": {
+        "ko": {
+          "empty": "비어 있음",
+          "added": "담김"
+        },
+        "en": {
+          "empty": "Empty",
+          "added": "Added"
+        }
+      },
+      "progress": false,
+      "sha256": "db59c1102029e486c08b8571ffcba68e1cfee6fb2d73111113c8c74d7b7b1ed1",
+      "codePath": "modules/cart.js"
+    },
+    {
+      "id": "bag",
+      "version": "2.0.13",
+      "order": 144,
+      "name": {
+        "ko": "쇼핑백",
+        "en": "Shopping bag"
+      },
+      "keywords": [
+        "쇼핑백",
+        "가방",
+        "구매",
+        "주문",
+        "bag",
+        "shopping",
+        "purchase",
+        "order"
+      ],
+      "category": "commerce",
+      "description": {
+        "ko": "손잡이를 들어 올린 듯 가방이 손잡이를 축으로 흔들립니다.",
+        "en": "The bag swings from its handle as if just picked up."
+      },
+      "color": "#F0764F",
+      "states": [],
+      "progress": false,
+      "sha256": "dc07ae2b2fe270d0d40a65825ff7ed4bd99124b65e418afa8fbdc5fec55ed014",
+      "codePath": "modules/bag.js"
+    },
+    {
+      "id": "wallet",
+      "version": "2.0.13",
+      "order": 145,
+      "name": {
+        "ko": "지갑",
+        "en": "Wallet"
+      },
+      "keywords": [
+        "지갑",
+        "결제",
+        "돈",
+        "카드",
+        "보관",
+        "wallet",
+        "money",
+        "pay",
+        "cards"
+      ],
+      "category": "commerce",
+      "description": {
+        "ko": "지갑에서 카드가 슬쩍 올라왔다 들어가고 잠금 탭이 움직입니다.",
+        "en": "A card slips up out of the wallet and the clasp tab shifts."
+      },
+      "color": "#F4AF2D",
+      "states": [],
+      "progress": false,
+      "sha256": "3ea95d679fb8f9912036ad0792f133a35355d94e1c9c8717d6e640f6c9262630",
+      "codePath": "modules/wallet.js"
+    },
+    {
+      "id": "card",
+      "version": "2.0.13",
+      "order": 146,
+      "name": {
+        "ko": "결제 카드",
+        "en": "Payment card"
+      },
+      "keywords": [
+        "카드",
+        "결제",
+        "신용카드",
+        "체크카드",
+        "비접촉",
+        "card",
+        "payment",
+        "credit",
+        "debit",
+        "contactless"
+      ],
+      "category": "commerce",
+      "description": {
+        "ko": "카드를 단말기에 대듯 기울이자 비접촉 신호가 퍼집니다.",
+        "en": "The card tilts as if tapped and a contactless signal spreads."
+      },
+      "color": "#5D73EA",
+      "states": [],
+      "progress": false,
+      "sha256": "5b1c1e89d924284d4ad2f9ad41468319cda80e35cade5c226749fd59561b65b5",
+      "codePath": "modules/card.js"
+    },
+    {
+      "id": "gift",
+      "version": "2.0.13",
+      "order": 147,
+      "name": {
+        "ko": "선물",
+        "en": "Gift"
+      },
+      "keywords": [
+        "선물",
+        "이벤트",
+        "리워드",
+        "포장",
+        "gift",
+        "present",
+        "reward",
+        "surprise"
+      ],
+      "category": "commerce",
+      "description": {
+        "ko": "뚜껑이 튀어 오르며 열리고 리본이 흔들립니다.",
+        "en": "The lid pops open and the bow wobbles."
+      },
+      "color": "#F05465",
+      "states": [
+        "closed",
+        "open"
+      ],
+      "defaultState": "closed",
+      "stateLabels": {
+        "ko": {
+          "closed": "닫힘",
+          "open": "열림"
+        },
+        "en": {
+          "closed": "Closed",
+          "open": "Open"
+        }
+      },
+      "progress": false,
+      "sha256": "fd023cdd3ce4a16101a59791970030fc3b580e867dc7ea7b1743842a35ec0a74",
+      "codePath": "modules/gift.js"
+    },
+    {
+      "id": "ticket",
+      "version": "2.0.13",
+      "order": 148,
+      "name": {
+        "ko": "티켓",
+        "en": "Ticket"
+      },
+      "keywords": [
+        "티켓",
+        "입장권",
+        "쿠폰",
+        "예매",
+        "ticket",
+        "coupon",
+        "pass",
+        "admission"
+      ],
+      "category": "commerce",
+      "description": {
+        "ko": "절취선을 따라 오른쪽 조각이 뜯겨 떨어지고 별이 반짝인 뒤, 새 조각이 오른쪽에서 천천히 밀려 들어와 제자리에 맞춰집니다.",
+        "en": "The stub tears off along the perforation and falls as the star shines, then a fresh stub slides slowly in from the right and settles into place."
+      },
+      "color": "#8968F4",
+      "states": [],
+      "progress": false,
+      "sha256": "41ed805e51713d02e16507af7e6223e5a07746e249f4304bfe05fdeac9823c0d",
+      "codePath": "modules/ticket.js"
+    },
+    {
+      "id": "coin",
+      "version": "2.0.13",
+      "order": 149,
+      "name": {
+        "ko": "동전",
+        "en": "Coin"
+      },
+      "keywords": [
+        "동전",
+        "돈",
+        "포인트",
+        "화폐",
+        "coin",
+        "money",
+        "points",
+        "currency"
+      ],
+      "category": "commerce",
+      "description": {
+        "ko": "두께가 보이는 동전이 톡 튀어 올랐다가 짤랑 내려앉고, 모서리에 반짝임이 일어납니다.",
+        "en": "A coin, its edge showing, hops up, lands with a clink, and a sparkle flashes beside it."
+      },
+      "color": "#F2CF3B",
+      "states": [],
+      "progress": false,
+      "sha256": "dfd6a0d5dfe9ea85653ca94d3f00d27b6fa8e84ac1d80bd1b49f7706597b3564",
+      "codePath": "modules/coin.js"
+    },
+    {
+      "id": "store",
+      "version": "2.0.13",
+      "order": 150,
+      "name": {
+        "ko": "상점",
+        "en": "Store"
+      },
+      "keywords": [
+        "상점",
+        "가게",
+        "매장",
+        "쇼핑몰",
+        "store",
+        "shop",
+        "market",
+        "retail"
+      ],
+      "category": "commerce",
+      "description": {
+        "ko": "차양이 한 번 출렁이고, 문이 경첩을 축으로 안쪽으로 열렸다가 닫힙니다.",
+        "en": "The awning bounces and the door swings in on its hinge, then closes."
+      },
+      "color": "#24B6A1",
+      "states": [],
+      "progress": false,
+      "sha256": "5da14a2aeb12f02e8deaf7aa68ade9489d724429b16ecc76304ff286dad51f6f",
+      "codePath": "modules/store.js"
+    },
+    {
+      "id": "bank",
+      "version": "2.0.13",
+      "order": 151,
+      "name": {
+        "ko": "은행",
+        "en": "Bank"
+      },
+      "keywords": [
+        "은행",
+        "금융",
+        "계좌",
+        "송금",
+        "bank",
+        "finance",
+        "account",
+        "transfer"
+      ],
+      "category": "commerce",
+      "description": {
+        "ko": "지붕이 들렸다 내려앉고, 기둥이 왼쪽부터 차례로 솟아 받쳐 줍니다.",
+        "en": "The roof lifts and settles as the columns rise one by one to hold it up."
+      },
+      "color": "#8968F4",
+      "states": [],
+      "progress": false,
+      "sha256": "71cc1544b75405b31b0dbd0068271e3dd91d694c3e6308003637ff1253888666",
+      "codePath": "modules/bank.js"
+    },
+    {
+      "id": "piggybank",
+      "version": "2.0.13",
+      "order": 152,
+      "name": {
+        "ko": "저금통",
+        "en": "Piggy bank"
+      },
+      "keywords": [
+        "저금통",
+        "저축",
+        "적금",
+        "모으기",
+        "piggy",
+        "bank",
+        "savings",
+        "save",
+        "deposit"
+      ],
+      "category": "commerce",
+      "description": {
+        "ko": "동전이 위에서 떨어져 등의 구멍으로 쏙 들어갑니다.",
+        "en": "A coin drops from above and slips into the slot."
+      },
+      "color": "#E662A8",
+      "states": [],
+      "progress": false,
+      "sha256": "1c895097e3cf828b474ab12e445e3a3d84a46cb1376eb50dc773bc40c0c76d7f",
+      "codePath": "modules/piggybank.js"
+    },
+    {
+      "id": "truck",
+      "version": "2.0.13",
+      "order": 153,
+      "name": {
+        "ko": "배송",
+        "en": "Delivery"
+      },
+      "keywords": [
+        "배송",
+        "트럭",
+        "택배",
+        "운송",
+        "delivery",
+        "truck",
+        "shipping",
+        "parcel"
+      ],
+      "category": "commerce",
+      "description": {
+        "ko": "트럭이 앞으로 출발하며 차체가 출렁이고 속도선이 지나갑니다.",
+        "en": "The truck pulls forward with a bounce as speed lines pass."
+      },
+      "color": "#3093EC",
+      "states": [],
+      "progress": false,
+      "sha256": "060d013703f28cb34ccce5f3608b9557fe823b6754ebf4040bdb24897cf92c21",
+      "codePath": "modules/truck.js"
+    },
+    {
+      "id": "scale",
+      "version": "2.0.13",
+      "order": 154,
+      "name": {
+        "ko": "저울",
+        "en": "Scale"
+      },
+      "keywords": [
+        "저울",
+        "균형",
+        "비교",
+        "법률",
+        "scale",
+        "balance",
+        "compare",
+        "law"
+      ],
+      "category": "commerce",
+      "description": {
+        "ko": "저울대가 한쪽으로 기울었다가 균형을 찾습니다.",
+        "en": "The beam tips to one side and finds its balance."
+      },
+      "color": "#AC5CD7",
+      "states": [],
+      "progress": false,
+      "sha256": "37e36a7e883a75c28101502bc3fab79076065390dedd391337e9b25b8e0464b2",
+      "codePath": "modules/scale.js"
+    },
+    {
+      "id": "diamond",
+      "version": "2.0.13",
+      "order": 155,
+      "name": {
+        "ko": "다이아몬드",
+        "en": "Diamond"
+      },
+      "keywords": [
+        "다이아몬드",
+        "보석",
+        "프리미엄",
+        "VIP",
+        "diamond",
+        "gem",
+        "premium",
+        "vip"
+      ],
+      "category": "commerce",
+      "description": {
+        "ko": "보석이 반짝 커지며 모서리에서 빛이 튑니다.",
+        "en": "The gem swells and a glint flashes at its corner."
+      },
+      "color": "#26B7D3",
+      "states": [],
+      "progress": false,
+      "sha256": "ff66cb57891b7c490f0087f08429f929128e4a92aae1bef2c6fc45010f195a8b",
+      "codePath": "modules/diamond.js"
+    },
+    {
+      "id": "barcode",
+      "version": "2.0.13",
+      "order": 156,
+      "name": {
+        "ko": "바코드",
+        "en": "Barcode"
+      },
+      "keywords": [
+        "바코드",
+        "상품",
+        "스캔",
+        "재고",
+        "barcode",
+        "product",
+        "scan",
+        "inventory",
+        "sku"
+      ],
+      "category": "commerce",
+      "description": {
+        "ko": "높이가 같은 막대 위로 빨간 스캔선이 위에서 아래로 훑고 지나갑니다.",
+        "en": "A red scan line sweeps down across bars of equal height."
+      },
+      "color": "#F05465",
+      "states": [],
+      "progress": false,
+      "sha256": "06056e0cbe44787f461d584c38f591026aa8784524aa6e35847867fbf95cba87",
+      "codePath": "modules/barcode.js"
+    },
+    {
+      "id": "box",
+      "version": "2.0.13",
+      "order": 157,
+      "name": {
+        "ko": "택배 상자",
+        "en": "Package"
+      },
+      "keywords": [
+        "상자",
+        "택배",
+        "포장",
+        "배송",
+        "box",
+        "package",
+        "parcel",
+        "shipping"
+      ],
+      "category": "commerce",
+      "description": {
+        "ko": "테이프가 한쪽 끝부터 뜯겨 나가며 상자가 톡 들리고, 새 테이프가 착 붙으며 상자가 내려앉습니다.",
+        "en": "The tape peels off from one end as the box pops up, then fresh tape slaps on and the box settles."
+      },
+      "color": "#F48D2F",
+      "states": [],
+      "progress": false,
+      "sha256": "6ff020e1a3b8d62626005270357df82446cfedf5c3a729f0a5c01d12c313b418",
+      "codePath": "modules/box.js"
+    },
+    {
+      "id": "user",
+      "version": "2.0.13",
+      "order": 158,
+      "name": {
+        "ko": "사용자",
+        "en": "User"
+      },
+      "keywords": [
+        "사용자",
+        "프로필",
+        "계정",
+        "사람",
+        "user",
+        "profile",
+        "account",
+        "person"
+      ],
+      "category": "people",
+      "description": {
+        "ko": "머리가 살짝 튀어 오르며 인사하듯 고개를 끄덕입니다.",
+        "en": "The head bobs up like a friendly nod."
+      },
+      "color": "#3093EC",
+      "states": [],
+      "progress": false,
+      "sha256": "9b13b33dd6c65322b1c70f9641eb59e64dd511eb2460ae1ea30c3dd71e5c7712",
+      "codePath": "modules/user.js"
+    },
+    {
+      "id": "users",
+      "version": "2.0.13",
+      "order": 159,
+      "name": {
+        "ko": "사용자 그룹",
+        "en": "Users"
+      },
+      "keywords": [
+        "그룹",
+        "팀",
+        "멤버",
+        "사람들",
+        "users",
+        "team",
+        "group",
+        "members"
+      ],
+      "category": "people",
+      "description": {
+        "ko": "뒤에 있던 사람이 옆으로 나왔다 들어가고 앞사람이 통 튑니다.",
+        "en": "The person behind steps out and back while the front one hops."
+      },
+      "color": "#24B6A1",
+      "states": [],
+      "progress": false,
+      "sha256": "7000ecc15325ab337acb6922d4302bdb846bf049e84284c446c2223acef9d5a1",
+      "codePath": "modules/users.js"
+    },
+    {
+      "id": "contact",
+      "version": "2.0.13",
+      "order": 160,
+      "name": {
+        "ko": "연락처",
+        "en": "Contacts"
+      },
+      "keywords": [
+        "연락처",
+        "주소록",
+        "전화번호부",
+        "명함",
+        "contacts",
+        "address",
+        "book",
+        "directory"
+      ],
+      "category": "people",
+      "description": {
+        "ko": "주소록 탭이 차례로 튀어나오고 사람이 살짝 커집니다.",
+        "en": "The index tabs pop out in turn and the person grows a little."
+      },
+      "color": "#F48D2F",
+      "states": [],
+      "progress": false,
+      "sha256": "681ace14a101df0e2fcefd8453223b3c72156715b73a1ebc4de61c365ffd53bc",
+      "codePath": "modules/contact.js"
+    },
+    {
+      "id": "handshake",
+      "version": "2.0.13",
+      "order": 161,
+      "name": {
+        "ko": "악수",
+        "en": "Handshake"
+      },
+      "keywords": [
+        "악수",
+        "협력",
+        "계약",
+        "파트너",
+        "동의",
+        "handshake",
+        "deal",
+        "partner",
+        "agreement"
+      ],
+      "category": "people",
+      "description": {
+        "ko": "맞잡은 두 손이 위아래로 두 번 흔들립니다.",
+        "en": "The clasped hands shake up and down twice."
+      },
+      "color": "#F4AF2D",
+      "states": [],
+      "progress": false,
+      "sha256": "d30e37dfd22422eacb0e7faef32c79eebf0b366da0138ac19b0a897f6315324e",
+      "codePath": "modules/handshake.js"
+    },
+    {
+      "id": "badge",
+      "version": "2.0.13",
+      "order": 162,
+      "name": {
+        "ko": "메달",
+        "en": "Medal"
+      },
+      "keywords": [
+        "메달",
+        "배지",
+        "수상",
+        "업적",
+        "badge",
+        "medal",
+        "award",
+        "achievement"
+      ],
+      "category": "people",
+      "description": {
+        "ko": "리본에 매달린 메달이 살짝 흔들리고, 가운데 별이 은은하게 커졌다 돌아옵니다.",
+        "en": "The medal sways gently from its ribbon and the star swells softly."
+      },
+      "color": "#F48D2F",
+      "states": [],
+      "progress": false,
+      "sha256": "a928379d002cd82a2eeab34b1b0fabeb5aee7c6ea76ea84ef1de1589df939224",
+      "codePath": "modules/badge.js"
+    },
+    {
+      "id": "userplus",
+      "version": "2.0.13",
+      "order": 163,
+      "name": {
+        "ko": "사용자 추가",
+        "en": "Add user"
+      },
+      "keywords": [
+        "초대",
+        "사용자추가",
+        "친구추가",
+        "가입",
+        "add",
+        "user",
+        "invite",
+        "friend",
+        "signup"
+      ],
+      "category": "people",
+      "description": {
+        "ko": "더하기 표시가 돌며 튀고 사람이 반깁니다.",
+        "en": "The plus spins and pops while the person leans in."
+      },
+      "color": "#43B966",
+      "states": [],
+      "progress": false,
+      "sha256": "5186fe439ee1afdda132d0a898895649c6abc7395e1578f0219d9f07ff143c2b",
+      "codePath": "modules/userplus.js"
+    },
+    {
+      "id": "crown",
+      "version": "2.0.13",
+      "order": 164,
+      "name": {
+        "ko": "왕관",
+        "en": "Crown"
+      },
+      "keywords": [
+        "왕관",
+        "프리미엄",
+        "VIP",
+        "1등",
+        "crown",
+        "premium",
+        "vip",
+        "king",
+        "best"
+      ],
+      "category": "people",
+      "description": {
+        "ko": "왕관이 통 튀어 오르고 보석이 차례로 반짝입니다.",
+        "en": "The crown hops and its jewels twinkle in turn."
+      },
+      "color": "#F2CF3B",
+      "states": [],
+      "progress": false,
+      "sha256": "09ce56ab715be99d4daa5790182df11abe491f381be23b31ac1c97b5e81cde47",
+      "codePath": "modules/crown.js"
+    },
+    {
+      "id": "graduation",
+      "version": "2.0.13",
+      "order": 165,
+      "name": {
+        "ko": "졸업",
+        "en": "Graduation"
+      },
+      "keywords": [
+        "졸업",
+        "학사모",
+        "교육",
+        "학습",
+        "강의",
+        "graduation",
+        "education",
+        "learn",
+        "course"
+      ],
+      "category": "people",
+      "description": {
+        "ko": "학사모가 위로 던져졌다 내려오고, 끈에 달린 술이 흔들립니다.",
+        "en": "The cap is tossed up and lands while its tassel swings on the cord."
+      },
+      "color": "#5D73EA",
+      "states": [],
+      "progress": false,
+      "sha256": "6ebdb43074acb71bd192e28e7419e03c606cc55808810858c4e97bcc313d2f66",
+      "codePath": "modules/graduation.js"
+    },
+    {
+      "id": "briefcase",
+      "version": "2.0.13",
+      "order": 166,
+      "name": {
+        "ko": "서류 가방",
+        "en": "Briefcase"
+      },
+      "keywords": [
+        "가방",
+        "업무",
+        "직장",
+        "비즈니스",
+        "포트폴리오",
+        "briefcase",
+        "work",
+        "job",
+        "business"
+      ],
+      "category": "people",
+      "description": {
+        "ko": "가방을 손잡이로 들어 올리듯 흔들립니다.",
+        "en": "It swings as if lifted by its handle."
+      },
+      "color": "#F4AF2D",
+      "states": [],
+      "progress": false,
+      "sha256": "6fe4df7403b17c4cf4539c14b631df7a2aab1c9bb1d740888c80b1f2e49bbd41",
+      "codePath": "modules/briefcase.js"
+    },
+    {
+      "id": "idcard",
+      "version": "2.0.13",
+      "order": 167,
+      "name": {
+        "ko": "신분증",
+        "en": "ID card"
+      },
+      "keywords": [
+        "신분증",
+        "사원증",
+        "회원증",
+        "본인인증",
+        "id",
+        "card",
+        "identity",
+        "membership"
+      ],
+      "category": "people",
+      "description": {
+        "ko": "사진이 튀어 오르고 정보 줄이 다시 쓰입니다.",
+        "en": "The photo pops and the info lines rewrite."
+      },
+      "color": "#26B7D3",
+      "states": [],
+      "progress": false,
+      "sha256": "c6531b1f7e0a48bd288baca69fae580548527a722a48833981fe0fb964d844c2",
+      "codePath": "modules/idcard.js"
+    },
+    {
+      "id": "accessibility",
+      "version": "2.0.13",
+      "order": 168,
+      "name": {
+        "ko": "접근성",
+        "en": "Accessibility"
+      },
+      "keywords": [
+        "접근성",
+        "장애",
+        "포용",
+        "보조",
+        "accessibility",
+        "a11y",
+        "inclusive",
+        "assist"
+      ],
+      "category": "people",
+      "description": {
+        "ko": "사람이 두 팔을 번쩍 들며 가볍게 뛰어오릅니다.",
+        "en": "The figure raises both arms and gives a little jump."
+      },
+      "color": "#3093EC",
+      "states": [],
+      "progress": false,
+      "sha256": "3192da2d48f1ece00472b57c9112dbc16a8d8c915221bf8d100c8b1291eab1e0",
+      "codePath": "modules/accessibility.js"
+    },
+    {
+      "id": "globe",
+      "version": "2.0.13",
+      "order": 169,
+      "name": {
+        "ko": "인터넷",
+        "en": "Internet"
+      },
+      "keywords": [
+        "인터넷",
+        "웹",
+        "지구",
+        "세계",
+        "글로벌",
+        "언어",
+        "internet",
+        "web",
+        "globe",
+        "world",
+        "global",
+        "language"
+      ],
+      "category": "travel",
+      "description": {
+        "ko": "지구본이 반 바퀴 돌며 경선이 넓어져 가장자리로 사라지고, 새 경선이 가운데를 지나 제자리로 옵니다.",
+        "en": "The globe turns half a revolution: a meridian widens out to the edge while a new one passes through the middle into place."
+      },
+      "color": "#3093EC",
+      "states": [],
+      "progress": false,
+      "sha256": "6d5594ec608a9db27edc0ad8dc242406ccffb055e0ba89ae078b798a1f242b59",
+      "codePath": "modules/globe.js"
+    },
+    {
+      "id": "compass",
+      "version": "2.0.13",
+      "order": 170,
+      "name": {
+        "ko": "나침반",
+        "en": "Compass"
+      },
+      "keywords": [
+        "나침반",
+        "방향",
+        "탐색",
+        "둘러보기",
+        "compass",
+        "direction",
+        "explore",
+        "navigate"
+      ],
+      "category": "travel",
+      "description": {
+        "ko": "바늘이 빙글 돌다가 흔들리며 북쪽을 찾습니다.",
+        "en": "The needle spins, wavers, and settles on north."
+      },
+      "color": "#F0764F",
+      "states": [],
+      "progress": false,
+      "sha256": "8f8e8c25086cb08d8b5294e673618c0564e3c529d1cfa578e02f5e2152a7be6d",
+      "codePath": "modules/compass.js"
+    },
+    {
+      "id": "pin",
+      "version": "2.0.13",
+      "order": 171,
+      "name": {
+        "ko": "위치",
+        "en": "Location"
+      },
+      "keywords": [
+        "위치",
+        "핀",
+        "지도",
+        "장소",
+        "주소",
+        "location",
+        "pin",
+        "map",
+        "place",
+        "address"
+      ],
+      "category": "travel",
+      "description": {
+        "ko": "핀이 위에서 떨어져 꽂히며 살짝 눌렸다 섭니다.",
+        "en": "The pin drops in, squashes on landing, and stands up."
+      },
+      "color": "#F05465",
+      "states": [],
+      "progress": false,
+      "sha256": "a65e9917f03996383d6dd72ef111e9eb1df1cd990cd70184b09c5f8efe6be51c",
+      "codePath": "modules/pin.js"
+    },
+    {
+      "id": "flag",
+      "version": "2.0.13",
+      "order": 172,
+      "name": {
+        "ko": "깃발",
+        "en": "Flag"
+      },
+      "keywords": [
+        "깃발",
+        "목표",
+        "신고",
+        "표시",
+        "flag",
+        "goal",
+        "report",
+        "mark"
+      ],
+      "category": "travel",
+      "description": {
+        "ko": "물결 모양 천이 깃대를 따라 부드럽게 나부낍니다.",
+        "en": "The wavy cloth flutters gently along the pole."
+      },
+      "color": "#F0764F",
+      "states": [],
+      "progress": false,
+      "sha256": "c31e88d9582b00d6cfba622a8145f1b43dff8019835803a2f68f8c5ff89ec3c4",
+      "codePath": "modules/flag.js"
+    },
+    {
+      "id": "map",
+      "version": "2.0.13",
+      "order": 173,
+      "name": {
+        "ko": "지도",
+        "en": "Map"
+      },
+      "keywords": [
+        "지도",
+        "길찾기",
+        "여행",
+        "경로",
+        "map",
+        "route",
+        "travel",
+        "directions"
+      ],
+      "category": "travel",
+      "description": {
+        "ko": "지도가 살짝 펼쳐지고, 위치 핀이 위로 떠올랐다가 톡 떨어져 꽂힙니다.",
+        "en": "The map spreads a little and the location pin lifts, then drops into place."
+      },
+      "color": "#43B966",
+      "states": [],
+      "progress": false,
+      "sha256": "cf28de4fe64ae88ba18637ae17939cdb5e52a5bb5b2cc3adc41331466e50d71d",
+      "codePath": "modules/map.js"
+    },
+    {
+      "id": "car",
+      "version": "2.0.13",
+      "order": 174,
+      "name": {
+        "ko": "자동차",
+        "en": "Car"
+      },
+      "keywords": [
+        "자동차",
+        "차량",
+        "운전",
+        "이동",
+        "승용차",
+        "car",
+        "vehicle",
+        "drive",
+        "ride",
+        "sedan"
+      ],
+      "category": "travel",
+      "description": {
+        "ko": "승용차가 살짝 뒤로 몸을 젖혔다가 앞으로 튀어 나가고, 뒤에 속도선이 스칩니다.",
+        "en": "The sedan rocks back, lunges forward, and speed lines streak behind it."
+      },
+      "color": "#F05465",
+      "states": [],
+      "progress": false,
+      "sha256": "99f1b193d04e6d3a819f7aa0939da6f67caf7611a4de3b365b0097bc311779fb",
+      "codePath": "modules/car.js"
+    },
+    {
+      "id": "bike",
+      "version": "2.0.13",
+      "order": 175,
+      "name": {
+        "ko": "자전거",
+        "en": "Bicycle"
+      },
+      "keywords": [
+        "자전거",
+        "라이딩",
+        "운동",
+        "이동",
+        "bicycle",
+        "bike",
+        "ride",
+        "cycling"
+      ],
+      "category": "travel",
+      "description": {
+        "ko": "자전거가 앞바퀴를 살짝 들며 앞으로 나아갑니다.",
+        "en": "The bike rolls forward with a small wheelie."
+      },
+      "color": "#98CB46",
+      "states": [],
+      "progress": false,
+      "sha256": "e159e8e3c902db68a2b0e02707d21434f7fde32bf51f7e2fdf2bdf9a62f5af9e",
+      "codePath": "modules/bike.js"
+    },
+    {
+      "id": "plane",
+      "version": "2.0.13",
+      "order": 176,
+      "name": {
+        "ko": "비행기",
+        "en": "Plane"
+      },
+      "keywords": [
+        "비행기",
+        "항공",
+        "여행",
+        "출발",
+        "plane",
+        "flight",
+        "travel",
+        "departure"
+      ],
+      "category": "travel",
+      "description": {
+        "ko": "비행기가 오른쪽 위로 치솟았다가 비행운을 남기고 돌아옵니다.",
+        "en": "The plane climbs to the upper right and returns, leaving trails."
+      },
+      "color": "#26B7D3",
+      "states": [],
+      "progress": false,
+      "sha256": "bd611541833cf2a2f702cbabed237bef2df5cd87074c48f88a2591a992f80d4d",
+      "codePath": "modules/plane.js"
+    },
+    {
+      "id": "train",
+      "version": "2.0.13",
+      "order": 177,
+      "name": {
+        "ko": "기차",
+        "en": "Train"
+      },
+      "keywords": [
+        "기차",
+        "지하철",
+        "열차",
+        "교통",
+        "train",
+        "subway",
+        "rail",
+        "transit"
+      ],
+      "category": "travel",
+      "description": {
+        "ko": "기차가 선로 위에서 덜컹거리며 다가오고, 전조등이 한 번 은은하게 깜빡입니다.",
+        "en": "The train rattles toward you on its track and its headlights dim softly once."
+      },
+      "color": "#5D73EA",
+      "states": [],
+      "progress": false,
+      "sha256": "34a65e85bcbb243e282d553c81b820b685561e09ac4d381e0acf0b321e3e6cf6",
+      "codePath": "modules/train.js"
+    },
+    {
+      "id": "bus",
+      "version": "2.0.13",
+      "order": 178,
+      "name": {
+        "ko": "버스",
+        "en": "Bus"
+      },
+      "keywords": [
+        "버스",
+        "대중교통",
+        "정류장",
+        "통학",
+        "bus",
+        "transit",
+        "public",
+        "transport"
+      ],
+      "category": "travel",
+      "description": {
+        "ko": "버스가 출발하며 앞으로 나가고, 차체가 뒤로 살짝 기울었다가 바로 섭니다.",
+        "en": "The bus pulls away; the body tilts back a little and then rights itself."
+      },
+      "color": "#F2CF3B",
+      "states": [],
+      "progress": false,
+      "sha256": "3cc1c7358176be8b98a44f84a901e600989d0aa563cfd4f5249b3011a63a8c5c",
+      "codePath": "modules/bus.js"
+    },
+    {
+      "id": "ship",
+      "version": "2.0.13",
+      "order": 179,
+      "name": {
+        "ko": "배",
+        "en": "Ship"
+      },
+      "keywords": [
+        "배",
+        "선박",
+        "항해",
+        "해운",
+        "크루즈",
+        "ship",
+        "boat",
+        "sail",
+        "cruise"
+      ],
+      "category": "travel",
+      "description": {
+        "ko": "배가 물 위에서 천천히 오르내리며 좌우로 살짝 흔들리고, 물결이 함께 일렁입니다.",
+        "en": "The ship bobs slowly and rolls a little while the water sways with it."
+      },
+      "color": "#3093EC",
+      "states": [],
+      "progress": false,
+      "sha256": "fbbffd3f0f6dcfaba217850d7fb45c379060616e8c802389c53aea8dbe958cc5",
+      "codePath": "modules/ship.js"
+    },
+    {
+      "id": "anchor",
+      "version": "2.0.13",
+      "order": 180,
+      "name": {
+        "ko": "닻",
+        "en": "Anchor"
+      },
+      "keywords": [
+        "닻",
+        "정박",
+        "항구",
+        "바다",
+        "고정",
+        "anchor",
+        "harbor",
+        "sea",
+        "pin"
+      ],
+      "category": "travel",
+      "description": {
+        "ko": "닻이 고리를 축으로 시계추처럼 흔들립니다.",
+        "en": "The anchor swings like a pendulum from its ring."
+      },
+      "color": "#24B6A1",
+      "states": [],
+      "progress": false,
+      "sha256": "8711bd3d0fa346057181830fc5fa7a09bf81bddb56e3e897adeff1a32424f031",
+      "codePath": "modules/anchor.js"
+    },
+    {
+      "id": "building",
+      "version": "2.0.13",
+      "order": 181,
+      "name": {
+        "ko": "건물",
+        "en": "Building"
+      },
+      "keywords": [
+        "건물",
+        "회사",
+        "빌딩",
+        "사무실",
+        "building",
+        "company",
+        "office",
+        "city"
+      ],
+      "category": "travel",
+      "description": {
+        "ko": "현관문이 살짝 열렸다 닫히고, 창문 불빛이 아래층부터 은은하게 깜빡입니다.",
+        "en": "The front door opens a little and closes while the window lights flicker softly, floor by floor from the bottom."
+      },
+      "color": "#8968F4",
+      "states": [],
+      "progress": false,
+      "sha256": "03bbd9f03fb3627334819a9222558d87ad52ed65371314343d4d39e2cf1b257e",
+      "codePath": "modules/building.js"
+    },
+    {
+      "id": "mountain",
+      "version": "2.0.13",
+      "order": 182,
+      "name": {
+        "ko": "산",
+        "en": "Mountain"
+      },
+      "keywords": [
+        "산",
+        "등산",
+        "아웃도어",
+        "풍경",
+        "mountain",
+        "hiking",
+        "outdoor",
+        "landscape"
+      ],
+      "category": "travel",
+      "description": {
+        "ko": "초록 산 뒤에서 노란 해가 떠오릅니다.",
+        "en": "A yellow sun rises behind the green peaks."
+      },
+      "color": "#43B966",
+      "states": [],
+      "progress": false,
+      "sha256": "0636cec76932ae5c29c7e3e72805fda76fe26bd88feed54530babe103596de52",
+      "codePath": "modules/mountain.js"
+    },
+    {
+      "id": "rocket",
+      "version": "2.0.13",
+      "order": 183,
+      "name": {
+        "ko": "로켓",
+        "en": "Rocket"
+      },
+      "keywords": [
+        "로켓",
+        "출시",
+        "시작",
+        "성장",
+        "부스트",
+        "rocket",
+        "launch",
+        "start",
+        "growth",
+        "boost"
+      ],
+      "category": "travel",
+      "description": {
+        "ko": "로켓이 살짝 웅크렸다가 꼬리 불꽃이 커지며 비스듬히 솟구치고 돌아옵니다.",
+        "en": "The rocket crouches, its tail flame flares, and it shoots up diagonally before settling."
+      },
+      "color": "#8968F4",
+      "states": [],
+      "progress": false,
+      "sha256": "e224a6ae48ba6862836e420345fbfe5265dd95bd4ea7b4155da547465873ad18",
+      "codePath": "modules/rocket.js"
+    },
+    {
+      "id": "sun",
+      "version": "2.0.13",
+      "order": 184,
+      "name": {
+        "ko": "해",
+        "en": "Sun"
+      },
+      "keywords": [
+        "해",
+        "햇빛",
+        "맑음",
+        "낮",
+        "밝은테마",
+        "sun",
+        "sunny",
+        "day",
+        "light",
+        "mode"
+      ],
+      "category": "nature",
+      "description": {
+        "ko": "빛살이 반 칸 돌며 퍼지고 해가 숨 쉬듯 커집니다.",
+        "en": "The rays turn a notch and spread while the sun swells."
+      },
+      "color": "#F4AF2D",
+      "states": [],
+      "progress": false,
+      "sha256": "5ee8d2679c59104572601ac41f7425cac4b641214428495c7dd8106f82996558",
+      "codePath": "modules/sun.js"
+    },
+    {
+      "id": "moon",
+      "version": "2.0.13",
+      "order": 185,
+      "name": {
+        "ko": "달",
+        "en": "Moon"
+      },
+      "keywords": [
+        "달",
+        "밤",
+        "야간",
+        "다크모드",
+        "수면",
+        "moon",
+        "night",
+        "dark",
+        "mode",
+        "sleep"
+      ],
+      "category": "nature",
+      "description": {
+        "ko": "초승달이 고개를 기울이고 곁의 별이 반짝입니다.",
+        "en": "The crescent tilts its head and the stars twinkle."
+      },
+      "color": "#8968F4",
+      "states": [],
+      "progress": false,
+      "sha256": "c6188203d4a1d497b5d816635a71441419c4ec3cd7b4644d54bdce8dd9cb96bd",
+      "codePath": "modules/moon.js"
+    },
+    {
+      "id": "umbrella",
+      "version": "2.0.13",
+      "order": 186,
+      "name": {
+        "ko": "우산",
+        "en": "Umbrella"
+      },
+      "keywords": [
+        "우산",
+        "비",
+        "날씨",
+        "보호",
+        "보험",
+        "umbrella",
+        "rain",
+        "weather",
+        "cover",
+        "insurance"
+      ],
+      "category": "nature",
+      "description": {
+        "ko": "접으면 우산살이 오므라들며 가늘게 말린 우산이 되고, 펴면 활짝 펼쳐집니다.",
+        "en": "Closing draws the canopy in to a slim furled umbrella; opening springs it wide."
+      },
+      "color": "#AC5CD7",
+      "states": [
+        "open",
+        "closed"
+      ],
+      "defaultState": "open",
+      "stateLabels": {
+        "ko": {
+          "open": "펼침",
+          "closed": "접힘"
+        },
+        "en": {
+          "open": "Open",
+          "closed": "Closed"
+        }
+      },
+      "progress": false,
+      "sha256": "af7e72d398d63ba95f69b46832f083eaaf181bb64cbeeb776e972d28c8b0dd0d",
+      "codePath": "modules/umbrella.js"
+    },
+    {
+      "id": "rain",
+      "version": "2.0.13",
+      "order": 187,
+      "name": {
+        "ko": "비",
+        "en": "Rain"
+      },
+      "keywords": [
+        "비",
+        "날씨",
+        "소나기",
+        "구름",
+        "rain",
+        "weather",
+        "shower",
+        "cloud"
+      ],
+      "category": "nature",
+      "description": {
+        "ko": "빗방울이 구름 아래로 사선을 그리며 떨어집니다.",
+        "en": "Raindrops slant down from the cloud."
+      },
+      "color": "#5D73EA",
+      "states": [],
+      "progress": false,
+      "sha256": "54ce154cf5d044b0822e39dcbafd1e06d92f0ce81b0e860fbdcc97e4d066e90b",
+      "codePath": "modules/rain.js"
+    },
+    {
+      "id": "snow",
+      "version": "2.0.13",
+      "order": 188,
+      "name": {
+        "ko": "눈",
+        "en": "Snow"
+      },
+      "keywords": [
+        "눈",
+        "겨울",
+        "추위",
+        "눈송이",
+        "냉동",
+        "snow",
+        "winter",
+        "cold",
+        "snowflake",
+        "freeze"
+      ],
+      "category": "nature",
+      "description": {
+        "ko": "눈송이가 한 칸 돌며 살짝 커졌다가 제자리에 멈춥니다.",
+        "en": "The snowflake turns one notch, swells a little, and settles."
+      },
+      "color": "#26B7D3",
+      "states": [],
+      "progress": false,
+      "sha256": "6c1083e210aaa86cbe11ff1de841ca7d6bff1d840e0be6734f2dd3537d476926",
+      "codePath": "modules/snow.js"
+    },
+    {
+      "id": "wind",
+      "version": "2.0.13",
+      "order": 189,
+      "name": {
+        "ko": "바람",
+        "en": "Wind"
+      },
+      "keywords": [
+        "바람",
+        "공기",
+        "환기",
+        "날씨",
+        "wind",
+        "air",
+        "breeze",
+        "weather"
+      ],
+      "category": "nature",
+      "description": {
+        "ko": "바람 줄기가 왼쪽부터 한 줄씩 불어와 끝에서 말립니다.",
+        "en": "Gusts sweep in from the left one line at a time and curl at the ends."
+      },
+      "color": "#24B6A1",
+      "states": [],
+      "progress": false,
+      "sha256": "d9f1f10be8b064988e5fda38934126830b2230a14567d3f719a275b4cb03792b",
+      "codePath": "modules/wind.js"
+    },
+    {
+      "id": "thermometer",
+      "version": "2.0.13",
+      "order": 190,
+      "name": {
+        "ko": "온도계",
+        "en": "Thermometer"
+      },
+      "keywords": [
+        "온도",
+        "온도계",
+        "기온",
+        "열",
+        "temperature",
+        "thermometer",
+        "heat",
+        "weather"
+      ],
+      "category": "nature",
+      "description": {
+        "ko": "수은주가 내려갔다가 힘차게 올라갑니다.",
+        "en": "The mercury dips, then climbs."
+      },
+      "color": "#F05465",
+      "states": [],
+      "progress": false,
+      "sha256": "45904c181b3e56f403ef85ed888acd813566c775be01409986f13e8110dd000a",
+      "codePath": "modules/thermometer.js"
+    },
+    {
+      "id": "bolt",
+      "version": "2.0.13",
+      "order": 191,
+      "name": {
+        "ko": "번개",
+        "en": "Lightning"
+      },
+      "keywords": [
+        "번개",
+        "전기",
+        "빠른",
+        "에너지",
+        "즉시",
+        "lightning",
+        "bolt",
+        "electric",
+        "fast",
+        "energy",
+        "instant"
+      ],
+      "category": "nature",
+      "description": {
+        "ko": "번개가 번쩍 깜빡이며 커집니다.",
+        "en": "The bolt flashes and jolts bigger."
+      },
+      "color": "#F2CF3B",
+      "states": [],
+      "progress": false,
+      "sha256": "8707d675a169d5eb56bd5fc9964502e7220161106902f028e3b2f9f3868ea859",
+      "codePath": "modules/bolt.js"
+    },
+    {
+      "id": "flame",
+      "version": "2.0.13",
+      "order": 192,
+      "name": {
+        "ko": "불꽃",
+        "en": "Flame"
+      },
+      "keywords": [
+        "불",
+        "불꽃",
+        "인기",
+        "핫",
+        "트렌드",
+        "fire",
+        "flame",
+        "hot",
+        "trending",
+        "popular"
+      ],
+      "category": "nature",
+      "description": {
+        "ko": "불꽃이 아래를 축으로 일렁이고 속불이 숨 쉬듯 커졌다 작아집니다.",
+        "en": "The flame flickers from its base while the inner flame swells and shrinks."
+      },
+      "color": "#F48D2F",
+      "states": [],
+      "progress": false,
+      "sha256": "586f35b80d49cc7e3e13c783b8e5d2ac02513faf7263180868b03d1f85536159",
+      "codePath": "modules/flame.js"
+    },
+    {
+      "id": "droplet",
+      "version": "2.0.13",
+      "order": 193,
+      "name": {
+        "ko": "물방울",
+        "en": "Droplet"
+      },
+      "keywords": [
+        "물",
+        "물방울",
+        "습도",
+        "액체",
+        "water",
+        "droplet",
+        "humidity",
+        "liquid"
+      ],
+      "category": "nature",
+      "description": {
+        "ko": "물방울이 떨어지듯 튀어 오르며 납작해졌다 돌아옵니다.",
+        "en": "The drop hops, flattens on landing, and recovers."
+      },
+      "color": "#3093EC",
+      "states": [],
+      "progress": false,
+      "sha256": "9db15fa5ef1a4e95e69fc09b5f8761d15322b61eb1b20a859527b00aa298cfb6",
+      "codePath": "modules/droplet.js"
+    },
+    {
+      "id": "leaf",
+      "version": "2.0.13",
+      "order": 194,
+      "name": {
+        "ko": "나뭇잎",
+        "en": "Leaf"
+      },
+      "keywords": [
+        "잎",
+        "친환경",
+        "자연",
+        "성장",
+        "식물",
+        "leaf",
+        "eco",
+        "nature",
+        "green",
+        "plant"
+      ],
+      "category": "nature",
+      "description": {
+        "ko": "잎이 줄기 끝을 축으로 바람에 흔들리다 멈춥니다.",
+        "en": "The leaf sways from the end of its stem and comes to rest."
+      },
+      "color": "#98CB46",
+      "states": [],
+      "progress": false,
+      "sha256": "c032c11d178086f65a489ac1d518fb5d14d6ebc352377140ac323265f9484ca7",
+      "codePath": "modules/leaf.js"
+    },
+    {
+      "id": "flower",
+      "version": "2.0.13",
+      "order": 195,
+      "name": {
+        "ko": "꽃",
+        "en": "Flower"
+      },
+      "keywords": [
+        "꽃",
+        "봄",
+        "정원",
+        "선물",
+        "아름다움",
+        "flower",
+        "spring",
+        "garden",
+        "bloom"
+      ],
+      "category": "nature",
+      "description": {
+        "ko": "줄기가 살랑이는 동안 꽃송이가 한 칸 돌며 피어납니다.",
+        "en": "The stem sways while the bloom turns a notch as it opens."
+      },
+      "color": "#E662A8",
+      "states": [],
+      "progress": false,
+      "sha256": "92748e5333c0e78cc44da924df23a711cf7fca840920b0e264064cb87ed1470a",
+      "codePath": "modules/flower.js"
+    },
+    {
+      "id": "tree",
+      "version": "2.0.13",
+      "order": 196,
+      "name": {
+        "ko": "나무",
+        "en": "Tree"
+      },
+      "keywords": [
+        "나무",
+        "숲",
+        "자연",
+        "환경",
+        "성장",
+        "tree",
+        "forest",
+        "nature",
+        "environment",
+        "growth"
+      ],
+      "category": "nature",
+      "description": {
+        "ko": "전나무가 밑동을 축으로 바람에 흔들리다 멈춥니다.",
+        "en": "The fir sways from its trunk in the wind and settles."
+      },
+      "color": "#43B966",
+      "states": [],
+      "progress": false,
+      "sha256": "0afa92d0cc072cc1975ba5484a2db5b760d619b83da1077a150f0d8304ef238b",
+      "codePath": "modules/tree.js"
+    },
+    {
+      "id": "heart",
+      "version": "2.0.13",
+      "order": 197,
+      "name": {
+        "ko": "하트",
+        "en": "Heart"
+      },
+      "keywords": [
+        "좋아요",
+        "하트",
+        "즐겨찾기",
+        "사랑",
+        "like",
+        "heart",
+        "favorite",
+        "love"
+      ],
+      "category": "lifestyle",
+      "description": {
+        "ko": "누르면 살짝 움츠렸다가 부드럽게 차오르며 색이 채워집니다.",
+        "en": "It dips a little, then springs back softly as it fills."
+      },
+      "color": "#F05465",
+      "states": [
+        "off",
+        "on"
+      ],
+      "defaultState": "off",
+      "stateLabels": {
+        "ko": {
+          "off": "꺼짐",
+          "on": "좋아요"
+        },
+        "en": {
+          "off": "Off",
+          "on": "Liked"
+        }
+      },
+      "progress": false,
+      "sha256": "309530ba53cad49907e5adc0c0a66406652901851c61f4c0a3164ebecd4725f5",
+      "codePath": "modules/heart.js"
+    },
+    {
+      "id": "calendar",
+      "version": "2.0.13",
+      "order": 198,
+      "name": {
+        "ko": "달력",
+        "en": "Calendar"
+      },
+      "keywords": [
+        "달력",
+        "일정",
+        "날짜",
+        "예약",
+        "calendar",
+        "schedule",
+        "date",
+        "booking",
+        "event"
+      ],
+      "category": "lifestyle",
+      "description": {
+        "ko": "선택된 날짜가 앞 칸에서 다음 칸으로 깡충 넘어가 자리 잡습니다.",
+        "en": "The selected day hops from the previous slot to the next and settles in."
+      },
+      "color": "#F0764F",
+      "states": [],
+      "progress": false,
+      "sha256": "6828fba8eb8add6a84bcdd12f52d36b766c2b628eb43016fd5c294c0cdf73a12",
+      "codePath": "modules/calendar.js"
+    },
+    {
+      "id": "clock",
+      "version": "2.0.13",
+      "order": 199,
+      "name": {
+        "ko": "시계",
+        "en": "Clock"
+      },
+      "keywords": [
+        "시계",
+        "시간",
+        "기한",
+        "대기",
+        "clock",
+        "time",
+        "deadline",
+        "hour"
+      ],
+      "category": "lifestyle",
+      "description": {
+        "ko": "분침이 한 바퀴 돌고 시침이 따라 움찔합니다.",
+        "en": "The minute hand sweeps a full turn and the hour hand twitches along."
+      },
+      "color": "#3093EC",
+      "states": [],
+      "progress": false,
+      "sha256": "2175149863bb0be758c42654d8d339da7381dbeb6c1e63437abf229b6c3c726c",
+      "codePath": "modules/clock.js"
+    },
+    {
+      "id": "stopwatch",
+      "version": "2.0.13",
+      "order": 200,
+      "name": {
+        "ko": "스톱워치",
+        "en": "Stopwatch"
+      },
+      "keywords": [
+        "스톱워치",
+        "타이머",
+        "측정",
+        "경과",
+        "stopwatch",
+        "timer",
+        "measure",
+        "elapsed"
+      ],
+      "category": "lifestyle",
+      "description": {
+        "ko": "위쪽 버튼이 눌리면 바늘이 한 바퀴 돌고, 측정 중에는 계속 돕니다.",
+        "en": "The top button clicks and the hand sweeps a full turn; while running it keeps going."
+      },
+      "color": "#F48D2F",
+      "states": [
+        "idle",
+        "running"
+      ],
+      "defaultState": "idle",
+      "stateLabels": {
+        "ko": {
+          "idle": "대기",
+          "running": "측정 중"
+        },
+        "en": {
+          "idle": "Idle",
+          "running": "Running"
+        }
+      },
+      "progress": false,
+      "sha256": "67272b18c0140a39689270ceae731380b55cf9dfe687bd6c3a8daa08edc70e1f",
+      "codePath": "modules/stopwatch.js"
+    },
+    {
+      "id": "coffee",
+      "version": "2.0.13",
+      "order": 201,
+      "name": {
+        "ko": "커피",
+        "en": "Coffee"
+      },
+      "keywords": [
+        "커피",
+        "카페",
+        "휴식",
+        "음료",
+        "coffee",
+        "cafe",
+        "break",
+        "drink"
+      ],
+      "category": "lifestyle",
+      "description": {
+        "ko": "김이 살짝 떠오르며 옅어져 사라지고, 잠시 뒤 제자리에 천천히 다시 피어납니다.",
+        "en": "The steam lifts a little as it fades away, then slowly reappears in its place."
+      },
+      "color": "#F4AF2D",
+      "states": [],
+      "progress": false,
+      "sha256": "9cbcec77dc3aabdf3b5f872c449d5333d4296eb4980f76f80839d48faa37dca5",
+      "codePath": "modules/coffee.js"
+    },
+    {
+      "id": "trophy",
+      "version": "2.0.13",
+      "order": 202,
+      "name": {
+        "ko": "트로피",
+        "en": "Trophy"
+      },
+      "keywords": [
+        "트로피",
+        "우승",
+        "성취",
+        "상",
+        "1위",
+        "trophy",
+        "win",
+        "award",
+        "achievement"
+      ],
+      "category": "lifestyle",
+      "description": {
+        "ko": "트로피가 높이 들리고 가운데 별이 한 바퀴 돕니다.",
+        "en": "The trophy lifts high and the star spins."
+      },
+      "color": "#F2CF3B",
+      "states": [],
+      "progress": false,
+      "sha256": "b5206f294216329a25c1df62b939af04752402a9620f0061b6aef9248320898b",
+      "codePath": "modules/trophy.js"
+    },
+    {
+      "id": "utensils",
+      "version": "2.0.13",
+      "order": 203,
+      "name": {
+        "ko": "식사",
+        "en": "Dining"
+      },
+      "keywords": [
+        "식사",
+        "식당",
+        "맛집",
+        "음식",
+        "포크",
+        "나이프",
+        "dining",
+        "restaurant",
+        "food",
+        "fork",
+        "knife"
+      ],
+      "category": "lifestyle",
+      "description": {
+        "ko": "포크와 나이프가 서로를 향해 기울어 건배하듯 부딪혔다가 돌아옵니다.",
+        "en": "The fork and knife lean in and clink together, then straighten."
+      },
+      "color": "#F0764F",
+      "states": [],
+      "progress": false,
+      "sha256": "a1c34b52488b73417336bf9009e43283957229e7466c5d6c1d730450b96e28ba",
+      "codePath": "modules/utensils.js"
+    },
+    {
+      "id": "cake",
+      "version": "2.0.13",
+      "order": 204,
+      "name": {
+        "ko": "케이크",
+        "en": "Cake"
+      },
+      "keywords": [
+        "케이크",
+        "생일",
+        "축하",
+        "기념일",
+        "디저트",
+        "cake",
+        "birthday",
+        "celebration",
+        "anniversary"
+      ],
+      "category": "lifestyle",
+      "description": {
+        "ko": "촛불이 일렁이고 케이크가 살짝 들썩입니다.",
+        "en": "The candle flame flickers and the cake gives a small hop."
+      },
+      "color": "#E662A8",
+      "states": [],
+      "progress": false,
+      "sha256": "6badc5602659beb99deb5ccd2cbf43f944c5b1214486585bdc60ac6c8b0ded05",
+      "codePath": "modules/cake.js"
+    },
+    {
+      "id": "pizza",
+      "version": "2.0.13",
+      "order": 205,
+      "name": {
+        "ko": "피자",
+        "en": "Pizza"
+      },
+      "keywords": [
+        "피자",
+        "음식",
+        "배달",
+        "간식",
+        "pizza",
+        "food",
+        "delivery",
+        "snack"
+      ],
+      "category": "lifestyle",
+      "description": {
+        "ko": "피자 조각이 들리며 페퍼로니가 차례로 튑니다.",
+        "en": "The slice lifts as the pepperoni pop one by one."
+      },
+      "color": "#F05465",
+      "states": [],
+      "progress": false,
+      "sha256": "c1c3336d158fb77f68077c3c17dd8c1b00ba8742c508bb502c44e63c1169f3a3",
+      "codePath": "modules/pizza.js"
+    },
+    {
+      "id": "bed",
+      "version": "2.0.13",
+      "order": 206,
+      "name": {
+        "ko": "침대",
+        "en": "Bed"
+      },
+      "keywords": [
+        "침대",
+        "숙소",
+        "수면",
+        "호텔",
+        "휴식",
+        "bed",
+        "sleep",
+        "hotel",
+        "stay",
+        "rest"
+      ],
+      "category": "lifestyle",
+      "description": {
+        "ko": "이불이 숨 쉬듯 오르내리고 Z가 떠오릅니다.",
+        "en": "The blanket rises and falls with breathing as a Z floats up."
+      },
+      "color": "#5D73EA",
+      "states": [],
+      "progress": false,
+      "sha256": "5b6a1f692f6092efeac5c0981fdfce8f2607a67b53ed799738b926f07c9e0635",
+      "codePath": "modules/bed.js"
+    },
+    {
+      "id": "lamp",
+      "version": "2.0.13",
+      "order": 207,
+      "name": {
+        "ko": "스탠드",
+        "en": "Lamp"
+      },
+      "keywords": [
+        "스탠드",
+        "조명",
+        "램프",
+        "인테리어",
+        "lamp",
+        "light",
+        "interior",
+        "desk"
+      ],
+      "category": "lifestyle",
+      "description": {
+        "ko": "줄을 당기면 갓이 깜빡이며 환해지고 양옆으로 빛줄기가 퍼집니다.",
+        "en": "Pulling the cord flickers the shade bright and light spreads to both sides."
+      },
+      "color": "#F2CF3B",
+      "states": [
+        "off",
+        "on"
+      ],
+      "defaultState": "off",
+      "stateLabels": {
+        "ko": {
+          "off": "꺼짐",
+          "on": "켜짐"
+        },
+        "en": {
+          "off": "Off",
+          "on": "On"
+        }
+      },
+      "progress": false,
+      "sha256": "493c98158a5d0a40b68f10e9e4563c1c42fa53ec521575ef5004c6637049e47d",
+      "codePath": "modules/lamp.js"
+    },
+    {
+      "id": "dumbbell",
+      "version": "2.0.13",
+      "order": 208,
+      "name": {
+        "ko": "덤벨",
+        "en": "Dumbbell"
+      },
+      "keywords": [
+        "덤벨",
+        "운동",
+        "헬스",
+        "피트니스",
+        "dumbbell",
+        "workout",
+        "gym",
+        "fitness"
+      ],
+      "category": "lifestyle",
+      "description": {
+        "ko": "덤벨을 두 번 번쩍 들어 올립니다.",
+        "en": "The dumbbell is lifted twice."
+      },
+      "color": "#3093EC",
+      "states": [],
+      "progress": false,
+      "sha256": "400990722654d804704a1c5a4316672a2c2b11e58c4f810eed02ffc905f1b4e9",
+      "codePath": "modules/dumbbell.js"
+    },
+    {
+      "id": "pill",
+      "version": "2.0.13",
+      "order": 209,
+      "name": {
+        "ko": "약",
+        "en": "Pill"
+      },
+      "keywords": [
+        "약",
+        "캡슐",
+        "건강",
+        "병원",
+        "처방",
+        "pill",
+        "capsule",
+        "health",
+        "medicine",
+        "pharmacy"
+      ],
+      "category": "lifestyle",
+      "description": {
+        "ko": "캡슐 두 반쪽이 축을 따라 벌어졌다가 딸깍 다시 끼워집니다.",
+        "en": "The two halves of the capsule pull apart along its axis and click back together."
+      },
+      "color": "#24B6A1",
+      "states": [],
+      "progress": false,
+      "sha256": "2cb8e298903eac9fb6cd4e652022afd53a3adad74b6678246401bce89b3ba876",
+      "codePath": "modules/pill.js"
+    },
+    {
+      "id": "paw",
+      "version": "2.0.13",
+      "order": 210,
+      "name": {
+        "ko": "반려동물",
+        "en": "Pet paw"
+      },
+      "keywords": [
+        "반려동물",
+        "반려견",
+        "강아지",
+        "고양이",
+        "발자국",
+        "발바닥",
+        "펫",
+        "pet",
+        "dog",
+        "puppy",
+        "cat",
+        "paw",
+        "animal"
+      ],
+      "category": "lifestyle",
+      "description": {
+        "ko": "발바닥이 꾹 눌렸다 올라오고, 발가락 젤리 네 개가 차례로 톡톡 튑니다.",
+        "en": "The paw presses down and lifts, and the four toe beans pop one after another."
+      },
+      "color": "#F4AF2D",
+      "states": [],
+      "progress": false,
+      "sha256": "2aa4a8817756595055fb59b68933114feeae21d30313db62856a66cd6c150b7b",
+      "codePath": "modules/paw.js"
+    },
+    {
+      "id": "dice",
+      "version": "2.0.13",
+      "order": 211,
+      "name": {
+        "ko": "주사위",
+        "en": "Dice"
+      },
+      "keywords": [
+        "주사위",
+        "게임",
+        "랜덤",
+        "운",
+        "확률",
+        "dice",
+        "game",
+        "random",
+        "luck",
+        "chance"
+      ],
+      "category": "lifestyle",
+      "description": {
+        "ko": "주사위가 튀어 오르며 구르고 다시 자리에 섭니다.",
+        "en": "The die hops, rolls a quarter turn, and lands."
+      },
+      "color": "#8968F4",
+      "states": [],
+      "progress": false,
+      "sha256": "786c9465592c59cd4b7d07614c39ca4f32103d474c02f1464d8e01ed308407e1",
+      "codePath": "modules/dice.js"
+    }
+  ]
+}
