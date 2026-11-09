@@ -1,0 +1,347 @@
+/* 프로젝트에 전역 리셋 파일이 없어 기본 body 여백만 제거 */
+body {
+    margin: 0;
+}
+
+.main-page {
+    --main-max: 420px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    max-width: var(--main-max);
+    min-height: 100dvh;
+    margin: 0 auto;
+    background: #cae3a5;
+    box-shadow: inset 0 -34px 56.2px 57px #b4df74;
+    font-family: "Inter", sans-serif;
+    color: #000;
+}
+
+:where(.main-page) button {
+    padding: 0;
+    border: 0;
+    background: none;
+    font: inherit;
+    color: inherit;
+    text-align: left;
+    cursor: pointer;
+}
+
+:where(.main-page) img {
+    display: block;
+}
+
+/* 헤더 */
+.main-header {
+    position: relative;
+    height: 231px;
+    flex-shrink: 0;
+}
+
+.main-logo {
+    position: absolute;
+    left: -5px;
+    top: -2px;
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+}
+
+.main-bell {
+    position: absolute;
+    right: 10px;
+    top: 13px;
+    color: #050505; /* 아이콘 선 색 (currentColor) */
+    --li-accent: #ffae00; /* 아이콘 면·세부 색 */
+    --li-tint: 1; /* 면 불투명도 (기본 0.24) */
+}
+
+.main-search {
+    position: absolute;
+    left: 50%;
+    top: 114px;
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    width: min(297px, calc(100% - 32px));
+    height: 39px;
+    padding: 0 12px;
+    background: #fff;
+    border: 1px solid #6f9c4c;
+    border-radius: 30px;
+    transform: translateX(calc(-50% + 7.5px)); /* Figma: left 69px */
+}
+
+/* input의 기본 outline을 지웠으므로 검색창 전체에 포커스 표시 */
+.main-search:focus-within {
+    outline: 2px solid #6f9c4c;
+    outline-offset: 2px;
+}
+
+.main-search img {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+}
+
+.main-search input {
+    flex: 1;
+    min-width: 0;
+    padding: 0 22px 0 2px;
+    border: 0;
+    outline: none;
+    background: none;
+    font: inherit;
+    font-size: 16px;
+    font-weight: 700;
+    text-align: center;
+}
+
+.main-search input::placeholder {
+    color: #b9b9b9;
+}
+
+/* 본문 패널 */
+.main-panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    padding-bottom: 68px; /* 하단 여백 8px + 하단 바 60px */
+    background: #f2f2f2;
+    border-radius: 20px 20px 0 0;
+    overflow: hidden;
+}
+
+.main-section {
+    position: relative;
+    background: #fff;
+    overflow: hidden;
+}
+
+.section-title {
+    margin: 0;
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 16px;
+}
+
+.divider {
+    max-width: none;
+}
+
+.chevron {
+    transform: rotate(180deg);
+}
+
+/* 지금 확인해야할 내 재료들 */
+.fridge-section {
+    border-radius: 20px 20px 0 0;
+}
+
+.fridge-title {
+    padding: 12px 17px 13px;
+}
+
+.fridge-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 168px);
+    justify-content: space-between;
+    row-gap: 21px;
+    padding: 7px 19px 30px 17px;
+}
+
+.fridge-card {
+    position: relative;
+    width: 168px;
+    height: 78px;
+    background: #f2f2f2;
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+.fridge-card span {
+    position: absolute;
+    left: 15px;
+    white-space: nowrap;
+}
+
+.fridge-status {
+    top: 9px;
+    font-size: 10px;
+}
+
+.fridge-status.warn {
+    color: #f86902;
+}
+
+.fridge-status.ok {
+    color: #91ae6e;
+}
+
+.fridge-name {
+    top: 35px;
+    font-size: 10px;
+}
+
+.fridge-desc {
+    top: 48px;
+    font-size: 9px;
+    color: #636363;
+}
+
+.fridge-icon {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+}
+
+.fridge-more {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    width: 100%;
+    height: 31px;
+    color: inherit;
+    text-decoration: none;
+}
+
+.fridge-more-text {
+    font-size: 13px;
+    font-weight: 300;
+    margin-left: 23px; /* 문구를 가운데 두고 화살표는 오른쪽에 붙임 */
+}
+
+.fridge-more-text strong {
+    font-weight: 500;
+}
+
+.fridge-more .chevron {
+    width: 20px;
+    height: 20px;
+}
+
+/* 내 조미료들 */
+.condiment-section {
+    height: 101px;
+    flex-shrink: 0;
+}
+
+.condiment-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 4px 8px 0 10px;
+    font-size: 8px;
+}
+
+.condiment-more {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+}
+
+.condiment-more .chevron {
+    width: 15px;
+    height: 15px;
+}
+
+.condiment-list {
+    display: flex;
+    gap: 15px;
+    margin: 0;
+    padding: 5px 0 0 14px;
+    list-style: none;
+}
+
+.condiment-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    width: 54px;
+    height: 54px;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: 30px;
+}
+
+.condiment-item img {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+}
+
+/* 재료 추천 */
+.recommend-section {
+    height: 205px;
+    flex-shrink: 0;
+    margin-top: 1px;
+}
+
+.recommend-title {
+    padding: 7px 7px 0;
+}
+
+.recommend-list {
+    display: flex;
+    gap: 8px;
+    padding: 8px 0 0 11px;
+}
+
+.recommend-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    width: 257px;
+}
+
+.recommend-image {
+    height: 113px;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.recommend-image img {
+    height: 113px;
+    object-fit: cover;
+}
+
+.recommend-name {
+    margin: 8px 0 0 2px;
+    font-size: 10px;
+    line-height: 12px;
+    white-space: nowrap;
+}
+
+.recommend-desc {
+    margin: 4px 0 0 2px;
+    font-size: 8px;
+    line-height: 11px;
+    color: #454545;
+}
+
+.recommend-chevron {
+    position: absolute;
+    left: 123px;
+    top: 147px;
+    width: 10px;
+    height: 10px;
+}
+
+/* 추가 버튼 */
+.main-add {
+    position: fixed;
+    right: max(3px, calc(50% - 207px));
+    bottom: 74px;
+    z-index: 2;
+}
+
+.main-add img {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+}
