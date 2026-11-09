@@ -1,5 +1,8 @@
 import React, { useState } from "react";
+import { Link } from "react-router";
 import logo from "../assets/Logo_FridgeO.svg"; // 로고 이미지 경로
+import backIcon from "../assets/lucide_chevron_left_icon.png";
+import searchIcon from "../assets/lucide_search_icon.png";
 
 export default function MyPage() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -9,38 +12,25 @@ export default function MyPage() {
       {/* 420 * 915 고정 프레임 */}
       <div style={styles.mobileContainer}>
         {/* 상단 검색 헤더 */}
-        <header style={styles.myPageHeader}>
-          <span style={styles.backArrow}>&lt;</span>
+        <header className="fridge-header">
+          <Link to="/" className="fridge-back" aria-label="홈으로">
+            <img src={backIcon} alt="" />
+          </Link>
 
-          {/* 2. 이 부분을 아래와 같이 수정하세요 */}
-          <div style={{ ...styles.logoCircle, overflow: "hidden" }}>
-            <img
-              src={logo} // 👈 따옴표 없이 위에서 import한 변수명인 logo를 중괄호 안에 그대로 넣습니다.
-              alt="Logo"
-              style={{
-                width: "50px%",
-                height: "auto",
-                objectFit: "contain",
-                transform: "scale(1.8)", // 👈 1.8배 강제 확대! (더 키우고 싶으면 2.0, 2.5 등으로 조절)
-                transformOrigin: "center", // 중심을 기준으로 확대
-              }}
-            />
-          </div>
+          <Link to="/" className="fridge-logo" aria-label="FridgeO 홈">
+            <img src={logo} alt="FridgeO" />
+          </Link>
 
-          <div style={styles.searchBar}>
-            <span
-              style={{ color: "#999", marginRight: "8px", fontSize: "14px" }}
-            >
-              🔍
-            </span>
+          <label className="fridge-search">
+            <img src={searchIcon} alt="" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="냉장고 안 재료를 검색해보세요"
-              style={styles.searchInput}
+              aria-label="냉장고 안 재료 검색"
             />
-          </div>
+          </label>
         </header>
 
         {/* 메인 컨텐츠 영역 */}
@@ -145,46 +135,6 @@ const styles = {
     boxShadow: "0 10px 30px rgba(0,0,0,0.12)",
     overflow: "hidden",
     boxSizing: "border-box",
-  },
-  myPageHeader: {
-    padding: "24px 26px 10px 26px",
-    display: "flex",
-    alignItems: "center",
-    gap: "12px",
-  },
-  backArrow: {
-    color: "#6E9952",
-    fontSize: "22px",
-    fontWeight: "bold",
-    cursor: "pointer",
-    lineHeight: 1,
-  },
-  logoCircle: {
-    width: "41px",
-    height: "43px",
-    borderRadius: "50%",
-
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    color: "#fff",
-    flexShrink: 0,
-  },
-  searchBar: {
-    flex: 1,
-    display: "flex",
-    alignItems: "center",
-    backgroundColor: "#FFFFFF",
-    border: "1.5px solid #6E9952",
-    borderRadius: "24px",
-    padding: "8px 16px",
-  },
-  searchInput: {
-    border: "none",
-    outline: "none",
-    width: "100%",
-    fontSize: "13px",
-    color: "#333",
   },
   mainContent: {
     flex: 1,
