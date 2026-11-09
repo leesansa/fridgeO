@@ -112,6 +112,7 @@ body {
 
 .fridge-search input::placeholder {
   color: #999;
+  font-weight: 700;
 }
 
 /* 필터 */
@@ -634,7 +635,7 @@ body {
   position: relative;
   display: flex;
   align-items: center;
-  gap: 44px;
+  gap: 25px;
   min-height: 112px;
   padding: 13px 0 18px;
 }
@@ -781,10 +782,54 @@ body {
 
 /* 목록형 전체: 사진과 음식 정보 간격 15px 축소 */
 .fridge-page .ingredient-row {
-  gap: 29px;
+  gap: 14px;
 }
 
 /* 줄어든 간격만큼 이름 표시 공간 확대 */
 .fridge-page .ingredient-row .ingredient-name {
   max-width: 121px;
+}
+
+.fridge-page {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 912px;
+  max-height: 100dvh;
+  min-height: 0;
+  padding-bottom: calc(var(--nav-height) + var(--safe-bottom));
+  overflow: hidden;
+}
+
+.fridge-page .fridge-header,
+.fridge-page .fridge-filters,
+.fridge-page .fridge-toolbar {
+  flex-shrink: 0;
+}
+
+.fridge-page .fridge-main {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+}
+
+/* 목록형과 박스형 모두 이 영역만 스크롤 */
+.fridge-page .fridge-content {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior-y: contain;
+  padding-bottom: 132px;
+}
+
+/* 하단바와 추가 버튼은 재료 스크롤 영역 바깥에 배치 */
+.fridge-page .fridge-navigation {
+  position: absolute;
+  bottom: 0;
+}
+
+.fridge-page .fridge-add-position {
+  position: absolute;
+  bottom: calc(var(--nav-height) + var(--safe-bottom) + 48px);
 }
