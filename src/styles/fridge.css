@@ -839,7 +839,6 @@ body {
   position: relative;
 }
 
-<<<<<<< Updated upstream
 .fridge-page button.ingredient-edit-target {
   position: absolute;
   inset: 0;
@@ -856,9 +855,6 @@ body {
 }
 
 .fridge-page button.ingredient-delete-button {
-=======
-.fridge-page .ingredient-delete-button {
->>>>>>> Stashed changes
   position: absolute;
   top: 4px;
   left: 4px;

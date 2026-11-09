@@ -3,12 +3,7 @@ import {
   getExpiryBadge,
 } from "../../utils/fridgeUtils";
 
-<<<<<<< Updated upstream
 const List = ({ items, today, onSelectIngredient, onDeleteIngredient }) => {
-=======
-// List.jsx
-const List = ({ items, today, isDeleteMode, onDeleteIngredient }) => {
->>>>>>> Stashed changes
   return (
     <ul className="ingredient-list">
       {items.map((item) => {
@@ -23,17 +18,6 @@ const List = ({ items, today, isDeleteMode, onDeleteIngredient }) => {
                 <span>{item.emoji}</span>
               )}
             </div>
-
-            {isDeleteMode && (
-  <button
-    type="button"
-    className="ingredient-delete-button"
-    aria-label={`${item.name} 삭제`}
-    onClick={() => onDeleteIngredient(item.id)}
-  >
-    <span aria-hidden="true">×</span>
-  </button>
-)}
 
             <div className="ingredient-info">
               <h2 className="ingredient-name">{item.name}</h2>
