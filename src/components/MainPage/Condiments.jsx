@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router";
 import chevron from "../../assets/main/chevron.png";
 import ketchup from "../../assets/main/ketchup.png";
 import pepper from "../../assets/main/pepper.png";
@@ -17,11 +18,14 @@ const condiments = [
 ];
 
 const Condiments = () => {
+    const navigate = useNavigate();
+    const goFridge = () => navigate("/fridge");
+
     return (
         <section className="main-section condiment-section">
             <div className="condiment-head">
                 <span>내 조미료들 한눈에 보기</span>
-                <button type="button" className="condiment-more">
+                <button type="button" className="condiment-more" onClick={goFridge}>
                     더보기
                     <img className="chevron" src={chevron} alt="" />
                 </button>
@@ -29,7 +33,7 @@ const Condiments = () => {
             <ul className="condiment-list">
                 {condiments.map((condiment) => (
                     <li key={condiment.name}>
-                        <button type="button" className="condiment-item" aria-label={condiment.name}>
+                        <button type="button" className="condiment-item" aria-label={condiment.name} onClick={goFridge}>
                             <img src={condiment.icon} alt="" />
                         </button>
                     </li>

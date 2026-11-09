@@ -1,4 +1,4 @@
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import line from "../../assets/main/line.svg";
 import chevron from "../../assets/main/chevron.png";
 import expiry from "../../assets/main/expiry.png";
@@ -15,13 +15,15 @@ const fridgeAlerts = [
 ];
 
 const FridgeAlerts = () => {
+    const navigate = useNavigate();
+
     return (
         <section className="main-section fridge-section">
             <h2 className="section-title fridge-title">지금 확인해야할 내 재료들!</h2>
             <img className="divider" src={line} alt="" />
             <div className="fridge-grid">
                 {fridgeAlerts.map((alert) => (
-                    <button type="button" className="fridge-card" key={alert.title}>
+                    <button type="button" className="fridge-card" key={alert.title} onClick={() => navigate("/fridge")}>
                         <span className={`fridge-status ${alert.tone}`}>{alert.status}</span>
                         <span className="fridge-name">{alert.title}</span>
                         <span className="fridge-desc">{alert.desc}</span>
