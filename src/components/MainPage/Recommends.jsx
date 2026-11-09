@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router";
 import chevron from "../../assets/main/chevron.png";
 import tofu from "../../assets/main/tofu.jpg";
 import eggsPhoto from "../../assets/main/eggs-photo.jpg";
@@ -9,12 +10,14 @@ const recommends = [
 ];
 
 const Recommends = () => {
+    const navigate = useNavigate();
+
     return (
         <section className="main-section recommend-section">
             <h2 className="section-title recommend-title">주인님을 기다리는 친구들이 있어요!!</h2>
             <div className="recommend-list">
                 {recommends.map((recommend) => (
-                    <button type="button" className="recommend-card" key={recommend.title}>
+                    <button type="button" className="recommend-card" key={recommend.title} onClick={() => navigate("/recipe")}>
                         <span className="recommend-image">
                             <img src={recommend.image} alt="" style={{ width: recommend.imageWidth }} />
                         </span>
