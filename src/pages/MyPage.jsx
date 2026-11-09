@@ -1,443 +1,379 @@
 import React, { useState } from "react";
+import logo from "../assets/Logo_FridgeO.svg"; // 로고 이미지 경로
 
-const MyPage = () => {
-  // 간단한 인터랙션 확인용 상태 (클릭해보실 수 있습니다)
-  const [count, setCount] = useState(3);
-  const [storage, setStorage] = useState("냉장");
-  const [selectedChip, setSelectedChip] = useState("사과");
+export default function MyPage() {
+  const [searchQuery, setSearchQuery] = useState("");
 
   return (
-    <>
-      <style>{`
-        @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
-        
-        .mockup-wrapper {
-          font-family: 'Pretendard', sans-serif;
-          background-color: #E5E5E5;
-          display: flex;
-          justify-content: center;
-          flex-wrap: wrap;
-          gap: 40px;
-          padding: 40px;
-          min-height: 100vh;
-          box-sizing: border-box;
-        }
-        .phone {
-          width: 340px;
-          height: 680px;
-          background-color: #F2F2F2;
-          border-radius: 36px;
-          box-shadow: 0 12px 30px rgba(0,0,0,0.12);
-          display: flex;
-          flex-direction: column;
-          justify-content: space-between;
-          overflow: hidden;
-          position: relative;
-          border: 8px solid #FFFFFF;
-        }
-        .header {
-          background: #FFFFFF;
-          padding: 18px 20px;
-          font-weight: 700;
-          font-size: 15px;
-          color: #333;
-          display: flex;
-          align-items: center;
-          gap: 12px;
-        }
-        .content {
-          padding: 20px;
-          flex: 1;
-          display: flex;
-          flex-direction: column;
-          gap: 14px;
-          overflow-y: auto;
-        }
-        .card {
-          background: #FFFFFF;
-          border-radius: 16px;
-          padding: 16px;
-          box-shadow: 0 2px 8px rgba(0,0,0,0.03);
-        }
-        .label {
-          font-size: 12px;
-          color: #777;
-          margin-bottom: 8px;
-          font-weight: 600;
-        }
-        .input-box {
-          font-size: 16px;
-          font-weight: 700;
-          color: #222;
-          border-bottom: 2px solid #91AE6E;
-          padding-bottom: 8px;
-        }
-        .chip-group {
-          display: flex;
-          gap: 6px;
-          margin-top: 10px;
-        }
-        .chip {
-          background: #F2F2F2;
-          color: #555;
-          font-size: 12px;
-          padding: 5px 10px;
-          border-radius: 20px;
-          cursor: pointer;
-        }
-        .chip.active {
-          background: #91AE6E;
-          color: #FFF;
-          font-weight: 600;
-        }
-        .row {
-          display: flex;
-          gap: 12px;
-        }
-        .col {
-          flex: 1;
-        }
-        .stepper {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          background: #F2F2F2;
-          border-radius: 10px;
-          padding: 6px 12px;
-          font-weight: 700;
-          user-select: none;
-        }
-        .stepper span {
-          color: #689D4B;
-          cursor: pointer;
-          font-size: 18px;
-          padding: 0 4px;
-        }
-        .toggle {
-          display: flex;
-          background: #F2F2F2;
-          border-radius: 10px;
-          padding: 4px;
-          font-size: 13px;
-          cursor: pointer;
-        }
-        .toggle div {
-          flex: 1;
-          text-align: center;
-          padding: 6px 0;
-          border-radius: 8px;
-          color: #777;
-        }
-        .toggle .active {
-          background: #689D4B;
-          color: #FFF;
-          font-weight: 700;
-        }
-        .date-box {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          font-weight: 600;
-          color: #333;
-        }
-        .badge-red {
-          background: #D96868;
-          color: #FFF;
-          font-size: 11px;
-          padding: 4px 8px;
-          border-radius: 8px;
-          font-weight: 700;
-        }
-        .cta-btn {
-          background: #689D4B;
-          color: #FFFFFF;
-          text-align: center;
-          padding: 16px;
-          border-radius: 16px;
-          font-weight: 700;
-          font-size: 16px;
-          margin-top: auto;
-          box-shadow: 0 4px 12px rgba(104, 157, 75, 0.3);
-          cursor: pointer;
-        }
-        /* 마이페이지 스타일 */
-        .search-bar {
-          background: #F2F2F2;
-          border-radius: 20px;
-          padding: 8px 14px;
-          font-size: 12px;
-          color: #888;
-          flex: 1;
-        }
-        .profile {
-          display: flex;
-          align-items: center;
-          gap: 14px;
-        }
-        .avatar {
-          width: 52px;
-          height: 52px;
-          border-radius: 50%;
-          background: #91AE6E;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          color: white;
-          font-weight: bold;
-          font-size: 20px;
-        }
-        .stats {
-          display: flex;
-          justify-content: space-around;
-          text-align: center;
-          padding: 12px 0;
-        }
-        .stat-num {
-          font-weight: 700;
-          font-size: 16px;
-          color: #689D4B;
-        }
-        .stat-label {
-          font-size: 12px;
-          color: #666;
-          margin-top: 4px;
-        }
-        .recipe-scroll {
-          display: flex;
-          gap: 10px;
-        }
-        .recipe-item {
-          flex: 1;
-          background: #F2F2F2;
-          border-radius: 10px;
-          padding: 10px;
-          font-size: 12px;
-          font-weight: 600;
-        }
-        .menu-list {
-          display: flex;
-          flex-direction: column;
-          gap: 12px;
-          font-size: 14px;
-          font-weight: 600;
-          color: #333;
-        }
-        .menu-item {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          padding-bottom: 10px;
-          border-bottom: 1px solid #F2F2F2;
-          cursor: pointer;
-        }
-        /* 하단 탭바 */
-        .nav-wrap {
-          padding: 12px 16px 20px;
-        }
-        .nav-bar {
-          background: #FFFFFF;
-          border-radius: 30px;
-          padding: 8px 16px;
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          box-shadow: 0 4px 15px rgba(0,0,0,0.06);
-          font-size: 12px;
-          font-weight: 600;
-          color: #999;
-        }
-        .nav-bar .active {
-          color: #689D4B;
-          font-weight: 700;
-        }
-        .logo-btn {
-          width: 38px;
-          height: 38px;
-          background: #689D4B;
-          border-radius: 50%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          color: white;
-          font-weight: 900;
-          position: relative;
-        }
-        .logo-dot {
-          width: 4px;
-          height: 10px;
-          background: #D96868;
-          border-radius: 2px;
-          margin-left: 6px;
-        }
-      `}</style>
+    <div style={styles.pageWrapper}>
+      {/* 420 * 915 고정 프레임 */}
+      <div style={styles.mobileContainer}>
+        {/* 상단 검색 헤더 */}
+        <header style={styles.myPageHeader}>
+          <span style={styles.backArrow}>&lt;</span>
 
-      <div className="mockup-wrapper">
-        {/* 화면 1: 냉장재료 등록 */}
-        <div className="phone">
-          <div className="header">&lt; 홈 &nbsp;|&nbsp; 냉장재료 등록</div>
-          <div className="content">
-            <div className="card">
-              <div className="label">어떤 재료인가요?</div>
-              <div className="input-box">🍎 {selectedChip}</div>
-              <div className="chip-group">
-                {["사과", "계란", "우유", "대파"].map((item) => (
-                  <div
-                    key={item}
-                    className={`chip ${selectedChip === item ? "active" : ""}`}
-                    onClick={() => setSelectedChip(item)}
-                  >
-                    {item}
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="row">
-              <div className="card col">
-                <div className="label">수량 (몇 개)</div>
-                <div className="stepper">
-                  <span onClick={() => setCount(Math.max(1, count - 1))}>
-                    -
-                  </span>
-                  {count}개<span onClick={() => setCount(count + 1)}>+</span>
-                </div>
-              </div>
-              <div className="card col">
-                <div className="label">보관 방법</div>
-                <div className="toggle">
-                  <div
-                    className={storage === "냉장" ? "active" : ""}
-                    onClick={() => setStorage("냉장")}
-                  >
-                    냉장
-                  </div>
-                  <div
-                    className={storage === "냉동" ? "active" : ""}
-                    onClick={() => setStorage("냉동")}
-                  >
-                    냉동
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="card">
-              <div className="label">유통기한</div>
-              <div className="date-box">
-                <span>2026. 11. 08 까지</span>
-                <span className="badge-red">D-3 임박</span>
-              </div>
-            </div>
-
-            <div className="cta-btn">추가완료</div>
+          {/* 2. 이 부분을 아래와 같이 수정하세요 */}
+          <div style={{ ...styles.logoCircle, overflow: "hidden" }}>
+            <img
+              src={logo} // 👈 따옴표 없이 위에서 import한 변수명인 logo를 중괄호 안에 그대로 넣습니다.
+              alt="Logo"
+              style={{
+                width: "50px%",
+                height: "auto",
+                objectFit: "contain",
+                transform: "scale(1.8)", // 👈 1.8배 강제 확대! (더 키우고 싶으면 2.0, 2.5 등으로 조절)
+                transformOrigin: "center", // 중심을 기준으로 확대
+              }}
+            />
           </div>
 
-          <div className="nav-wrap">
-            <div className="nav-bar">
-              <span>홈</span>
-              <span>레시피</span>
-              <div className="logo-btn">
-                <div className="logo-dot"></div>
-              </div>
-              <span className="active">냉장고</span>
-              <span>마이</span>
+          <div style={styles.searchBar}>
+            <span
+              style={{ color: "#999", marginRight: "8px", fontSize: "14px" }}
+            >
+              🔍
+            </span>
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="냉장고 안 재료를 검색해보세요"
+              style={styles.searchInput}
+            />
+          </div>
+        </header>
+
+        {/* 메인 컨텐츠 영역 */}
+        <main style={styles.mainContent}>
+          {/* 프로필 카드 */}
+          <div
+            style={{
+              ...styles.card,
+              display: "flex",
+              alignItems: "center",
+              gap: "18px",
+            }}
+          >
+            <div style={styles.profileAvatar}>🍏</div>
+            <div>
+              <div style={styles.profileName}>프레시요리사 님</div>
+              <div style={styles.profileSub}>오늘도 냉장고를 비워볼까요?</div>
             </div>
           </div>
-        </div>
 
-        {/* 화면 2: 마이페이지 */}
-        <div className="phone">
-          <div className="header">
-            <div className="logo-btn" style={{ width: "28px", height: "28px" }}>
-              <div className="logo-dot" style={{ height: "7px" }}></div>
+          {/* 북마크 / 팔로우 / 구독 통계 카드 */}
+          <div
+            style={{
+              ...styles.card,
+              display: "flex",
+              justifyContent: "space-around",
+              padding: "22px 12px",
+            }}
+          >
+            <div style={styles.statItem}>
+              <div style={{ ...styles.statNum, color: "#4E7A36" }}>3개</div>
+              <div style={styles.statLabel}>북마크</div>
             </div>
-            <div className="search-bar">🔍 레시피나 재료를 검색해보세요</div>
+            <div style={styles.statDivider} />
+            <div style={styles.statItem}>
+              <div style={{ ...styles.statNum, color: "#4E7A36" }}>34</div>
+              <div style={styles.statLabel}>팔로우</div>
+            </div>
+            <div style={styles.statDivider} />
+            <div style={styles.statItem}>
+              <div style={{ ...styles.statNum, color: "#C95B5B" }}>10</div>
+              <div style={styles.statLabel}>구독</div>
+            </div>
           </div>
-          <div className="content">
-            <div className="card profile">
-              <div className="avatar">🍏</div>
-              <div>
-                <div style={{ fontWeight: 700, fontSize: "16px" }}>
-                  프레시요리사 님
-                </div>
-                <div
-                  style={{ fontSize: "12px", color: "#888", marginTop: "4px" }}
-                >
-                  오늘도 냉장고를 비워볼까요?
-                </div>
-              </div>
-            </div>
 
-            <div className="card stats">
-              <div>
-                <div className="stat-num">12</div>
-                <div className="stat-label">북마크</div>
+          {/* 최근 본 레시피 / 정보 */}
+          <div style={styles.card}>
+            <div style={styles.sectionTitle}>최근 본 레시피 / 정보</div>
+            <div style={{ display: "flex", gap: "14px" }}>
+              <div style={styles.recipeMiniCard}>
+                <div style={styles.recipeTitle}>🥗 사과 샐러드</div>
+                <div style={styles.recipeSub}>10분 완성</div>
               </div>
-              <div style={{ borderLeft: "1px solid #EEE" }}></div>
-              <div>
-                <div className="stat-num">34</div>
-                <div className="stat-label">팔로우</div>
-              </div>
-              <div style={{ borderLeft: "1px solid #EEE" }}></div>
-              <div>
-                <div className="stat-num" style={{ color: "#D96868" }}>
-                  5
-                </div>
-                <div className="stat-label">구독</div>
-              </div>
-            </div>
-
-            <div className="card">
-              <div className="label">최근 본 레시피 / 정보</div>
-              <div className="recipe-scroll">
-                <div className="recipe-item">
-                  🥗 사과 샐러드
-                  <br />
-                  <span style={{ fontSize: "10px", color: "#888" }}>
-                    10분 완성
-                  </span>
-                </div>
-                <div className="recipe-item">
-                  🍲 두부 된장찌개
-                  <br />
-                  <span style={{ fontSize: "10px", color: "#888" }}>
-                    재료 100% 일치
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            <div className="card menu-list">
-              <div className="menu-item">
-                <span>내 냉장고 관리</span>
-                <span className="badge-red">임박 2개 &gt;</span>
-              </div>
-              <div className="menu-item">
-                <span>개인정보 관리</span>
-                <span style={{ color: "#CCC" }}>&gt;</span>
-              </div>
-              <div className="menu-item" style={{ border: "none", padding: 0 }}>
-                <span>알림 설정 &nbsp;|&nbsp; 동의/약관</span>
-                <span style={{ color: "#CCC" }}>&gt;</span>
+              <div style={styles.recipeMiniCard}>
+                <div style={styles.recipeTitle}>🍲 두부 된장찌개</div>
+                <div style={styles.recipeSub}>재료 100%일치</div>
               </div>
             </div>
           </div>
 
-          <div className="nav-wrap">
-            <div className="nav-bar">
-              <span>홈</span>
-              <span>레시피</span>
-              <div className="logo-btn">
-                <div className="logo-dot"></div>
-              </div>
-              <span>냉장고</span>
-              <span className="active">마이</span>
+          {/* 하단 메뉴 리스트 */}
+          <div style={{ ...styles.card, padding: "20px 24px" }}>
+            <div style={styles.menuRow}>
+              <span style={styles.menuText}>내 냉장고 관리</span>
+              <span style={styles.urgentBadgeSmall}>임박 2개 &gt;</span>
+            </div>
+            <div style={styles.menuDivider} />
+            <div style={styles.menuRow}>
+              <span style={styles.menuText}>개인정보 관리</span>
+              <span style={styles.menuArrow}>&gt;</span>
+            </div>
+            <div style={styles.menuDivider} />
+            <div style={{ ...styles.menuRow, paddingBottom: 0 }}>
+              <span style={styles.menuText}>알림 설정 | 동의/약관</span>
+              <span style={styles.menuArrow}>&gt;</span>
             </div>
           </div>
-        </div>
+        </main>
+
+        {/* 하단 네비게이션 바 */}
+        <nav style={styles.bottomNav}>
+          <button style={styles.navBtn}>
+            <svg
+              width="28"
+              height="28"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="#85A86E"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+              <polyline points="9 22 9 12 15 12 15 22" />
+            </svg>
+          </button>
+          <button style={styles.navBtn}>
+            <svg
+              width="28"
+              height="28"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="#85A86E"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <rect x="5" y="2" width="14" height="20" rx="2" />
+              <line x1="5" y1="10" x2="19" y2="10" />
+              <line x1="9" y1="6" x2="9" y2="7" />
+              <line x1="9" y1="14" x2="9" y2="16" />
+            </svg>
+          </button>
+          <button style={styles.navBtn}>
+            <svg
+              width="28"
+              height="28"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="#85A86E"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <rect x="4" y="3" width="16" height="18" rx="2" />
+              <path d="M9 7v5" />
+              <path d="M15 7v5" />
+              <path d="M9 12v5" />
+              <path d="M15 12v5" />
+            </svg>
+          </button>
+          <button style={styles.navBtn}>
+            <svg
+              width="28"
+              height="28"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="#85A86E"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+              <circle cx="12" cy="7" r="4" />
+            </svg>
+          </button>
+        </nav>
       </div>
-    </>
+    </div>
   );
-};
+}
 
-export default MyPage;
+const styles = {
+  pageWrapper: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#E5E7EB",
+    minHeight: "100vh",
+    margin: 0,
+    fontFamily: "'Pretendard', 'Noto Sans KR', sans-serif",
+  },
+  mobileContainer: {
+    width: "420px",
+    height: "915px",
+    backgroundColor: "#F3F4F3",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-between",
+    boxShadow: "0 10px 30px rgba(0,0,0,0.12)",
+    overflow: "hidden",
+    boxSizing: "border-box",
+  },
+  myPageHeader: {
+    padding: "24px 26px 10px 26px",
+    display: "flex",
+    alignItems: "center",
+    gap: "12px",
+  },
+  backArrow: {
+    color: "#6E9952",
+    fontSize: "22px",
+    fontWeight: "bold",
+    cursor: "pointer",
+    lineHeight: 1,
+  },
+  logoCircle: {
+    width: "41px",
+    height: "43px",
+    borderRadius: "50%",
+
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    color: "#fff",
+    flexShrink: 0,
+  },
+  searchBar: {
+    flex: 1,
+    display: "flex",
+    alignItems: "center",
+    backgroundColor: "#FFFFFF",
+    border: "1.5px solid #6E9952",
+    borderRadius: "24px",
+    padding: "8px 16px",
+  },
+  searchInput: {
+    border: "none",
+    outline: "none",
+    width: "100%",
+    fontSize: "13px",
+    color: "#333",
+  },
+  mainContent: {
+    flex: 1,
+    padding: "20px 26px",
+    display: "flex",
+    flexDirection: "column",
+    gap: "20px",
+    boxSizing: "border-box",
+  },
+  card: {
+    backgroundColor: "#FFFFFF",
+    borderRadius: "20px",
+    padding: "22px 24px",
+    boxShadow: "0 2px 8px rgba(0,0,0,0.02)",
+  },
+  profileAvatar: {
+    width: "72px",
+    height: "72px",
+    borderRadius: "50%",
+    backgroundColor: "#86A96F",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    fontSize: "36px",
+    flexShrink: 0,
+  },
+  profileName: {
+    fontSize: "16px",
+    fontWeight: "700",
+    color: "#222",
+    marginBottom: "6px",
+  },
+  profileSub: {
+    fontSize: "13px",
+    color: "#555",
+  },
+  statItem: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    flex: 1,
+  },
+  statNum: {
+    fontSize: "18px",
+    fontWeight: "700",
+    marginBottom: "6px",
+  },
+  statLabel: {
+    fontSize: "13px",
+    color: "#555",
+  },
+  statDivider: {
+    width: "1px",
+    backgroundColor: "#EAEAEA",
+  },
+  sectionTitle: {
+    fontSize: "14px",
+    fontWeight: "700",
+    color: "#333",
+    marginBottom: "14px",
+  },
+  recipeMiniCard: {
+    flex: 1,
+    backgroundColor: "#F3F4F3",
+    borderRadius: "16px",
+    padding: "16px 14px",
+  },
+  recipeTitle: {
+    fontSize: "14px",
+    fontWeight: "700",
+    color: "#222",
+    marginBottom: "6px",
+  },
+  recipeSub: {
+    fontSize: "12px",
+    color: "#666",
+    paddingLeft: "20px",
+  },
+  menuRow: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    padding: "10px 0",
+    cursor: "pointer",
+  },
+  menuText: {
+    fontSize: "14px",
+    fontWeight: "700",
+    color: "#222",
+  },
+  urgentBadgeSmall: {
+    backgroundColor: "#C85A5A",
+    color: "#FFFFFF",
+    fontSize: "12px",
+    fontWeight: "600",
+    padding: "5px 12px",
+    borderRadius: "16px",
+  },
+  menuArrow: {
+    color: "#6E9952",
+    fontWeight: "bold",
+    fontSize: "18px",
+  },
+  menuDivider: {
+    height: "1px",
+    backgroundColor: "#F0F0F0",
+    margin: "4px 0",
+  },
+  bottomNav: {
+    backgroundColor: "#FFFFFF",
+    borderTop: "1px solid #E5E5E5",
+    height: "68px",
+    display: "flex",
+    justifyContent: "space-around",
+    alignItems: "center",
+    flexShrink: 0,
+  },
+  navBtn: {
+    background: "transparent",
+    border: "none",
+    cursor: "pointer",
+    padding: "8px",
+  },
+};
