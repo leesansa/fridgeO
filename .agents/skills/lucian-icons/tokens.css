@@ -1,0 +1,9 @@
+/* Lucian Icons v2.0.13 | MIT (c) 2026 Lucian
+   Optional CSS variables. Strokes follow `color`; these tune the rest. */
+.lucian-icon-theme {
+  --li-accent: var(--brand, #6a57f2); /* replaces each icon's own color; omit to keep per-icon colors */
+  --li-tint: .24;                     /* surface fill opacity, 0 to 1 */
+  --li-weight: 1.75;                  /* stroke width on the 24 grid */
+  --li-size: 24px;
+}
+[data-theme="dark"] .lucian-icon-theme { --li-tint: .32; }
