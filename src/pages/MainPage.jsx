@@ -34,7 +34,7 @@ const MainPage = () => {
                 <button type="button" className="main-bell" aria-label={hasUnread ? "알림, 새 알림 있음" : "알림"} onClick={() => navigate("/notification")}>
                     <lucian-bell size="34" ref={bellRef} />
                     {hasUnread && <span className="main-bell-dot" aria-hidden="true" />}
-                </button>
+                </button> 
                 <label className="main-search">
                     <img src={search} alt="" />
                     <input type="text" name="search" placeholder="레시피나 재료를 검색해보세요" aria-label="레시피나 재료 검색" />
