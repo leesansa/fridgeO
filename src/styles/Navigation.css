@@ -1,0 +1,22 @@
+/* 하단 바: Layout에서 모든 페이지에 표시 */
+.main-nav {
+    position: fixed;
+    left: 50%;
+    bottom: 0;
+    z-index: 2;
+    display: flex;
+    justify-content: space-between;
+    box-sizing: border-box;
+    width: min(100%, 420px); /* MainPage의 --main-max와 같은 폭 */
+    padding: 9px 34px 9px 29px;
+    background: #fff;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    transform: translateX(-50%);
+}
+
+.main-nav img {
+    display: block;
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+}
