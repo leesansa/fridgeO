@@ -91,3 +91,60 @@
     color: #000;
     transform: translateY(-18px);
 }
+
+/* 알림 있음: 헤더 우측 상단 일괄삭제 + 카드 목록 */
+.notification-clear {
+    position: absolute;
+    right: 16px;
+    top: 19px;
+    padding: 0;
+    border: 0;
+    background: none;
+    font: inherit;
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 21px;
+    color: #f86902;
+    cursor: pointer;
+}
+
+.notification-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 0;
+    padding: 14px 16px 80px; /* 하단 바(60px)에 가리지 않게 */
+    list-style: none;
+}
+
+.notification-card {
+    padding: 14px 16px;
+    background: #fff;
+    border-radius: 15px;
+}
+
+.notification-card-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 8px;
+}
+
+.notification-card-head strong {
+    font-size: 14px;
+    font-weight: 600;
+    color: #303030;
+}
+
+.notification-card-head span {
+    flex-shrink: 0;
+    font-size: 11px;
+    color: #8a8a8a;
+}
+
+.notification-card p {
+    margin: 6px 0 0;
+    font-size: 13px;
+    line-height: 18px;
+    color: #303030;
+}
