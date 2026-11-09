@@ -44,7 +44,11 @@ const Fridge = () => {
   const [sortBy, setSortBy] = useState("expiry");
   const [viewMode, setViewMode] = useState("list");
 
+<<<<<<< Updated upstream
   const [mode, setMode] = useState(null);
+=======
+  const [isDeleteMode, setIsDeleteMode] = useState(false);
+>>>>>>> Stashed changes
 
 const [deletedIds, setDeletedIds] = useState(() => {
   try {
@@ -57,6 +61,7 @@ const [deletedIds, setDeletedIds] = useState(() => {
   }
 });
 
+<<<<<<< Updated upstream
 function handleDeleteIngredient(id) {
   const nextIds = [...new Set([...deletedIds, id])];
 
@@ -73,6 +78,17 @@ function handleDeleteIngredient(id) {
 
 function handleSelectIngredient(id) {
   navigate(`/ingredient/edit/${encodeURIComponent(id)}`);
+=======
+useEffect(() => {
+  localStorage.setItem(
+    "fridgeo:deleted-ingredient-ids",
+    JSON.stringify(deletedIds),
+  );
+}, [deletedIds]);
+
+function handleDeleteIngredient(id) {
+  setDeletedIds((ids) => (ids.includes(id) ? ids : [...ids, id]));
+>>>>>>> Stashed changes
 }
 
   // 현재 대한민국 날짜
@@ -93,6 +109,7 @@ function handleSelectIngredient(id) {
 
     // 검색어와 정렬 기준을 반영한 재료 목록
   const visibleIngredients = filterAndSortIngredients(
+<<<<<<< Updated upstream
   applyIngredientEdits(
     fridgeIngredients.filter((item) => !deletedIds.includes(item.id)),
   ),
@@ -106,6 +123,12 @@ const ingredientViewProps = {
   onDeleteIngredient: mode === "delete" ? handleDeleteIngredient : undefined,
   onSelectIngredient: mode === "edit" ? handleSelectIngredient : undefined,
 };
+=======
+  fridgeIngredients.filter((item) => !deletedIds.includes(item.id)),
+  keyword,
+  sortBy,
+  );
+>>>>>>> Stashed changes
 
   return (
     <div className="fridge-page">
@@ -165,10 +188,17 @@ const ingredientViewProps = {
             <button
   type="button"
   className="fridge-delete"
+<<<<<<< Updated upstream
   aria-pressed={mode === "delete"}
   onClick={() => setMode((current) => (current === "delete" ? null : "delete"))}
 >
   {mode === "delete" ? "삭제 완료" : "삭제하기"}
+=======
+  aria-pressed={isDeleteMode}
+  onClick={() => setIsDeleteMode((current) => !current)}
+>
+  {isDeleteMode ? "삭제 모드 끝내기" : "삭제하기"}
+>>>>>>> Stashed changes
 </button>
 
 <button
@@ -216,9 +246,25 @@ const ingredientViewProps = {
   {visibleIngredients.length === 0 ? (
     <p className="fridge-empty">검색한 재료가 없어요.</p>
   ) : viewMode === "list" ? (
+<<<<<<< Updated upstream
     <List {...ingredientViewProps} />
   ) : (
     <Box {...ingredientViewProps} />
+=======
+    <List
+  items={visibleIngredients}
+  today={today}
+  isDeleteMode={isDeleteMode}
+  onDeleteIngredient={handleDeleteIngredient}
+/>
+  ) : (
+    <Box
+  items={visibleIngredients}
+  today={today}
+  isDeleteMode={isDeleteMode}
+  onDeleteIngredient={handleDeleteIngredient}
+/>
+>>>>>>> Stashed changes
   )}
 </section>
       </main>
