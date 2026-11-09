@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { Link } from "react-router";
+import backIcon from "../assets/lucide_chevron_left_icon.png";
 
 export default function FridgeRegister() {
   const [ingredient, setIngredient] = useState("🍎사과");
@@ -25,7 +27,9 @@ export default function FridgeRegister() {
       <div style={styles.mobileContainer}>
         {/* 상단 헤더 */}
         <header style={styles.header}>
-          <span style={styles.backArrow}>&lt;</span>
+          <Link to="/" className="fridge-back" aria-label="홈으로">
+            <img src={backIcon} alt="" />
+          </Link>
           <span style={styles.headerTitle}>홈 | 냉장재료 등록</span>
         </header>
 
@@ -233,13 +237,6 @@ const styles = {
     gap: "12px",
     borderTopLeftRadius: "20px",
     borderTopRightRadius: "20px",
-  },
-  backArrow: {
-    color: "#6E9952",
-    fontSize: "22px",
-    fontWeight: "bold",
-    cursor: "pointer",
-    lineHeight: 1,
   },
   headerTitle: {
     fontSize: "16px",
