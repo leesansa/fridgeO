@@ -1,13 +1,69 @@
 import React, { useState } from "react";
-import { Link } from "react-router";
+import { Link, useNavigate, useParams } from "react-router";
+import { fridgeIngredients } from "../utils/fridgeData";
+import { applyIngredientEdits, saveIngredientEdit } from "../utils/fridgeEdit";
 import backIcon from "../assets/lucide_chevron_left_icon.png";
 
-export default function FridgeRegister() {
-  const [ingredient, setIngredient] = useState("🍎사과");
-  const [selectedTag, setSelectedTag] = useState("사과");
-  const [quantity, setQuantity] = useState(3);
-  const [storage, setStorage] = useState("냉장");
-  const [expiryDate, setExpiryDate] = useState("2026. 11. 10 까지");
+export default function IngredientEdit() {
+  const { id } = useParams();
+  const item = applyIngredientEdits(fridgeIngredients).find(
+    (ingredient) => ingredient.id === id,
+  );
+
+  if (!item) {
+    return <Link to="/fridge">재료를 찾을 수 없어요. 냉장고로 돌아가기</Link>;
+  }
+
+  return <IngredientEditForm key={item.id} item={item} />;
+}
+
+function IngredientEditForm({ item }) {
+  const navigate = useNavigate();
+  const quantityParts = item.quantity.match(/^(\d+(?:\.\d+)?)(.*)$/);
+  const unit = quantityParts?.[2] ?? "";
+
+  const [ingredient, setIngredient] = useState(item.name);
+  const [selectedTag, setSelectedTag] = useState(item.name);
+  const [quantity, setQuantity] = useState(quantityParts?.[1] ?? "1");
+  const [storage, setStorage] = useState(item.storage);
+  const [expiryDate, setExpiryDate] = useState(item.expiryDate);
+
+  function handleSave() {
+    const name = ingredient.trim();
+
+    if (!name || !expiryDate) {
+      alert("재료 이름과 소비기한을 입력해 주세요.");
+      return;
+    }
+
+const amount = Number(quantity);
+
+if (!Number.isFinite(amount) || amount <= 0) {
+  alert("수량은 0보다 큰 숫자로 입력해 주세요.");
+  return;
+}
+
+const changes = {
+  name,
+  quantity: `${amount}${unit}`,
+  storage,
+  expiryDate,
+};
+
+    try {
+      saveIngredientEdit(item.id, changes);
+    } catch {
+      alert("편집 내용을 저장하지 못했어요.");
+      return;
+    }
+
+    alert(
+      `편집 완료!\n${changes.name} ${changes.quantity} (${changes.storage})\n` +
+        `소비기한: ${changes.expiryDate}`,
+    );
+
+    navigate("/fridge", { replace: true });
+  }
 
   const tags = [
     { name: "사과", emoji: "🍎" },
@@ -67,21 +123,45 @@ export default function FridgeRegister() {
             {/* 수량 */}
             <div style={{ ...styles.card, flex: 1, padding: "20px 18px" }}>
               <div style={styles.cardLabel}>수량</div>
-              <div style={styles.counterBox}>
-                <button
-                  style={styles.counterBtn}
-                  onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                >
-                  −
-                </button>
-                <span style={styles.counterValue}>{quantity}개</span>
-                <button
-                  style={styles.counterBtn}
-                  onClick={() => setQuantity(quantity + 1)}
-                >
-                  +
-                </button>
-              </div>
+<div style={styles.counterBox}>
+  <button
+    type="button"
+    style={styles.counterBtn}
+    aria-label="수량 줄이기"
+    onClick={() =>
+      setQuantity((value) => String(Math.max(1, Number(value) - 1)))
+    }
+  >
+    −
+  </button>
+
+          <input
+          type="number"
+          inputMode="decimal"
+          step="any"
+          aria-label="수량"
+          value={quantity}
+          onChange={(event) => setQuantity(event.target.value)}
+          style={{
+            ...styles.counterValue,
+            width: "100%",
+            minWidth: 0,
+            border: 0,
+            background: "transparent",
+            textAlign: "center",
+          }}
+        />
+        <span>{unit}</span>
+
+        <button
+          type="button"
+          style={styles.counterBtn}
+          aria-label="수량 늘리기"
+          onClick={() => setQuantity((value) => String(Number(value) + 1))}
+        >
+          +
+        </button>
+      </div>
             </div>
 
             {/* 보관 방법 */}
@@ -113,7 +193,7 @@ export default function FridgeRegister() {
             <div style={styles.cardLabel}>유통기한</div>
             <div style={styles.expiryRow}>
               <input
-                type="text"
+                type="date"
                 value={expiryDate}
                 onChange={(e) => setExpiryDate(e.target.value)}
                 style={styles.expiryInput}
@@ -124,14 +204,9 @@ export default function FridgeRegister() {
 
           {/* Frame 41: 편집완료 버튼 */}
           <div style={styles.submitWrapper}>
-            <button
-              style={styles.submitBtn}
-              onClick={() =>
-                alert(`${ingredient} ${quantity}개 (${storage}) 편집 완료!`)
-              }
-            >
-              편집 완료
-            </button>
+            <button type="button" style={styles.submitBtn} onClick={handleSave}>
+            편집 완료
+          </button>
           </div>
         </main>
 

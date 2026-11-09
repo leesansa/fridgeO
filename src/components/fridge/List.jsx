@@ -3,7 +3,7 @@ import {
   getExpiryBadge,
 } from "../../utils/fridgeUtils";
 
-const List = ({ items, today }) => {
+const List = ({ items, today, onSelectIngredient, onDeleteIngredient }) => {
   return (
     <ul className="ingredient-list">
       {items.map((item) => {
@@ -33,9 +33,29 @@ const List = ({ items, today }) => {
             </div>
 
             <span className={`ingredient-badge ${badge.className}`}>
-              {badge.label}
-            </span>
-          </li>
+  {badge.label}
+</span>
+
+{onDeleteIngredient && (
+  <button
+    type="button"
+    className="ingredient-delete-button"
+    aria-label={`${item.name} 삭제`}
+    onClick={() => onDeleteIngredient(item.id)}
+  >
+    <span aria-hidden="true">×</span>
+  </button>
+)}
+
+{onSelectIngredient && (
+  <button
+    type="button"
+    className="ingredient-edit-target"
+    aria-label={`${item.name} 편집`}
+    onClick={() => onSelectIngredient(item.id)}
+  />
+)}
+</li>
         );
       })}
     </ul>

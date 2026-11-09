@@ -30,6 +30,8 @@ import {
   filterAndSortIngredients,
 } from "../utils/fridgeUtils";
 
+import { applyIngredientEdits } from "../utils/fridgeEdit";
+
 const filters = [
   { value: "expiry", label: "유통기한순" },
   { value: "name", label: "재료 이름순" },
@@ -41,6 +43,37 @@ const Fridge = () => {
   const [keyword, setKeyword] = useState("");
   const [sortBy, setSortBy] = useState("expiry");
   const [viewMode, setViewMode] = useState("list");
+
+  const [mode, setMode] = useState(null);
+
+const [deletedIds, setDeletedIds] = useState(() => {
+  try {
+    const saved = JSON.parse(
+      localStorage.getItem("fridgeo:deleted-ingredient-ids") ?? "[]",
+    );
+    return Array.isArray(saved) ? saved : [];
+  } catch {
+    return [];
+  }
+});
+
+function handleDeleteIngredient(id) {
+  const nextIds = [...new Set([...deletedIds, id])];
+
+  try {
+    localStorage.setItem(
+      "fridgeo:deleted-ingredient-ids",
+      JSON.stringify(nextIds),
+    );
+    setDeletedIds(nextIds);
+  } catch {
+    alert("삭제 내용을 저장하지 못했어요.");
+  }
+}
+
+function handleSelectIngredient(id) {
+  navigate(`/ingredient/edit/${encodeURIComponent(id)}`);
+}
 
   // 현재 대한민국 날짜
   const [today, setToday] = useState(() => getTodayKey());
@@ -58,12 +91,21 @@ const Fridge = () => {
     };
   }, []);
 
-  // 검색어와 정렬 기준을 반영한 재료 목록
+    // 검색어와 정렬 기준을 반영한 재료 목록
   const visibleIngredients = filterAndSortIngredients(
-    fridgeIngredients,
-    keyword,
-    sortBy,
-  );
+  applyIngredientEdits(
+    fridgeIngredients.filter((item) => !deletedIds.includes(item.id)),
+  ),
+  keyword,
+  sortBy,
+);
+
+const ingredientViewProps = {
+  items: visibleIngredients,
+  today,
+  onDeleteIngredient: mode === "delete" ? handleDeleteIngredient : undefined,
+  onSelectIngredient: mode === "edit" ? handleSelectIngredient : undefined,
+};
 
   return (
     <div className="fridge-page">
@@ -123,17 +165,19 @@ const Fridge = () => {
             <button
   type="button"
   className="fridge-delete"
-  onClick={() => navigate("/fridge/delete")}
+  aria-pressed={mode === "delete"}
+  onClick={() => setMode((current) => (current === "delete" ? null : "delete"))}
 >
-  삭제하기
+  {mode === "delete" ? "삭제 완료" : "삭제하기"}
 </button>
 
 <button
   type="button"
   className="fridge-edit"
-  onClick={() => navigate("/fridge/edit")}
+  aria-pressed={mode === "edit"}
+  onClick={() => setMode((current) => (current === "edit" ? null : "edit"))}
 >
-  편집하기
+  {mode === "edit" ? "선택 취소" : "편집하기"}
 </button>
           </div>
 
@@ -172,9 +216,9 @@ const Fridge = () => {
   {visibleIngredients.length === 0 ? (
     <p className="fridge-empty">검색한 재료가 없어요.</p>
   ) : viewMode === "list" ? (
-    <List items={visibleIngredients} today={today} />
+    <List {...ingredientViewProps} />
   ) : (
-    <Box items={visibleIngredients} today={today} />
+    <Box {...ingredientViewProps} />
   )}
 </section>
       </main>

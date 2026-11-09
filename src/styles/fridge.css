@@ -833,3 +833,42 @@ body {
   position: absolute;
   bottom: calc(var(--nav-height) + var(--safe-bottom) + 48px);
 }
+
+.fridge-page .ingredient-row,
+.fridge-page .ingredient-card {
+  position: relative;
+}
+
+.fridge-page button.ingredient-edit-target {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  padding: 0;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+}
+
+.fridge-page button.ingredient-edit-target:hover,
+.fridge-page button.ingredient-edit-target:focus-visible {
+  box-shadow: inset 0 0 0 2px #94ad6e;
+}
+
+.fridge-page button.ingredient-delete-button {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: #c06563;
+  color: #fff;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1;
+}
