@@ -108,7 +108,7 @@ export default function FridgeRegister() {
 
           {/* Frame 39: 유통기한 */}
           <div
-            style={{ ...styles.card, width: "90%", boxSizing: "border-box" }}
+            style={{ ...styles.card, width: "100%", boxSizing: "border-box" }}
           >
             <div style={styles.cardLabel}>유통기한</div>
             <div style={styles.expiryRow}>
