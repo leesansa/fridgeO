@@ -8,7 +8,7 @@ export default Fridge;
 */
 
 import { useEffect, useState } from "react";
-import { Link, NavLink } from "react-router";
+import { Link, useNavigate } from "react-router";
 
 import Box from "../components/fridge/Box";
 import List from "../components/fridge/List";
@@ -17,10 +17,6 @@ import logo from "../assets/Logo_FridgeO.svg";
 import backIcon from "../assets/lucide_chevron_left_icon.png";
 import searchIcon from "../assets/lucide_search_icon.png";
 import plusIcon from "../assets/lucide_circle_plus_icon.png";
-import homeIcon from "../assets/lucide_house_icon.png";
-import fridgeIcon from "../assets/lucide_refrigerator_icon.png";
-import recipeIcon from "../assets/lucide_recipe_icon.png";
-import userIcon from "../assets/lucide_user_icon.png";
 
 import "../styles/fridge.css";
 
@@ -40,14 +36,8 @@ const filters = [
   { value: "storage", label: "보관 장소순" },
 ];
 
-const menus = [
-  { path: "/", label: "홈", icon: homeIcon },
-  { path: "/fridge", label: "냉장고", icon: fridgeIcon },
-  { path: "/recipe", label: "레시피", icon: recipeIcon },
-  { path: "/mypage", label: "마이페이지", icon: userIcon },
-];
-
 const Fridge = () => {
+  const navigate = useNavigate();
   const [keyword, setKeyword] = useState("");
   const [sortBy, setSortBy] = useState("expiry");
   const [viewMode, setViewMode] = useState("list");
@@ -129,22 +119,22 @@ const Fridge = () => {
 
         <div className="fridge-toolbar">
           <div className="fridge-actions">
-            {/* 선택 기능을 구현한 다음 disabled를 제거하세요. */}
+            {/* 함수 이름 팀원과 맞추기 */}
             <button
-              type="button"
-              className="fridge-delete"
-              disabled
-            >
-              삭제하기
-            </button>
+  type="button"
+  className="fridge-delete"
+  onClick={() => navigate("/fridge/delete")}
+>
+  삭제하기
+</button>
 
-            <button
-              type="button"
-              className="fridge-edit"
-              disabled
-            >
-              편집하기
-            </button>
+<button
+  type="button"
+  className="fridge-edit"
+  onClick={() => navigate("/fridge/edit")}
+>
+  편집하기
+</button>
           </div>
 
           <div
@@ -198,22 +188,6 @@ const Fridge = () => {
           <img src={plusIcon} alt="" />
         </Link>
       </div>
-
-      <nav className="fridge-navigation" aria-label="주요 메뉴">
-        {menus.map((menu) => (
-          <NavLink
-            key={menu.path}
-            to={menu.path}
-            end={menu.path === "/"}
-            aria-label={menu.label}
-            className={({ isActive }) =>
-              `fridge-nav-item ${isActive ? "is-active" : ""}`
-            }
-          >
-            <img src={menu.icon} alt="" />
-          </NavLink>
-        ))}
-      </nav>
     </div>
   );
 };
