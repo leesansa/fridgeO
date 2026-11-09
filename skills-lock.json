@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "skills": {
+    "lucian-icons": {
+      "source": "Seokwoooo/lucian-icons",
+      "sourceType": "github",
+      "skillPath": "skills/lucian-icons/SKILL.md",
+      "computedHash": "c0c5a3cddbef756fa41f1715a037a1750eb49abb5b698c49fa8e45c41b6ea64f"
+    }
+  }
+}
