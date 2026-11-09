@@ -635,7 +635,7 @@ body {
   position: relative;
   display: flex;
   align-items: center;
-  gap: 44px;
+  gap: 25px;
   min-height: 112px;
   padding: 13px 0 18px;
 }
@@ -782,7 +782,7 @@ body {
 
 /* 목록형 전체: 사진과 음식 정보 간격 15px 축소 */
 .fridge-page .ingredient-row {
-  gap: 29px;
+  gap: 14px;
 }
 
 /* 줄어든 간격만큼 이름 표시 공간 확대 */
