@@ -56,6 +56,17 @@ body {
     --li-tint: 1; /* 면 불투명도 (기본 0.24) */
 }
 
+/* 확인 안 한 알림 표시: 아이콘 내장 배지는 종과 같은 accent 색이라 따로 그린다 */
+.main-bell-dot {
+    position: absolute;
+    right: 3px;
+    top: 2px;
+    width: 9px;
+    height: 9px;
+    background: #ff3b30;
+    border-radius: 50%;
+}
+
 .main-search {
     position: absolute;
     left: 50%;

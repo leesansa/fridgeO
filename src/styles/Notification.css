@@ -1,0 +1,150 @@
+/* Figma 알림센터 (420x912). 하단 바는 Layout의 Navigation이 그린다 */
+.notification-page {
+    display: flex;
+    flex-direction: column;
+    max-width: 420px;
+    min-height: 100dvh;
+    margin: 0 auto;
+    background: #f0f0f0;
+    font-family: "Inter", sans-serif;
+}
+
+.notification-header {
+    position: relative;
+    height: 60px;
+    flex-shrink: 0;
+    background: #fff;
+    border-radius: 25px 25px 0 0;
+}
+
+.notification-back {
+    position: absolute;
+    left: 4px;
+    top: 12px;
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: pointer;
+}
+
+.notification-back img {
+    display: block;
+    width: 38px;
+    height: 38px;
+    object-fit: cover;
+}
+
+.notification-title {
+    position: absolute;
+    left: 38px;
+    top: 20px;
+    margin: 0;
+    font-size: 17px;
+    font-weight: 600;
+    line-height: 21px;
+    color: #303030;
+    white-space: pre;
+}
+
+/* 빈 상태: Figma에서 X 표시 위쪽이 384px (헤더~하단 바 사이 가운데보다 18px 위) */
+.notification-empty {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding-bottom: 60px; /* 하단 바 높이 */
+}
+
+.notification-empty-mark {
+    position: relative;
+    width: 83.44px;
+    height: 83.44px;
+    transform: translateY(-18px);
+}
+
+.notification-empty-mark::before,
+.notification-empty-mark::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 16px;
+    height: 102px;
+    background: #b5df75;
+    border-radius: 20px;
+}
+
+.notification-empty-mark::before {
+    transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+.notification-empty-mark::after {
+    transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.notification-empty p {
+    margin: 7.5px 0 0;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 17px;
+    color: #000;
+    transform: translateY(-18px);
+}
+
+/* 알림 있음: 헤더 우측 상단 일괄삭제 + 카드 목록 */
+.notification-clear {
+    position: absolute;
+    right: 16px;
+    top: 19px;
+    padding: 0;
+    border: 0;
+    background: none;
+    font: inherit;
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 21px;
+    color: #f86902;
+    cursor: pointer;
+}
+
+.notification-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 0;
+    padding: 14px 16px 80px; /* 하단 바(60px)에 가리지 않게 */
+    list-style: none;
+}
+
+.notification-card {
+    padding: 14px 16px;
+    background: #fff;
+    border-radius: 15px;
+}
+
+.notification-card-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 8px;
+}
+
+.notification-card-head strong {
+    font-size: 14px;
+    font-weight: 600;
+    color: #303030;
+}
+
+.notification-card-head span {
+    flex-shrink: 0;
+    font-size: 11px;
+    color: #8a8a8a;
+}
+
+.notification-card p {
+    margin: 6px 0 0;
+    font-size: 13px;
+    line-height: 18px;
+    color: #303030;
+}
