@@ -2,14 +2,13 @@ import "../styles/MainPage.css";
 import FridgeAlerts from "../components/MainPage/FridgeAlerts.jsx";
 import Condiments from "../components/MainPage/Condiments.jsx";
 import Recommends from "../components/MainPage/Recommends.jsx";
-import "../vendor/lucian-icons/bell.js";
 
 // assets/main의 이미지를 한 번에 불러와 확장자를 뺀 파일명으로 꺼낸다 (예: eggs-photo.jpg → "eggs-photo")
 const images = Object.fromEntries(
     Object.entries(import.meta.glob("../assets/main/*", { eager: true, import: "default" }))
         .map(([path, url]) => [path.split("/").pop().replace(/\.\w+$/, ""), url]),
 );
-const { logo, search, add } = images;
+const { logo, search, add, bell } = images;
 
 const MainPage = () => {
     return (
@@ -17,7 +16,7 @@ const MainPage = () => {
             <header className="main-header">
                 <img className="main-logo" src={logo} alt="fridgeO" />
                 <button type="button" className="main-bell" aria-label="알림">
-                    <lucian-bell size="34" />
+                    <img src={bell} alt="" />
                 </button>
                 <label className="main-search">
                     <img src={search} alt="" />
