@@ -1,0 +1,33 @@
+/* Figma 로딩창 선택 (420x912): 로고는 화면 세로 중앙, 가로는 중앙에서 7.5px 오른쪽 */
+.loading-page {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+}
+
+.loading-brand {
+    position: relative;
+    width: 307px;
+    height: 307px;
+    transform: translateX(7.5px);
+}
+
+.loading-logo {
+    display: block;
+    width: 307px;
+    height: 307px;
+    object-fit: cover;
+}
+
+/* 로고 기준 위치: Figma left 79 - 64, top 550 - 302 */
+.loading-script {
+    position: absolute;
+    left: 15px;
+    top: 248px;
+    width: 278px;
+    height: 160px;
+    object-fit: cover;
+}

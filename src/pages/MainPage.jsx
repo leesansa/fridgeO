@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router";
 import "../styles/MainPage.css";
 import FridgeAlerts from "../components/MainPage/FridgeAlerts.jsx";
 import Condiments from "../components/MainPage/Condiments.jsx";
@@ -12,11 +13,13 @@ const images = Object.fromEntries(
 const { logo, search, add } = images;
 
 const MainPage = () => {
+    const navigate = useNavigate();
+
     return (
         <div className="main-page">
             <header className="main-header">
                 <img className="main-logo" src={logo} alt="fridgeO" />
-                <button type="button" className="main-bell" aria-label="알림">
+                <button type="button" className="main-bell" aria-label="알림" onClick={() => navigate("/notification")}>
                     <lucian-bell size="34" />
                 </button>
                 <label className="main-search">
