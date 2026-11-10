@@ -1,0 +1,114 @@
+/* 모든 페이지 공통 헤더 (뒤로가기 / 로고 / 검색창), 420px 화면 기준 위치 */
+.app-header {
+  --green: #91ae6e;
+  --green-dark: #6f9c4c;
+  --bg: #f2f2f2;
+  --placeholder: #b9b9b9;
+
+  position: relative;
+  z-index: 2;
+  flex-shrink: 0;
+  width: 100%;
+  max-width: 420px;
+  height: 80px;
+  margin: 0 auto;
+}
+
+.app-header,
+.app-header * {
+  box-sizing: border-box;
+}
+
+/* 헤더 배경: top 9, 높이 60 (바로 아래 내용의 윗부분을 덮음) */
+.app-header .header-bg {
+  position: absolute;
+  left: 0;
+  top: 9px;
+  width: 100%;
+  height: 60px;
+  background: var(--bg);
+}
+
+.app-header .back-btn {
+  position: absolute;
+  left: 0;
+  top: 21px;
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.app-header .back-btn svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  fill: none;
+  stroke: var(--green);
+  stroke-width: 2.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* 로고: 80 x 80 (logo.png 는 둘레에 투명한 여백이 있음) */
+.app-header .logo {
+  position: absolute;
+  left: 36px;
+  top: 0;
+  width: 80px;
+  height: 80px;
+}
+
+/* 검색창: 297 x 39, left 114 / top 19 */
+.app-header .search {
+  position: absolute;
+  left: 114px;
+  top: 19px;
+  width: 297px;
+  height: 39px;
+  margin: 0;
+  border: 1px solid var(--green-dark);
+  border-radius: 30px;
+  background: #fff;
+}
+
+.app-header .search:focus-within {
+  box-shadow: 0 0 0 3px rgba(111, 156, 76, 0.18);
+}
+
+.app-header .search svg {
+  position: absolute;
+  left: 7px;
+  top: 7px;
+  width: 24px;
+  height: 24px;
+  fill: none;
+  stroke: var(--green);
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+.app-header .search input {
+  position: absolute;
+  left: 35px;
+  top: 6px;
+  width: 252px;
+  height: 24px;
+  padding: 0;
+  border: none;
+  outline: none;
+  background: none;
+  font-family: "Paperlogy", "Malgun Gothic", sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 19px;
+  letter-spacing: -0.03em;
+  text-align: center;
+  color: #333;
+}
+
+.app-header .search input::placeholder {
+  color: var(--placeholder);
+}

@@ -1,8 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router";
-import logo from "../assets/Logo_FridgeO.svg"; // 로고 이미지 경로
-import backIcon from "../assets/lucide_chevron_left_icon.png";
-import searchIcon from "../assets/lucide_search_icon.png";
+import Header from "../components/Header";
 
 export default function MyPage() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -12,26 +9,7 @@ export default function MyPage() {
       {/* 420 * 915 고정 프레임 */}
       <div style={styles.mobileContainer}>
         {/* 상단 검색 헤더 */}
-        <header className="fridge-header">
-          <Link to="/" className="fridge-back" aria-label="홈으로">
-            <img src={backIcon} alt="" />
-          </Link>
-
-          <Link to="/" className="fridge-logo" aria-label="FridgeO 홈">
-            <img src={logo} alt="FridgeO" />
-          </Link>
-
-          <label className="fridge-search">
-            <img src={searchIcon} alt="" />
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="냉장고 안 재료를 검색해보세요"
-              aria-label="냉장고 안 재료 검색"
-            />
-          </label>
-        </header>
+        <Header backTo="/" value={searchQuery} onChange={setSearchQuery} />
 
         {/* 메인 컨텐츠 영역 */}
         <main style={styles.mainContent}>
