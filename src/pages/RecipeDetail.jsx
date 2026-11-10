@@ -2,6 +2,7 @@ import { useState } from "react";
 import Header from "../components/Header.jsx";
 import { fridgeIngredients } from "../utils/fridgeData";
 import "../vendor/lucian-icons/check.js"; // 065번 check 아이콘
+import "../vendor/lucian-icons/edit.js"; // 079번 edit(연필) 아이콘
 import "../styles/recipe-detail.css";
 
 const images = Object.fromEntries(
@@ -55,6 +56,9 @@ const RecipeDetail = () => {
             <main className="detail-main">
                 <section className="detail-card detail-hero">
                     <img src={images.hero} alt="국물이 개운한 맑은 콩나물국" />
+                    <div className="detail-hero-actions">
+                        <button type="button" className="detail-btn"><lucian-edit size="16" tone="line" aria-hidden="true" /> 리뷰 작성하기</button>
+                    </div>
                 </section>
 
                 <section className="detail-card">

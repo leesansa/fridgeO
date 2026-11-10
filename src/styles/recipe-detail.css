@@ -63,6 +63,19 @@
   height: auto; /* 원본 478x310 비율 그대로 (잘리지 않게) */
 }
 
+.detail-hero-actions {
+  display: flex;
+  justify-content: flex-end;
+  padding: 10px 16px;
+}
+
+.detail-hero-actions .detail-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0 14px;
+}
+
 /* ---- 제목 / 작성자 / 시간·인분·난이도 ---- */
 .detail-title {
   margin: 0;
