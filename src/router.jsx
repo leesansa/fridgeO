@@ -21,6 +21,7 @@ const router = createBrowserRouter([
       { path: "ingredient/edit/:id", element: <IngredientEdit /> },
       { path: "recipe", element: <RecipeList/> },
       { path: "recipe/:id", element: <RecipeDetail/> },
+      { path: "bookmark", element: <BookMark/> },
       { path: "mypage", element: <MyPage/> },
       { path: "notification", element: <Notification/> },
     ],

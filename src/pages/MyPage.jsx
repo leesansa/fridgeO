@@ -40,7 +40,7 @@ export default function MyPage() {
               padding: "22px 12px",
             }}
           >
-            <div style={styles.statItem}>
+            <div style={styles.statItem} onClick={() => navigate("/bookmark")}>
               <div style={{ ...styles.statNum, color: "#4E7A36" }}>3개</div>
               <div style={styles.statLabel}>북마크</div>
             </div>

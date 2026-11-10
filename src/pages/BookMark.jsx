@@ -33,10 +33,10 @@ const categories = [
 ];
 
 const recipes = [
-    { id: 1, image: "recipe1", alt: "무생채", author: "뽕림이", views: "(958) 조회수 369.7만", title: ["무생채 만드는 법, 절이지 않고 10분", "만에 휘리릭~"] },
-    { id: 2, image: "recipe2", alt: "순두부찌개", author: "케이쿡", views: "(1,849) 조회수 452.7만", title: ["순두부찌개. 바지락, 고기 없이도", "기가 막힌 순두부찌개 만드는 법 . . ."] },
-    { id: 3, image: "recipe3", alt: "소고기 미역국", author: "베리츄", views: "(1,503) 조회수 576.1만", title: ["엄마의 레시피, 소고기 미역국 끓이", "는 법^^"] },
-    { id: 4, image: "recipe4", alt: "닭볶음탕", author: "주부9단요리톡톡", views: "(2,773) 조회수 625.1만", title: ["닭볶음탕 진짜진짜 황금레시피 알려", "드려요 ~~ ^^"] },
+    { id: 1, imageUrl: "https://images.unsplash.com/photo-1583480241328-87b2795fbb8f?auto=format&fit=crop&w=600&q=80", alt: "코코아 가루를 입힌 파베 초콜릿", author: "달콤한키친", views: "(128) 조회수 2.1만", title: ["파베초콜릿 만들기", "입에서 사르르 녹는 생초콜릿"] },
+    { id: 2, imageUrl: "https://images.squarespace-cdn.com/content/v1/642aad7f5bfb85079881c691/b20c5a06-35b8-4a28-804e-f60a44508dbd/shabu%2Bhot%2Bpot%2Bjapan.jpg?format=1200w", alt: "소고기와 채소를 곁들인 샤브샤브", author: "오늘의식탁", views: "(356) 조회수 8.4만", title: ["집에서 푸짐하게 즐기는 샤브샤브", "육수부터 소스까지 간단하게"] },
+    { id: 3, imageUrl: "https://www.hansik.or.kr/files/magazine/thumbnail/cc863fc2-b978-4720-af30-33ef1083f752.jpg", alt: "고명을 올린 따뜻한 호박죽", author: "따뜻한한끼", views: "(214) 조회수 4.8만", title: ["달콤하고 부드러운 호박죽", "새알심 넣어 든든하게 만들기"] },
+    { id: 4, imageUrl: "https://image.8dogam.com/resized/product/asset/v1/upload/36c7e94b38094fdca60b671851e124da.jpeg?ext=jpg&res=3x&type=big", alt: "무와 고추가 담긴 동치미", author: "소담한밥상", views: "(92) 조회수 1.6만", title: ["시원하고 아삭한 동치미 담그기", "겨울 내내 맛있는 국물김치"] },
 ];
 
 // 모든 카드가 같은 크기·배치 (카드 왼쪽 위 기준 px)
@@ -105,7 +105,7 @@ const RecipeList = () => {
                         onKeyDown={(e) => e.key === "Enter" && go()}
                     >
                         <span className="card-photo" style={{ left: 4, top: 4, width: 122, height: 122 }}>
-                            <img src={images[r.image]} alt={r.alt} />
+                            <img src={r.imageUrl ?? images[r.image]} alt={r.alt} />
                         </span>
                         <h3 className="card-title" style={{ left: 150, top: 9, width: 238, height: 42 }}>
                             {r.title[0]}<br />{r.title[1]}
