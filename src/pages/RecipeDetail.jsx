@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router";
 import Header from "../components/Header.jsx";
 import { fridgeIngredients } from "../utils/fridgeData";
 import "../vendor/lucian-icons/check.js"; // 065번 check 아이콘
 import "../vendor/lucian-icons/edit.js"; // 079번 edit(연필) 아이콘
+import "../vendor/lucian-icons/bookmark.js"; // 012번 bookmark 아이콘
 import "../styles/recipe-detail.css";
 
 const images = Object.fromEntries(
@@ -41,6 +42,10 @@ const review = [
 // shortcut: 레시피 하나(콩나물국)만 있어 :id 를 쓰지 않음, 레시피 데이터가 생기면 id 로 골라 보여주기
 const RecipeDetail = () => {
     const navigate = useNavigate();
+    const [saved, setSaved] = useState(false); // shortcut: 화면에만 저장됨(새로고침하면 해제), 저장 목록이 생기면 거기에 연결
+    // React 가 state 를 속성이 아닌 프로퍼티로 넣으면 getter 만 있어 에러가 나므로 속성으로 직접 지정
+    const bookmarkRef = useRef(null);
+    useEffect(() => bookmarkRef.current.setAttribute("state", saved ? "on" : "off"), [saved]);
     // 체크 = 이미 갖고 있음. 처음엔 냉장고 재료로 채우고, 눌러서 바꿀 수 있음
     const [checked, setChecked] = useState(() => new Set(ingredients.filter((ing) => inFridge.has(norm(ing.name))).map((ing) => ing.name)));
     const toggle = (name) => setChecked((prev) => {
@@ -59,6 +64,9 @@ const RecipeDetail = () => {
                 <section className="detail-card detail-hero">
                     <img src={images.hero} alt="국물이 개운한 맑은 콩나물국" />
                     <div className="detail-hero-actions">
+                        <button type="button" className="detail-bookmark" aria-label="북마크" aria-pressed={saved} onClick={() => setSaved((s) => !s)}>
+                            <lucian-bookmark size="30" tone="line" accent="#57852f" ref={bookmarkRef} aria-hidden="true" />
+                        </button>
                         <button type="button" className="detail-btn" onClick={() => navigate("/review")}><lucian-edit size="16" tone="line" aria-hidden="true" /> 리뷰 작성하기</button>
                     </div>
                 </section>
