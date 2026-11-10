@@ -5,7 +5,6 @@ import recipeIcon from "../assets/lucide_recipe_icon.png";
 import food from "../assets/review/food.png";
 import stars from "../assets/review/stars.svg";
 import dot from "../assets/review/dot.svg";
-import camera from "../assets/review/camera.png";
 import "../styles/review-write.css";
 
 const tastes = ["맛있어요", "보통이예요", "생각보다 별로예요"];
@@ -15,7 +14,6 @@ const ReviewWrite = () => {
     const navigate = useNavigate();
     const [rating, setRating] = useState(5); // 디자인처럼 처음엔 별 5개
     const [taste, setTaste] = useState("");
-    const [photo, setPhoto] = useState(""); // 미리보기용 임시 주소
 
     const [text, setText] = useState("");
     const textRef = useRef(null);
@@ -23,18 +21,11 @@ const ReviewWrite = () => {
     // 저장된 리뷰가 없어 삭제 = 쓰던 내용을 처음 상태로 되돌림
     const remove = () => {
         if (!window.confirm("작성한 리뷰를 삭제할까요?")) return;
-        if (photo) URL.revokeObjectURL(photo);
         setRating(5);
         setTaste("");
         setText("");
-        setPhoto("");
     };
 
-    const attach = (e) => {
-        const file = e.target.files[0];
-        if (photo) URL.revokeObjectURL(photo);
-        setPhoto(file ? URL.createObjectURL(file) : "");
-    };
 
     return (
         <div className="review-page">
@@ -91,13 +82,7 @@ const ReviewWrite = () => {
                             aria-label="상세 리뷰"
                             placeholder="다른 고객님에게 도움이 되도록 레시피에 대한 솔직한 평가를 남겨주세요"
                         />
-                        <label className="review-attach">
-                            <img src={camera} alt="" />
-                            첨부하기
-                            <input type="file" accept="image/*" hidden onChange={attach} />
-                        </label>
                     </div>
-                    {photo && <img className="review-attached" src={photo} alt="첨부한 사진" />}
                 </section>
 
                 {/* 저장할 곳이 아직 없어 이전 페이지로만 돌아감 */}

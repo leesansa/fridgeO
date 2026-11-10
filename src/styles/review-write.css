@@ -230,7 +230,6 @@
   display: flex;
   flex-direction: column;
   height: 150px;
-  padding: 18px 18px 14px;
   border-radius: 10px;
   background: #fff;
 }
@@ -238,7 +237,7 @@
 .review-box textarea {
   flex: 1;
   width: 100%;
-  padding: 0;
+  padding: 18px;
   border: 0;
   outline: 0;
   resize: none;
@@ -248,20 +247,7 @@
   font-weight: 700;
 }
 
-.review-attach {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-  font-size: 14px;
-  font-weight: 700;
-  cursor: pointer;
-}
 
-.review-attach img {
-  width: 20px;
-  height: 20px;
-}
 
 .review-actions {
   display: flex;
@@ -289,13 +275,10 @@
   outline: 2px solid #689d4b;
 }
 
-.review-attached {
-  display: block;
-  width: 100%;
-  max-height: 300px;
-  margin-top: 10px;
-  border-radius: 10px;
-  object-fit: cover;
+
+
+.review-box textarea::placeholder {
+  color: #b9b9b9;
 }
 
 .review-submit--sub {
