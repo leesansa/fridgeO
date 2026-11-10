@@ -1,24 +1,46 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { useNavigate } from "react-router";
 import Header from "../components/Header";
+
+const PROFILE_PHOTO_KEY = "fridgeO.profilePhoto";
 
 export default function MyPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
   const photoInputRef = useRef(null);
-  const [profilePhoto, setProfilePhoto] = useState("");
-
-  useEffect(() => {
-    return () => {
-      if (profilePhoto) URL.revokeObjectURL(profilePhoto);
-    };
-  }, [profilePhoto]);
+  const [profilePhoto, setProfilePhoto] = useState(
+    () => localStorage.getItem(PROFILE_PHOTO_KEY) ?? "",
+  );
 
   const handleProfilePhotoChange = (event) => {
     const file = event.target.files?.[0];
     if (!file) return;
-    setProfilePhoto(URL.createObjectURL(file));
     event.target.value = "";
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      const image = new Image();
+      image.onload = () => {
+        const maxSize = 512;
+        const scale = Math.min(1, maxSize / Math.max(image.width, image.height));
+        const canvas = document.createElement("canvas");
+        canvas.width = Math.round(image.width * scale);
+        canvas.height = Math.round(image.height * scale);
+        canvas.getContext("2d").drawImage(image, 0, 0, canvas.width, canvas.height);
+
+        try {
+          const photoData = canvas.toDataURL("image/jpeg", 0.82);
+          localStorage.setItem(PROFILE_PHOTO_KEY, photoData);
+          setProfilePhoto(photoData);
+        } catch {
+          alert("사진을 저장하지 못했어요. 다른 사진을 선택해 주세요.");
+        }
+      };
+      image.onerror = () => alert("사진 파일을 열 수 없어요. 다른 사진을 선택해 주세요.");
+      image.src = reader.result;
+    };
+    reader.onerror = () => alert("사진을 읽지 못했어요. 다시 선택해 주세요.");
+    reader.readAsDataURL(file);
   };
 
   return (
@@ -50,6 +72,12 @@ export default function MyPage() {
               ) : (
                 "🍏"
               )}
+              <span style={styles.profileCameraBadge} aria-hidden="true">
+                <svg viewBox="0 0 24 24" style={styles.profileCameraIcon}>
+                  <path d="M4 7h3l1.5-2h7L17 7h3v12H4z" />
+                  <circle cx="12" cy="13" r="3.5" />
+                </svg>
+              </span>
             </button>
             <input
               ref={photoInputRef}
@@ -174,6 +202,7 @@ const styles = {
     boxShadow: "0 2px 8px rgba(0,0,0,0.02)",
   },
   profileAvatar: {
+    position: "relative",
     width: "72px",
     height: "72px",
     borderRadius: "50%",
@@ -186,12 +215,36 @@ const styles = {
     padding: 0,
     border: "none",
     cursor: "pointer",
-    overflow: "hidden",
+    overflow: "visible",
   },
   profilePhotoImage: {
     width: "100%",
     height: "100%",
+    borderRadius: "50%",
     objectFit: "cover",
+  },
+  profileCameraBadge: {
+    position: "absolute",
+    right: "-5px",
+    bottom: "-5px",
+    display: "grid",
+    placeItems: "center",
+    width: "25px",
+    height: "25px",
+    border: "2px solid #FFFFFF",
+    borderRadius: "50%",
+    backgroundColor: "#4E7A36",
+    color: "#FFFFFF",
+    pointerEvents: "none",
+  },
+  profileCameraIcon: {
+    width: "14px",
+    height: "14px",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: 2,
+    strokeLinecap: "round",
+    strokeLinejoin: "round",
   },
   hiddenPhotoInput: {
     display: "none",
