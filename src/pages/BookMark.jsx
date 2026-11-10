@@ -33,18 +33,16 @@ const categories = [
 ];
 
 const recipes = [
-    { id: 1, imageUrl: "https://images.unsplash.com/photo-1583480241328-87b2795fbb8f?auto=format&fit=crop&w=600&q=80", alt: "코코아 가루를 입힌 파베 초콜릿", author: "달콤한키친", views: "(128) 조회수 2.1만", title: ["파베초콜릿 만들기", "입에서 사르르 녹는 생초콜릿"] },
-    { id: 2, imageUrl: "https://images.squarespace-cdn.com/content/v1/642aad7f5bfb85079881c691/b20c5a06-35b8-4a28-804e-f60a44508dbd/shabu%2Bhot%2Bpot%2Bjapan.jpg?format=1200w", alt: "소고기와 채소를 곁들인 샤브샤브", author: "오늘의식탁", views: "(356) 조회수 8.4만", title: ["집에서 푸짐하게 즐기는 샤브샤브", "육수부터 소스까지 간단하게"] },
-    { id: 3, imageUrl: "https://www.hansik.or.kr/files/magazine/thumbnail/cc863fc2-b978-4720-af30-33ef1083f752.jpg", alt: "고명을 올린 따뜻한 호박죽", author: "따뜻한한끼", views: "(214) 조회수 4.8만", title: ["달콤하고 부드러운 호박죽", "새알심 넣어 든든하게 만들기"] },
-    { id: 4, imageUrl: "https://image.8dogam.com/resized/product/asset/v1/upload/36c7e94b38094fdca60b671851e124da.jpeg?ext=jpg&res=3x&type=big", alt: "무와 고추가 담긴 동치미", author: "소담한밥상", views: "(92) 조회수 1.6만", title: ["시원하고 아삭한 동치미 담그기", "겨울 내내 맛있는 국물김치"] },
+    { id: 1, imageUrl: "https://images.unsplash.com/photo-1583480241328-87b2795fbb8f?auto=format&fit=crop&w=600&q=80", alt: "코코아 가루를 입힌 파베 초콜릿", author: "달콤한키친", title: ["파베초콜릿 만들기", "입에서 사르르 녹는 생초콜릿"] },
+    { id: 2, imageUrl: "https://images.squarespace-cdn.com/content/v1/642aad7f5bfb85079881c691/b20c5a06-35b8-4a28-804e-f60a44508dbd/shabu%2Bhot%2Bpot%2Bjapan.jpg?format=1200w", alt: "소고기와 채소를 곁들인 샤브샤브", author: "오늘의식탁", title: ["집에서 푸짐하게 즐기는 샤브샤브", "육수부터 소스까지 간단하게"] },
+    { id: 3, imageUrl: "https://www.hansik.or.kr/files/magazine/thumbnail/cc863fc2-b978-4720-af30-33ef1083f752.jpg", alt: "고명을 올린 따뜻한 호박죽", author: "따뜻한한끼", title: ["달콤하고 부드러운 호박죽", "새알심 넣어 든든하게 만들기"] },
+    { id: 4, imageUrl: "https://image.8dogam.com/resized/product/asset/v1/upload/36c7e94b38094fdca60b671851e124da.jpeg?ext=jpg&res=3x&type=big", alt: "무와 고추가 담긴 동치미", author: "소담한밥상", title: ["시원하고 아삭한 동치미 담그기", "겨울 내내 맛있는 국물김치"] },
 ];
 
 // 모든 카드가 같은 크기·배치 (카드 왼쪽 위 기준 px)
 const CARD_TOP = 201; // 첫 카드 위치
 const CARD_HEIGHT = 130;
 const CARD_GAP = 24;
-const STARS = [158, 172, 186, 200, 214]; // 별 5개 (별점 5점)
-
 const RecipeList = () => {
     const navigate = useNavigate();
     const [start, setStart] = useState(0); // 지금 맨 왼쪽에 보이는 분류 번호
@@ -112,11 +110,6 @@ const RecipeList = () => {
                         </h3>
                         <span className="avatar" style={{ left: 158, top: 62, width: 25, height: 25 }} />
                         <span className="author" style={{ left: 194, top: 65, height: 19 }}>{r.author}</span>
-                        <span className="sr-only">별점 5점</span>
-                        {STARS.map((x) => (
-                            <span key={x} className="star" style={{ left: x, top: 102, width: 13, height: 13 }} />
-                        ))}
-                        <span className="views" style={{ left: 238, top: 100, height: 18 }}>{r.views}</span>
                     </article>
                 );
             })}

@@ -1,10 +1,25 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router";
 import Header from "../components/Header";
 
 export default function MyPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
+  const photoInputRef = useRef(null);
+  const [profilePhoto, setProfilePhoto] = useState("");
+
+  useEffect(() => {
+    return () => {
+      if (profilePhoto) URL.revokeObjectURL(profilePhoto);
+    };
+  }, [profilePhoto]);
+
+  const handleProfilePhotoChange = (event) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    setProfilePhoto(URL.createObjectURL(file));
+    event.target.value = "";
+  };
 
   return (
     <div style={styles.pageWrapper}>
@@ -24,7 +39,26 @@ export default function MyPage() {
               gap: "18px",
             }}
           >
-            <div style={styles.profileAvatar}>🍏</div>
+            <button
+              type="button"
+              style={styles.profileAvatar}
+              aria-label="프로필 사진 바꾸기"
+              onClick={() => photoInputRef.current?.click()}
+            >
+              {profilePhoto ? (
+                <img src={profilePhoto} alt="프로필 사진" style={styles.profilePhotoImage} />
+              ) : (
+                "🍏"
+              )}
+            </button>
+            <input
+              ref={photoInputRef}
+              type="file"
+              accept="image/*"
+              aria-label="프로필 사진 파일 선택"
+              style={styles.hiddenPhotoInput}
+              onChange={handleProfilePhotoChange}
+            />
             <div>
               <div style={styles.profileName}>프레시요리사 님</div>
               <div style={styles.profileSub}>오늘도 냉장고를 비워볼까요?</div>
@@ -149,6 +183,18 @@ const styles = {
     justifyContent: "center",
     fontSize: "36px",
     flexShrink: 0,
+    padding: 0,
+    border: "none",
+    cursor: "pointer",
+    overflow: "hidden",
+  },
+  profilePhotoImage: {
+    width: "100%",
+    height: "100%",
+    objectFit: "cover",
+  },
+  hiddenPhotoInput: {
+    display: "none",
   },
   profileName: {
     fontSize: "16px",
