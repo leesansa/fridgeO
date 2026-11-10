@@ -253,6 +253,7 @@
 
 .review-actions {
   display: flex;
+  align-items: center;
   justify-content: center;
   gap: 8px;
   margin-top: 17px;
@@ -283,7 +284,20 @@
   color: #b9b9b9;
 }
 
+.review-submit:not(.review-submit--sub) {
+  height: 38px;
+  padding: 0 16px;
+  border-radius: 10px;
+  font-size: 28px;
+  line-height: 38px;
+}
+
 .review-submit--sub {
+  height: 30px;
+  padding: 0 12px;
+  border-radius: 8px;
+  font-size: 18px;
+  line-height: 30px;
   background: #fff;
   box-shadow: inset 0 0 0 1px var(--green);
 }
