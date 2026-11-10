@@ -22,11 +22,16 @@ export default function MyPage() {
       const image = new Image();
       image.onload = () => {
         const maxSize = 512;
-        const scale = Math.min(1, maxSize / Math.max(image.width, image.height));
+        const scale = Math.min(
+          1,
+          maxSize / Math.max(image.width, image.height),
+        );
         const canvas = document.createElement("canvas");
         canvas.width = Math.round(image.width * scale);
         canvas.height = Math.round(image.height * scale);
-        canvas.getContext("2d").drawImage(image, 0, 0, canvas.width, canvas.height);
+        canvas
+          .getContext("2d")
+          .drawImage(image, 0, 0, canvas.width, canvas.height);
 
         try {
           const photoData = canvas.toDataURL("image/jpeg", 0.82);
@@ -36,7 +41,8 @@ export default function MyPage() {
           alert("사진을 저장하지 못했어요. 다른 사진을 선택해 주세요.");
         }
       };
-      image.onerror = () => alert("사진 파일을 열 수 없어요. 다른 사진을 선택해 주세요.");
+      image.onerror = () =>
+        alert("사진 파일을 열 수 없어요. 다른 사진을 선택해 주세요.");
       image.src = reader.result;
     };
     reader.onerror = () => alert("사진을 읽지 못했어요. 다시 선택해 주세요.");
@@ -68,7 +74,11 @@ export default function MyPage() {
               onClick={() => photoInputRef.current?.click()}
             >
               {profilePhoto ? (
-                <img src={profilePhoto} alt="프로필 사진" style={styles.profilePhotoImage} />
+                <img
+                  src={profilePhoto}
+                  alt="프로필 사진"
+                  style={styles.profilePhotoImage}
+                />
               ) : (
                 "🍏"
               )}
@@ -103,7 +113,7 @@ export default function MyPage() {
             }}
           >
             <div style={styles.statItem} onClick={() => navigate("/bookmark")}>
-              <div style={{ ...styles.statNum, color: "#4E7A36" }}>3개</div>
+              <div style={{ ...styles.statNum, color: "#4E7A36" }}>4개</div>
               <div style={styles.statLabel}>북마크</div>
             </div>
             <div style={styles.statDivider} />
