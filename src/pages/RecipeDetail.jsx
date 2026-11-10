@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router";
 import Header from "../components/Header.jsx";
 import { fridgeIngredients } from "../utils/fridgeData";
 import "../vendor/lucian-icons/check.js"; // 065번 check 아이콘
@@ -39,6 +40,7 @@ const review = [
 
 // shortcut: 레시피 하나(콩나물국)만 있어 :id 를 쓰지 않음, 레시피 데이터가 생기면 id 로 골라 보여주기
 const RecipeDetail = () => {
+    const navigate = useNavigate();
     // 체크 = 이미 갖고 있음. 처음엔 냉장고 재료로 채우고, 눌러서 바꿀 수 있음
     const [checked, setChecked] = useState(() => new Set(ingredients.filter((ing) => inFridge.has(norm(ing.name))).map((ing) => ing.name)));
     const toggle = (name) => setChecked((prev) => {
@@ -57,7 +59,7 @@ const RecipeDetail = () => {
                 <section className="detail-card detail-hero">
                     <img src={images.hero} alt="국물이 개운한 맑은 콩나물국" />
                     <div className="detail-hero-actions">
-                        <button type="button" className="detail-btn"><lucian-edit size="16" tone="line" aria-hidden="true" /> 리뷰 작성하기</button>
+                        <button type="button" className="detail-btn" onClick={() => navigate("/review")}><lucian-edit size="16" tone="line" aria-hidden="true" /> 리뷰 작성하기</button>
                     </div>
                 </section>
 
