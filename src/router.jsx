@@ -9,6 +9,7 @@ import MyPage from "./pages/MyPage";
 import Loading from "./pages/Loading";
 import Notification from "./pages/Notification";
 import IngredientEdit from "./pages/IngredientEdit";
+import BookMark from "./pages/BookMark";
 
 const router = createBrowserRouter([
   {
