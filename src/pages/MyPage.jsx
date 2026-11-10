@@ -1,8 +1,22 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
 import Header from "../components/Header";
+import { apiFetch, authClient } from "../utils/auth";
 
 export default function MyPage() {
+  const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
+  // 내 프로필(users 테이블). 불러오기 전·실패 시엔 이름 자리를 비워 둔다
+  const [me, setMe] = useState(null);
+
+  useEffect(() => {
+    apiFetch("/api/me").then(setMe).catch(() => setMe(null));
+  }, []);
+
+  const handleLogout = async () => {
+    await authClient.signOut();
+    navigate("/login");
+  };
 
   return (
     <div style={styles.pageWrapper}>
@@ -24,7 +38,7 @@ export default function MyPage() {
           >
             <div style={styles.profileAvatar}>🍏</div>
             <div>
-              <div style={styles.profileName}>프레시요리사 님</div>
+              <div style={styles.profileName}>{me ? `${me.name} 님` : " "}</div>
               <div style={styles.profileSub}>오늘도 냉장고를 비워볼까요?</div>
             </div>
           </div>
@@ -81,10 +95,19 @@ export default function MyPage() {
               <span style={styles.menuArrow}>&gt;</span>
             </div>
             <div style={styles.menuDivider} />
-            <div style={{ ...styles.menuRow, paddingBottom: 0 }}>
+            <div style={styles.menuRow}>
               <span style={styles.menuText}>알림 설정 | 동의/약관</span>
               <span style={styles.menuArrow}>&gt;</span>
             </div>
+            <div style={styles.menuDivider} />
+            <button
+              type="button"
+              onClick={handleLogout}
+              style={{ ...styles.menuRow, paddingBottom: 0, width: "100%", border: 0, background: "none", font: "inherit", cursor: "pointer" }}
+            >
+              <span style={styles.menuText}>로그아웃</span>
+              <span style={styles.menuArrow}>&gt;</span>
+            </button>
           </div>
         </main>
 

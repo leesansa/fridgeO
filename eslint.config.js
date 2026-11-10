@@ -18,4 +18,9 @@ export default defineConfig([
       parserOptions: { ecmaFeatures: { jsx: true } },
     },
   },
+  // API 서버는 브라우저가 아니라 Node에서 실행 (process 등 Node 전역 변수 사용)
+  {
+    files: ['server/**/*.js'],
+    languageOptions: { globals: globals.node },
+  },
 ])

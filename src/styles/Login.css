@@ -1,0 +1,237 @@
+/* Figma 회원가입 페이지 (420x912). 위치는 흰 카드(left 10, top 73) 기준 */
+.signup-card {
+    position: relative;
+    box-sizing: border-box;
+    height: 750px;
+    margin: 13px 10px 89px; /* 아래: 하단 바 60px + 여백 29px */
+    background: #fff;
+    border-radius: 15px;
+}
+
+.signup-note {
+    position: absolute;
+    right: 32px;
+    top: 12px;
+    margin: 0;
+    font-size: 14px;
+    line-height: 28px;
+    color: #b26361;
+    white-space: nowrap;
+}
+
+.signup-fields {
+    margin: 0;
+    padding: 60px 0 0;
+    list-style: none;
+}
+
+.signup-field {
+    position: relative;
+    display: flex;
+    gap: 18px;
+    height: 35px; /* 배지 30 + 간격 4 + 선 1 */
+    margin-bottom: 10px;
+    padding-left: 28px;
+}
+
+.signup-badge {
+    flex-shrink: 0;
+    width: 70px;
+    height: 30px;
+    padding: 0;
+    border: 0;
+    border-radius: 10px;
+    background: #9baa6e;
+    font: inherit;
+    font-size: 14px;
+    line-height: 30px;
+    color: #fff;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.signup-badge.required {
+    background: #b96462;
+}
+
+.signup-field input {
+    flex: 1;
+    min-width: 0;
+    height: 30px;
+    margin-right: 58px;
+    padding: 0;
+    border: 0;
+    outline: none;
+    background: none;
+    font: inherit;
+    font-size: 14px;
+    color: #000;
+}
+
+.signup-verify {
+    position: absolute;
+    right: 24px;
+    top: 0;
+    background: #99ab6e;
+    cursor: pointer;
+}
+
+.signup-line {
+    position: absolute;
+    left: 22px;
+    right: 24px;
+    bottom: 0;
+    height: 1px;
+    overflow: hidden;
+}
+
+.signup-submit {
+    position: absolute;
+    left: calc(50% - 84px); /* Figma: 카드 가운데보다 9px 왼쪽 */
+    top: 457px;
+    width: 150px;
+    height: 50px;
+    padding: 0;
+    border: 0;
+    border-radius: 10px;
+    background: #99ab6e;
+    font: inherit;
+    font-size: 24px;
+    color: #fff;
+    cursor: pointer;
+}
+
+.signup-line img {
+    display: block;
+}
+
+/* Figma 회원가입_완료: 420px 화면 전체(하단 바 포함)를 rgba(0,0,0,.3)로 덮음 */
+.signup-done {
+    position: fixed;
+    z-index: 40; /* 하단 바(.main-nav)보다 위 */
+    inset: 0 auto 0 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: min(100%, 420px);
+    background: rgba(0, 0, 0, 0.3);
+    transform: translateX(-50%);
+    cursor: pointer;
+}
+
+.signup-done p {
+    margin: 0;
+    font-size: 24px;
+    color: #fff;
+}
+
+/* 로그인 페이지: 회원가입 스타일을 쓰고 Figma 로그인 페이지 위치만 맞춘다 (카드 기준) */
+.login-card .signup-fields {
+    padding-top: 98px;
+}
+
+.login-card .signup-field {
+    padding-left: 29px;
+}
+
+.login-card .signup-field input {
+    margin-right: 57px;
+}
+
+.login-card .signup-line {
+    left: 23px;
+    right: 23px;
+}
+
+.login-card .signup-submit {
+    top: 201px;
+}
+
+.login-forgot {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 279px;
+    height: 28px;
+    padding: 0;
+    border: 0;
+    background: none;
+    font: inherit;
+    font-size: 14px;
+    color: #b26361;
+    text-align: center;
+    cursor: pointer;
+}
+
+/* 아이디, 비밀번호 찾기: 로그인 스타일 위에 두 구역 위치만 맞춘다 (카드 기준) */
+.find-card .signup-fields {
+    position: absolute;
+    left: 0;
+    right: 0;
+    padding-top: 0;
+}
+
+.find-card .find-id-fields {
+    top: 99px;
+}
+
+/* 비밀번호 찾기 구역: 아이디 찾기 안내 문구(두 줄, ~299px) 아래로 간격을 줄여 배치. 버튼·문구도 같이 145px 올림 */
+.find-card .find-pw-fields {
+    top: 347px;
+}
+
+.find-card .signup-verify {
+    right: 23px;
+}
+
+.find-card .find-id-btn {
+    left: calc(50% - 75px);
+    top: 201px;
+}
+
+.find-card .find-pw-btn {
+    left: calc(50% - 90px);
+    top: 448px;
+    width: 180px;
+}
+
+/* 로그인·회원가입 실패 문구 (카드 기준, 버튼 아래) */
+.auth-error {
+    position: absolute;
+    left: 24px;
+    right: 24px;
+    margin: 0;
+    font-size: 14px;
+    line-height: 20px;
+    color: #c0392b;
+    text-align: center;
+}
+
+/* 회원가입 버튼: '잊으셨나요?'와 같은 모양, 바로 아래 줄 */
+.login-signup {
+    top: 311px;
+}
+
+.login-error {
+    top: 347px;
+}
+
+.signup-error {
+    top: 523px;
+}
+
+/* 아이디·비밀번호 찾기 안내 문구: 각 버튼(높이 50px) 바로 아래, 줄바꿈(\n) 그대로 표시 */
+.find-id-message {
+    top: 259px;
+    white-space: pre-line;
+}
+
+.find-pw-message {
+    top: 506px;
+    white-space: pre-line;
+}
+
+.signup-submit:disabled {
+    opacity: 0.6;
+    cursor: wait;
+}
