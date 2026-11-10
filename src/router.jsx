@@ -5,6 +5,7 @@ import Fridge from "./pages/Fridge";
 import Ingredient from "./pages/Ingredient";
 import RecipeList from "./pages/RecipeList";
 import RecipeDetail from "./pages/RecipeDetail";
+import ReviewWrite from "./pages/ReviewWrite";
 import MyPage from "./pages/MyPage";
 import Loading from "./pages/Loading";
 import Notification from "./pages/Notification";
@@ -20,6 +21,7 @@ const router = createBrowserRouter([
       { path: "ingredient/edit/:id", element: <IngredientEdit /> },
       { path: "recipe", element: <RecipeList/> },
       { path: "recipe/:id", element: <RecipeDetail/> },
+      { path: "review", element: <ReviewWrite /> },
       { path: "mypage", element: <MyPage/> },
       { path: "notification", element: <Notification/> },
     ],
