@@ -47,7 +47,7 @@ const MainPage = () => {
                 <Recommends />
             </main>
 
-            <button type="button" className="main-add" aria-label="추가">
+            <button type="button" className="main-add" aria-label="추가" onClick={() => navigate("/ingredient")}>
                 <img src={add} alt="" />
             </button>
         </div>
