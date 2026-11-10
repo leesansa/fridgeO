@@ -30,6 +30,7 @@
   margin: 0;
   font-size: 24px;
   text-align: center;
+  pointer-events: none; /* 전체 너비라 뒤로가기 버튼 클릭을 가리지 않게 */
 }
 
 .review-back {
@@ -41,6 +42,7 @@
   padding: 0;
   border: 0;
   background: none;
+  z-index: 1;
   cursor: pointer;
 }
 
