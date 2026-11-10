@@ -1,8 +1,10 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router";
 import Header from "../components/Header";
 
 export default function MyPage() {
   const [searchQuery, setSearchQuery] = useState("");
+  const navigate = useNavigate();
 
   return (
     <div style={styles.pageWrapper}>
@@ -58,20 +60,30 @@ export default function MyPage() {
           <div style={styles.card}>
             <div style={styles.sectionTitle}>최근 본 레시피 / 정보</div>
             <div style={{ display: "flex", gap: "14px" }}>
-              <div style={styles.recipeMiniCard}>
-                <div style={styles.recipeTitle}>🥗 사과 샐러드</div>
+              <button
+                type="button"
+                style={styles.recipeMiniCard}
+                aria-label="무생채 레시피 보기"
+                onClick={() => navigate("/recipe/1")}
+              >
+                <div style={styles.recipeTitle}>　무생채</div>
                 <div style={styles.recipeSub}>10분 완성</div>
-              </div>
-              <div style={styles.recipeMiniCard}>
-                <div style={styles.recipeTitle}>🍲 두부 된장찌개</div>
+              </button>
+              <button
+                type="button"
+                style={styles.recipeMiniCard}
+                aria-label="순두부찌개 레시피 보기"
+                onClick={() => navigate("/recipe/2")}
+              >
+                <div style={styles.recipeTitle}>　순두부찌개</div>
                 <div style={styles.recipeSub}>재료 100%일치</div>
-              </div>
+              </button>
             </div>
           </div>
 
           {/* 하단 메뉴 리스트 */}
           <div style={{ ...styles.card, padding: "20px 24px" }}>
-            <div style={styles.menuRow}>
+            <div style={styles.menuRow} onClick={() => navigate("/fridge")}>
               <span style={styles.menuText}>내 냉장고 관리</span>
               <span style={styles.urgentBadgeSmall}>임박 2개 &gt;</span>
             </div>
@@ -87,7 +99,6 @@ export default function MyPage() {
             </div>
           </div>
         </main>
-
       </div>
     </div>
   );
@@ -154,6 +165,7 @@ const styles = {
     flexDirection: "column",
     alignItems: "center",
     flex: 1,
+    cursor: "pointer",
   },
   statNum: {
     fontSize: "18px",
@@ -176,9 +188,13 @@ const styles = {
   },
   recipeMiniCard: {
     flex: 1,
+    cursor: "pointer",
     backgroundColor: "#F3F4F3",
     borderRadius: "16px",
     padding: "16px 14px",
+    border: "none",
+    textAlign: "left",
+    font: "inherit",
   },
   recipeTitle: {
     fontSize: "14px",
