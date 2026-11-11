@@ -112,6 +112,11 @@ CREATE TABLE notifications (
   ingredient_id BIGINT REFERENCES ingredients(id) ON DELETE CASCADE,       -- 유통기한 알림
   recipe_id     BIGINT REFERENCES recipes(id) ON DELETE CASCADE,           -- 리뷰 알림
   actor_id      UUID REFERENCES users(id) ON DELETE CASCADE,               -- 팔로우하거나 리뷰 단 사람
-  created_at    TIMESTAMPTZ NOT NULL DEFAULT now()
+  created_at    TIMESTAMPTZ NOT NULL DEFAULT now(),
+  read_at       TIMESTAMPTZ,                                               -- 알림센터에서 확인한 시각 (NULL = 안 읽음)
+  dismissed_at  TIMESTAMPTZ                                                -- 전체삭제한 시각 (행은 남겨 같은 알림이 다시 생기지 않게)
 );
+-- 재료 하나당 유통기한 알림은 하나 (동시에 만들어도 중복 안 됨). 재료 기한을 고치면 서버가 지우고 다시 판단
+CREATE UNIQUE INDEX notifications_expiry_once ON notifications (ingredient_id) WHERE type = 'expiry';
+CREATE INDEX notifications_user_idx ON notifications (user_id, created_at DESC);
 
