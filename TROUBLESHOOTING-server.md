@@ -16,6 +16,14 @@
 | 7 | 레시피 재료를 냉장고 재료와 연결할 수 없음 | 재료가 "이름+분량" 문장으로 저장됨 | `recipe_ingredients` 테이블로 분리 |
 | 8 | 재료 분리 후에도 `감자1개` 같은 값이 남음 | 이름과 분량 사이에 공백이 없음 | 숫자 앞에서 한 번 더 분리 |
 | 9 | `계란`, `다진 마늘`이 카탈로그와 매칭 안 됨 | 표기 차이(`달걀`, 공백) | 별칭 변환 + 공백 무시 비교 |
+| 10 | 사용자 id 타입이 Neon Auth와 맞지 않음 | Neon Auth id는 `uuid`, 테이블은 `neon_auth."user"` | 사용자 id 컬럼을 모두 `UUID`로 변경 |
+| 11 | `users`에 email·password 중복 | 로그인 정보는 Neon Auth가 이미 관리 | 두 컬럼 제거, 앱 프로필만 저장 |
+| 12 | 리뷰가 어느 레시피 것인지 알 수 없음 | `reviews`에 `recipe_id` 없음 | `recipe_id` 추가 + 별점 1~5 제한 |
+| 13 | 재료 사전의 유통기한을 날짜로 저장 | 재료마다 고정 날짜는 의미가 없음 | 보관 일수(`shelf_life_days`)로 변경 |
+| 14 | 수량을 개수로만 저장 | `300g`, `1단`, `500ml`를 표현 못 함 | `quantity NUMERIC` + `unit` |
+| 15 | 중복·잘못된 데이터가 들어갈 수 있음 | 제약 조건 없음 | `UNIQUE`, `CHECK` 추가 |
+| 16 | 앱 테이블 이름이 크롤링 테이블과 겹침 | 같은 DB에 `recipes` 등이 이미 있음 | **미해결**: 새 Neon 브랜치 또는 기존 테이블 정리 |
+| 17 | 초기 레시피를 누구 이름으로 보여줄지 | 실제 서비스명 계정은 오해·저작권 문제 | 계정을 만들지 않고 `user_id = NULL` |
 
 ---
 
@@ -256,6 +264,171 @@ LIMIT 10;
 
 **남은 한계**
 이름이 아예 다른 경우(`대파`와 `파`, `진간장`과 `간장`, `참치`와 `참치캔`)는 아직 연결되지 않습니다. 필요하면 `ALIASES`에 추가하거나 별칭 테이블을 만들어야 합니다.
+
+---
+
+> 10번부터는 냉장고 앱 전체 테이블을 Neon Auth 기준으로 다시 설계하면서 정리한 내용입니다(2026-11-10).
+> - 작성 위치: `fridgeO/db/schema.sql` (수정 중), 처음 작성한 원본은 `fridgeO/db/schema.original.sql`
+> - 아직 Neon에서 실행하지 않았습니다(16번 참고).
+
+## 10. 사용자 id 타입이 Neon Auth와 맞지 않음
+
+**증상**
+처음 설계에서는 `users.id`를 `TEXT`(또는 `serial`)로 두었습니다. 그런데 Neon Auth의 사용자 id와 타입이 다르면 외래 키를 걸 수 없고, 다른 테이블의 `user_id`도 함께 어긋납니다.
+
+**원인**
+Neon DB에서 직접 조회해 보니, 현재 Neon Auth(Better Auth 기반)는 사용자를 `neon_auth."user"` 테이블에 저장하고 id 타입은 `uuid`였습니다.
+```sql
+SELECT column_name, data_type
+FROM information_schema.columns
+WHERE table_schema = 'neon_auth' AND table_name = 'user';
+-- id uuid, name text, email text, emailVerified boolean, image text, ...
+```
+
+**해결**
+- `users.id`를 `UUID`로 바꾸고 Neon Auth 사용자를 참조하게 했습니다.
+  ```sql
+  id UUID PRIMARY KEY REFERENCES neon_auth."user"(id) ON DELETE CASCADE
+  ```
+- `user`는 PostgreSQL 예약어라서 반드시 큰따옴표(`"user"`)로 감싸야 합니다.
+- 사용자 id를 담는 나머지 컬럼 8개도 모두 `UUID`로 맞췄습니다: `follows.user_id`, `follows.following_id`, `ingredients.user_id`, `recipes.user_id`, `recipe_bookmarks.user_id`, `reviews.user_id`, `notifications.user_id`, `notifications.actor_id`.
+
+---
+
+## 11. `users`에 email·password 중복
+
+**증상**
+처음 `users` 테이블에 email과 password를 두려고 했습니다.
+
+**원인**
+Neon Auth를 쓰면 이메일은 `neon_auth."user"`에, 비밀번호(해시)는 `neon_auth.account`에 이미 저장됩니다. 내 테이블에 또 두면 값이 두 곳에 생기고, 비밀번호는 쓰이지도 않으면서 유출 위험만 늘어납니다.
+
+**해결**
+- `users`에서 email과 password를 빼고, 앱 전용 정보(`name`, `profile_image_url`)만 남겼습니다. 이메일이 필요하면 `neon_auth."user"`와 JOIN해서 읽습니다.
+- Neon Auth는 자기 테이블에만 사용자를 만듭니다. 그래서 가입 직후나 첫 로그인 때 API 서버가 `users` 행을 직접 만들어야 합니다.
+  ```sql
+  INSERT INTO users (id, name) VALUES ($1, $2) ON CONFLICT (id) DO NOTHING;
+  ```
+- API 서버는 클라이언트가 보낸 `user_id`를 그대로 믿지 말고, Neon Auth 토큰을 검증해서 꺼낸 id를 사용해야 합니다.
+
+---
+
+## 12. 리뷰가 어느 레시피 것인지 알 수 없음
+
+**증상**
+`reviews` 설계에 `user_id`, `rating`, `comment`만 있었습니다.
+
+**원인**
+`recipe_id`가 빠져 있어서 리뷰를 레시피에 연결할 수 없었습니다.
+
+**해결**
+```sql
+recipe_id  BIGINT NOT NULL REFERENCES recipes(id) ON DELETE CASCADE,
+rating     SMALLINT NOT NULL CHECK (rating BETWEEN 1 AND 5),
+created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+UNIQUE (user_id, recipe_id)   -- 레시피당 한 사람 리뷰 1개
+```
+
+---
+
+## 13. 재료 사전의 유통기한을 날짜로 저장
+
+**증상**
+`ingredient_catalog.expiry_date`를 날짜(`DATE`)로 두려고 했습니다.
+
+**원인**
+사전에 있는 재료는 모든 사용자가 같이 씁니다. "2026-11-20까지" 같은 고정 날짜는 사람마다, 등록한 날마다 맞지 않습니다.
+
+**해결**
+등록일로부터 며칠 보관할 수 있는지를 정수로 저장합니다. 재료를 등록할 때 `오늘 + shelf_life_days`로 `ingredients.expiry_date`의 기본값을 계산합니다.
+```sql
+shelf_life_days INT CHECK (shelf_life_days > 0)
+```
+
+---
+
+## 14. 수량을 개수로만 저장
+
+**증상**
+`ingredients.quantity`를 개수(정수)로만 처리하려고 했습니다.
+
+**원인**
+프론트의 기존 데이터(`src/utils/fridgeData.js`)에 이미 `"1모"`, `"300g"`, `"500ml"`, `"1단"`이 있었습니다. 개수만 받으면 이 값들을 표현할 수 없습니다. 반대로 `"300g"` 같은 문자열 하나로 저장하면 "1개 남음 → 새로 채워야 하는 상품" 같은 계산을 할 수 없습니다.
+
+**해결**
+숫자와 단위를 나눴습니다. 대파 반 단(`0.5`)처럼 소수가 필요할 수 있어서 `INT`가 아니라 `NUMERIC`을 씁니다.
+```sql
+quantity NUMERIC NOT NULL DEFAULT 1 CHECK (quantity >= 0),
+unit     TEXT    NOT NULL DEFAULT '개'   -- 개, g, ml, 단, 모 ...
+```
+조미료(소금, 후추 등)는 양 대신 "있음/부족/없음" 같은 상태로 관리하는 편이 실용적입니다(아직 반영 안 함).
+
+---
+
+## 15. 중복·잘못된 데이터가 들어갈 수 있음
+
+**증상**
+같은 사람을 두 번 팔로우하거나, 자기 자신을 팔로우하거나, 같은 레시피를 두 번 북마크하는 일을 DB가 막지 못하는 설계였습니다.
+
+**해결**
+DB 제약 조건으로 막았습니다. 앱 코드에서 실수해도 잘못된 데이터가 저장되지 않습니다.
+
+| 테이블 | 추가한 제약 |
+|---|---|
+| `follows` | `UNIQUE (user_id, following_id)`, `CHECK (user_id <> following_id)` / 컬럼명 `follow_id` → `following_id` |
+| `recipe_bookmarks` | `UNIQUE (user_id, recipe_id)` |
+| `recipe_steps`, `recipe_ingredients` | `UNIQUE (recipe_id, position)` / `image` → `image_url` |
+| `ingredients` | `storage IN ('실온', '냉장', '냉동')` |
+| `recipes` | `difficulty IN ('쉬움', '보통', '어려움')`, `servings > 0`, `cook_time > 0`(분 단위) |
+| `notifications` | `type IN ('expiry', 'follow', 'review')` |
+
+자주 조회하는 외래 키(`ingredients.user_id`, `recipes.user_id`, `recipes.category_id`, `follows.following_id`, `reviews.recipe_id`)에는 인덱스를 추가했습니다.
+
+---
+
+## 16. 앱 테이블 이름이 크롤링 테이블과 겹침 (미해결)
+
+**증상**
+`schema.sql`을 지금 DB에서 실행하면 `relation "recipes" already exists` 오류가 날 것으로 예상됩니다.
+
+**원인**
+같은 Neon DB에 크롤링용 `authors`, `recipes`, `recipe_ingredients`, `recipe_bookmarks`, `author_follows`가 이미 있습니다.
+
+**해결 방법(선택 필요)**
+- Neon에서 개발용 DB 브랜치를 새로 만들어 거기서 실행합니다(기존 데이터 그대로 유지).
+- 또는 크롤링 테이블을 지우거나 이름을 바꾼 뒤 실행합니다. `authors`는 만개의레시피 사용자 정보라 공개 배포 버전에서는 쓰지 않기로 했습니다(17번 참고).
+
+---
+
+## 17. 초기 레시피를 누구 이름으로 보여줄지
+
+**고민**
+사용자가 레시피를 추가하기 전에도 레시피가 어느 정도 보이게 하려고, "만개의레시피"를 사용자로 등록해 초기 레시피를 보여주는 방법을 검토했습니다.
+
+**검토 결과: 사용하지 않음**
+- `users.id`가 Neon Auth를 참조하므로, 실제로 로그인하지 않는 가짜 인증 계정을 만들어야 합니다.
+- 실제 서비스 이름의 계정은 제휴하거나 직접 올린 것처럼 보이게 만듭니다.
+- 계정 이름과 관계없이, 크롤링한 레시피를 공개 배포하는 저작권 문제는 그대로 남습니다.
+
+**정한 방법**
+- 초기 레시피는 `recipes.user_id = NULL`로 저장합니다(`ON DELETE SET NULL`이라 탈퇴한 사용자 레시피도 같은 형태).
+- 초기 데이터 출처는 공공데이터(식품안전나라 조리식품 레시피 API, COOKRCP01)나 팀원이 직접 작성한 레시피를 우선 검토합니다. 공공데이터의 이용 조건(공공누리 유형)은 신청할 때 확인해야 합니다.
+- 출처 링크를 표시하는 것은 예의일 뿐, 사용 허락을 받은 것은 아닙니다.
+
+---
+
+## 현재 `db/schema.sql` 확인 사항
+
+원본(`schema.original.sql`)에서 아래 항목이 빠진 상태입니다. 의도한 변경이라면 그에 따른 영향을 확인해야 합니다.
+
+| 빠진 항목 | 영향 |
+|---|---|
+| `BEGIN;` / `COMMIT;` | 중간에 오류가 나면 앞부분 테이블만 만들어진 채로 남습니다. 다시 실행하면 `already exists` 오류가 납니다. |
+| `ingredients.custom_name` + `CHECK` | `catalog_id`가 NULL을 허용하므로 재료 이름이 전혀 없는 행이 생길 수 있습니다. 사전 재료만 등록하게 할 거라면 `catalog_id`를 `NOT NULL`로 하고 `ON DELETE SET NULL` 대신 `ON DELETE RESTRICT`를 써야 합니다(`NOT NULL`과 `SET NULL`은 함께 쓸 수 없음). |
+| `ingredient_catalog.default_unit` | 등록할 때 단위를 자동으로 채울 수 없습니다(직접 선택). |
+| `recipes.source_name`, `source_url` | 외부에서 가져온 레시피의 출처를 표시할 수 없습니다. 17번처럼 공공데이터를 쓰면 출처 표시가 이용 조건일 수 있습니다. |
+| `recipe_ingredients.catalog_id` + 인덱스 | 레시피 재료와 냉장고 재료를 계속 이름으로 비교합니다(9번의 남은 한계 그대로). |
+| `notifications.is_read` + 인덱스 | 알림을 읽었는지 저장할 수 없어서, 메인 화면의 새 알림 표시(`hasUnread`)를 계산할 방법이 없습니다. |
 
 ---
 

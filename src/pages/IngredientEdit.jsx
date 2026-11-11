@@ -66,15 +66,15 @@ const changes = {
   }
 
   const tags = [
-    { name: "사과", emoji: "🍎" },
-    { name: "계란", emoji: "🥚" },
-    { name: "대파", emoji: "🌱" },
-    { name: "우유", emoji: "🥛" },
+    { name: "사과" },
+    { name: "계란" },
+    { name: "대파" },
+    { name: "우유" },
   ];
 
   const handleTagClick = (tag) => {
     setSelectedTag(tag.name);
-    setIngredient(`${tag.emoji}${tag.name}`);
+    setIngredient(tag.name);
   };
 
   return (
@@ -193,11 +193,24 @@ const changes = {
             <div style={styles.cardLabel}>유통기한</div>
             <div style={styles.expiryRow}>
               <input
-                type="date"
-                value={expiryDate}
-                onChange={(e) => setExpiryDate(e.target.value)}
+                type="text"
+                value={`${expiryDate} 까지`}
+                readOnly
                 style={styles.expiryInput}
               />
+              <label style={styles.calendarButton} aria-label="유통기한 달력 열기">
+                <svg viewBox="0 0 24 24" aria-hidden="true" style={styles.calendarButtonSvg}>
+                  <rect x="3" y="5" width="18" height="16" rx="2" />
+                  <path d="M16 3v4M8 3v4M3 10h18" />
+                </svg>
+                <input
+                  type="date"
+                  value={expiryDate}
+                  onChange={(e) => setExpiryDate(e.target.value)}
+                  aria-label="유통기한 선택"
+                  style={styles.datePickerInput}
+                />
+              </label>
               <span style={styles.urgentBadge}>D-3 임박</span>
             </div>
           </div>
@@ -408,7 +421,7 @@ const styles = {
   expiryRow: {
     display: "flex",
     alignItems: "center",
-    justifyContent: "space-between",
+    gap: "8px",
     marginTop: "6px",
   },
   expiryInput: {
@@ -417,7 +430,40 @@ const styles = {
     color: "#111",
     border: "none",
     outline: "none",
-    width: "65%",
+    width: "0",
+    flex: 1,
+    minWidth: 0,
+    padding: 0,
+    background: "transparent",
+    fontFamily: "inherit",
+  },
+  calendarButton: {
+    position: "relative",
+    display: "grid",
+    placeItems: "center",
+    width: "34px",
+    height: "34px",
+    flexShrink: 0,
+    borderRadius: "8px",
+    color: "#6E9952",
+    cursor: "pointer",
+  },
+  datePickerInput: {
+    position: "absolute",
+    inset: 0,
+    width: "100%",
+    height: "100%",
+    opacity: 0,
+    cursor: "pointer",
+  },
+  calendarButtonSvg: {
+    width: "22px",
+    height: "22px",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: 2,
+    strokeLinecap: "round",
+    strokeLinejoin: "round",
   },
   urgentBadge: {
     backgroundColor: "#C85A5A",

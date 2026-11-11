@@ -3,22 +3,22 @@ import { Link } from "react-router";
 import backIcon from "../assets/lucide_chevron_left_icon.png";
 
 export default function FridgeRegister() {
-  const [ingredient, setIngredient] = useState("🍎사과");
+  const [ingredient, setIngredient] = useState("사과");
   const [selectedTag, setSelectedTag] = useState("사과");
   const [quantity, setQuantity] = useState(3);
   const [storage, setStorage] = useState("냉장");
-  const [expiryDate, setExpiryDate] = useState("2026. 11. 10 까지");
+  const [expiryDate, setExpiryDate] = useState("2026-11-10");
 
   const tags = [
-    { name: "사과", emoji: "🍎" },
-    { name: "계란", emoji: "🥚" },
-    { name: "대파", emoji: "🌱" },
-    { name: "우유", emoji: "🥛" },
+    { name: "사과" },
+    { name: "계란" },
+    { name: "대파" },
+    { name: "우유" },
   ];
 
   const handleTagClick = (tag) => {
     setSelectedTag(tag.name);
-    setIngredient(`${tag.emoji}${tag.name}`);
+    setIngredient(tag.name);
   };
 
   return (
@@ -114,10 +114,23 @@ export default function FridgeRegister() {
             <div style={styles.expiryRow}>
               <input
                 type="text"
-                value={expiryDate}
-                onChange={(e) => setExpiryDate(e.target.value)}
+                value={`${expiryDate} 까지`}
+                readOnly
                 style={styles.expiryInput}
               />
+              <label style={styles.calendarButton} aria-label="유통기한 달력 열기">
+                <svg viewBox="0 0 24 24" aria-hidden="true" style={styles.calendarButtonSvg}>
+                  <rect x="3" y="5" width="18" height="16" rx="2" />
+                  <path d="M16 3v4M8 3v4M3 10h18" />
+                </svg>
+                <input
+                  type="date"
+                  value={expiryDate}
+                  onChange={(e) => setExpiryDate(e.target.value)}
+                  aria-label="유통기한 선택"
+                  style={styles.datePickerInput}
+                />
+              </label>
               <span style={styles.urgentBadge}>D-3 임박</span>
             </div>
           </div>
@@ -135,74 +148,6 @@ export default function FridgeRegister() {
           </div>
         </main>
 
-        {/* 하단 네비게이션 바 */}
-        <nav style={styles.bottomNav}>
-          <button style={styles.navBtn}>
-            <svg
-              width="28"
-              height="28"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="#85A86E"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-              <polyline points="9 22 9 12 15 12 15 22" />
-            </svg>
-          </button>
-          <button style={styles.navBtn}>
-            <svg
-              width="28"
-              height="28"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="#85A86E"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <rect x="5" y="2" width="14" height="20" rx="2" />
-              <line x1="5" y1="10" x2="19" y2="10" />
-              <line x1="9" y1="6" x2="9" y2="7" />
-              <line x1="9" y1="14" x2="9" y2="16" />
-            </svg>
-          </button>
-          <button style={styles.navBtn}>
-            <svg
-              width="28"
-              height="28"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="#85A86E"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <rect x="4" y="3" width="16" height="18" rx="2" />
-              <path d="M9 7v5" />
-              <path d="M15 7v5" />
-              <path d="M9 12v5" />
-              <path d="M15 12v5" />
-            </svg>
-          </button>
-          <button style={styles.navBtn}>
-            <svg
-              width="28"
-              height="28"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="#85A86E"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-              <circle cx="12" cy="7" r="4" />
-            </svg>
-          </button>
-        </nav>
       </div>
     </div>
   );
@@ -221,6 +166,7 @@ const styles = {
   mobileContainer: {
     width: "420px",
     height: "915px",
+    paddingBottom: "68px",
     backgroundColor: "#F3F4F3",
     display: "flex",
     flexDirection: "column",
@@ -333,7 +279,7 @@ const styles = {
   expiryRow: {
     display: "flex",
     alignItems: "center",
-    justifyContent: "space-between",
+    gap: "8px",
     marginTop: "6px",
   },
   expiryInput: {
@@ -342,7 +288,40 @@ const styles = {
     color: "#111",
     border: "none",
     outline: "none",
-    width: "65%",
+    width: "0",
+    flex: 1,
+    minWidth: 0,
+    padding: 0,
+    background: "transparent",
+    fontFamily: "inherit",
+  },
+  calendarButton: {
+    position: "relative",
+    display: "grid",
+    placeItems: "center",
+    width: "34px",
+    height: "34px",
+    flexShrink: 0,
+    borderRadius: "8px",
+    color: "#6E9952",
+    cursor: "pointer",
+  },
+  datePickerInput: {
+    position: "absolute",
+    inset: 0,
+    width: "100%",
+    height: "100%",
+    opacity: 0,
+    cursor: "pointer",
+  },
+  calendarButtonSvg: {
+    width: "22px",
+    height: "22px",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: 2,
+    strokeLinecap: "round",
+    strokeLinejoin: "round",
   },
   urgentBadge: {
     backgroundColor: "#C85A5A",
@@ -354,7 +333,7 @@ const styles = {
   },
   submitWrapper: {
     marginTop: "auto",
-    paddingBottom: "10px",
+    paddingBottom: "0",
     display: "flex",
     justifyContent: "center",
   },
@@ -368,20 +347,5 @@ const styles = {
     fontSize: "19px",
     fontWeight: "700",
     cursor: "pointer",
-  },
-  bottomNav: {
-    backgroundColor: "#FFFFFF",
-    borderTop: "1px solid #E5E5E5",
-    height: "68px",
-    display: "flex",
-    justifyContent: "space-around",
-    alignItems: "center",
-    flexShrink: 0,
-  },
-  navBtn: {
-    background: "transparent",
-    border: "none",
-    cursor: "pointer",
-    padding: "8px",
   },
 };
