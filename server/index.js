@@ -108,6 +108,10 @@ const publicRoutes = {
     if (category !== null && (!Number.isSafeInteger(category) || category < 1)) {
       throw new HttpError(400, "category 가 올바르지 않습니다");
     }
+    // q = 검색어 (제목 또는 재료 이름에 포함). %, _, \ 는 글자 그대로 찾도록 escape
+    const q = params.get("q")?.trim() || null;
+    if (q && q.length > 50) throw new HttpError(400, "검색어는 50자 이하로 입력하세요");
+    const pattern = q && `%${q.replace(/[\\%_]/g, "\\$&")}%`;
     // 한 개 더 가져와서 다음 페이지가 있는지 확인
     const rows = await sql`
       SELECT r.id, r.title, r.image_url, u.name AS author, s.review_count, s.rating
@@ -117,7 +121,11 @@ const publicRoutes = {
         SELECT count(*)::int AS review_count, round(avg(rating), 1)::float AS rating
         FROM reviews WHERE recipe_id = r.id
       ) s
-      WHERE r.id > ${cursor} AND (${category}::bigint IS NULL OR r.category_id = ${category})
+      WHERE r.id > ${cursor}
+        AND (${category}::bigint IS NULL OR r.category_id = ${category})
+        AND (${q}::text IS NULL
+             OR r.title ILIKE ${pattern}
+             OR EXISTS (SELECT 1 FROM recipe_ingredients i WHERE i.recipe_id = r.id AND i.name ILIKE ${pattern}))
       ORDER BY r.id
       LIMIT ${RECIPE_PAGE + 1}`;
     const items = rows.slice(0, RECIPE_PAGE);

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import Header from "../components/Header.jsx";
 import { apiFetch } from "../utils/auth.js";
 import { fridgeIngredients } from "../utils/fridgeData";
@@ -14,6 +14,9 @@ const coupangUrl = (name) => `https://www.coupang.com/np/search?q=${encodeURICom
 // 주소의 :id 로 DB 레시피(기본 정보·재료·recipe_steps)를 불러와 보여줌
 const RecipeDetail = () => {
     const { id } = useParams();
+    const navigate = useNavigate();
+    // 헤더 검색창에서 Enter → 레시피 목록에서 그 검색어로 찾기
+    const search = (q) => navigate(q ? `/recipe?q=${encodeURIComponent(q)}` : "/recipe");
     // 응답을 어느 id 것인지와 함께 보관 → 주소의 id 가 바뀌면 자동으로 "불러오는 중"
     const [loaded, setLoaded] = useState({ id: null, recipe: null, error: "" });
     const recipe = loaded.id === id ? loaded.recipe : null;
@@ -53,7 +56,7 @@ const RecipeDetail = () => {
     if (!recipe) {
         return (
             <div className="detail-page">
-                <Header />
+                <Header onSearch={search} />
                 <main className="detail-main">
                     <section className="detail-card">
                         <p className="detail-intro" role={error ? "alert" : "status"}>{error || "레시피를 불러오는 중..."}</p>
@@ -75,7 +78,7 @@ const RecipeDetail = () => {
 
     return (
         <div className="detail-page">
-            <Header />
+            <Header onSearch={search} />
 
             <main className="detail-main">
                 {recipe.image_url && (

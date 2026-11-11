@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router";
+import { useNavigate, useSearchParams } from "react-router";
 import Header from "../components/Header.jsx";
 import { apiFetch } from "../utils/auth.js";
 import "../styles/recipes.css";
@@ -68,8 +68,8 @@ const ALL = { id: null, name: "전체" };
 // 카드 안 별 5개의 x 위치 (카드 왼쪽 위 기준 px)
 const STARS = [158, 172, 186, 200, 214];
 
-// 레시피 카드 무한 스크롤. 분류가 바뀌면 부모가 key 로 새로 만들어서 목록·cursor·스크롤이 처음부터 시작
-const RecipeCards = ({ categoryId }) => {
+// 레시피 카드 무한 스크롤. 분류·검색어가 바뀌면 부모가 key 로 새로 만들어서 목록·cursor·스크롤이 처음부터 시작
+const RecipeCards = ({ categoryId, q }) => {
     const navigate = useNavigate();
     const [recipes, setRecipes] = useState([]);
     const [cursor, setCursor] = useState(0); // 다음에 불러올 위치, null 이면 끝
@@ -84,6 +84,7 @@ const RecipeCards = ({ categoryId }) => {
         try {
             const query = new URLSearchParams({ cursor });
             if (categoryId !== null) query.set("category", categoryId);
+            if (q) query.set("q", q);
             const data = await apiFetch(`/api/recipes?${query}`);
             setRecipes((prev) => [...prev, ...data.items]);
             setCursor(data.nextCursor);
@@ -92,7 +93,7 @@ const RecipeCards = ({ categoryId }) => {
         } finally {
             loadingRef.current = false;
         }
-    }, [cursor, categoryId]);
+    }, [cursor, categoryId, q]);
 
     // 목록 끝(sentinel)이 보이면 다음 페이지. cursor 가 바뀌면 다시 관찰해서 화면이 찰 때까지 이어 불러옴
     useEffect(() => {
@@ -140,7 +141,9 @@ const RecipeCards = ({ categoryId }) => {
                     {error} <button type="button" onClick={() => setError("")}>다시 시도</button>
                 </p>
             )}
-            {cursor === null && recipes.length === 0 && <p className="list-status">레시피가 없습니다.</p>}
+            {cursor === null && recipes.length === 0 && (
+                <p className="list-status">{q ? `'${q}'에 맞는 레시피가 없어요.` : "레시피가 없습니다."}</p>
+            )}
         </div>
     );
 };
@@ -150,6 +153,20 @@ const RecipeList = () => {
     const [selected, setSelected] = useState(null); // 고른 분류 id, null = 전체
     const [start, setStart] = useState(0); // 지금 맨 왼쪽에 보이는 분류 번호
     const maxStart = Math.max(0, categories.length - SHOW);
+
+    // 검색어는 주소 ?q= 에 둔다 → 상세에서 뒤로 오거나 새로고침해도 유지, 상세 페이지 Enter 검색도 여기로 옴
+    const [searchParams, setSearchParams] = useSearchParams();
+    const q = searchParams.get("q")?.trim() ?? "";
+    const [text, setText] = useState(q); // 입력창 글자 (타자 칠 때마다 바뀜)
+
+    // 입력이 0.3초 멈추면 검색 (글자마다 요청하지 않게)
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            const next = text.trim();
+            if (next !== q) setSearchParams(next ? { q: next } : {}, { replace: true });
+        }, 300);
+        return () => clearTimeout(timer);
+    }, [text, q, setSearchParams]);
 
     // DB 분류 목록. 실패하면 "전체"만 남고 레시피 목록은 그대로 동작
     useEffect(() => {
@@ -202,9 +219,9 @@ const RecipeList = () => {
                 </div>
             </section>
 
-            <Header />
+            <Header value={text} onChange={setText} />
 
-            <RecipeCards key={selected ?? "all"} categoryId={selected} />
+            <RecipeCards key={`${selected ?? "all"}|${q}`} categoryId={selected} q={q} />
         </div>
     );
 };
