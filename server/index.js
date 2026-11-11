@@ -84,13 +84,54 @@ const routes = {
     const [me] = await sql`SELECT id, name, profile_image_url, created_at FROM users WHERE id = ${user.sub}`;
     return me;
   },
+  // 이 레시피에 내가 쓴 리뷰 (없으면 null). 레시피당 한 사람 1개 (reviews UNIQUE(user_id, recipe_id))
+  async "GET /api/recipes/:id/review"(req, user) {
+    const [review] = await sql`
+      SELECT rating, comment, created_at FROM reviews WHERE user_id = ${user.sub} AND recipe_id = ${recipeIdOf(req)}`;
+    return review ?? null;
+  },
+  // 리뷰 작성·수정 (이미 있으면 덮어씀)
+  async "PUT /api/recipes/:id/review"(req, user) {
+    const recipeId = recipeIdOf(req);
+    const body = await readJson(req);
+    const rating = Number(body.rating);
+    if (!Number.isInteger(rating) || rating < 1 || rating > 5) throw new HttpError(400, "별점은 1~5점으로 골라 주세요");
+    const comment = typeof body.comment === "string" ? body.comment.trim() : "";
+    if (comment.length > 1000) throw new HttpError(400, "리뷰는 1000자 이하로 입력하세요");
+    // 프로필 행이 아직 없으면(가입 직후 POST /api/me 실패 등) 만들어 둔다 → reviews.user_id 외래키 통과
+    await sql`INSERT INTO users (id, name) VALUES (${user.sub}, ${user.name ?? "사용자"}) ON CONFLICT (id) DO NOTHING`;
+    try {
+      const [review] = await sql`
+        INSERT INTO reviews (user_id, recipe_id, rating, comment)
+        VALUES (${user.sub}, ${recipeId}, ${rating}, ${comment || null})
+        ON CONFLICT (user_id, recipe_id) DO UPDATE SET rating = EXCLUDED.rating, comment = EXCLUDED.comment
+        RETURNING rating, comment, created_at`;
+      return review;
+    } catch (e) {
+      if (e.code === "23503") throw new HttpError(404, "레시피를 찾을 수 없습니다"); // 없는 recipe_id
+      throw e;
+    }
+  },
+  // 내 리뷰 삭제
+  async "DELETE /api/recipes/:id/review"(req, user) {
+    await sql`DELETE FROM reviews WHERE user_id = ${user.sub} AND recipe_id = ${recipeIdOf(req)}`;
+    return { ok: true };
+  },
 };
+
+// /api/recipes/<id>/... 주소에서 레시피 id
+function recipeIdOf(req) {
+  const id = Number(new URL(req.url, "http://localhost").pathname.split("/")[3]);
+  if (!Number.isSafeInteger(id) || id < 1) throw new HttpError(404, "레시피를 찾을 수 없습니다");
+  return id;
+}
 
 // Neon 재시도(같은 event_id)로 문자가 두 번 가지 않게, 보낸 이벤트를 10분간 기억
 // shortcut: 메모리 보관이라 서버 재시작·여러 대 실행 시 중복 가능, 그때 DB 테이블로 옮길 것
 const sentOtpEvents = new Set();
 
 const RECIPE_PAGE = 10;
+const REVIEW_PAGE = 5;
 
 // 로그인 없이 호출되는 경로. 대신 각자 요청을 검증한다
 const publicRoutes = {
@@ -153,6 +194,21 @@ const publicRoutes = {
     ]);
     return { ...recipe, ingredients, steps };
   },
+  // 이 레시피의 리뷰 목록. 내용 있는 리뷰 먼저, 그다음 최신순. offset = 이미 받은 개수, nextOffset 이 null 이면 끝
+  // shortcut: OFFSET 페이지라 리뷰가 아주 많아지면 느려짐, 그때 (created_at, id) 커서로 교체
+  async "GET /api/recipes/:id/reviews"(req) {
+    const recipeId = recipeIdOf(req);
+    const offset = Number(new URL(req.url, "http://localhost").searchParams.get("offset") ?? 0);
+    if (!Number.isSafeInteger(offset) || offset < 0) throw new HttpError(400, "offset 이 올바르지 않습니다");
+    const rows = await sql`
+      SELECT r.id, r.rating, r.comment, r.created_at, u.name AS author, u.profile_image_url
+      FROM reviews r
+      LEFT JOIN users u ON u.id = r.user_id
+      WHERE r.recipe_id = ${recipeId}
+      ORDER BY (r.comment IS NULL), r.created_at DESC, r.id DESC
+      LIMIT ${REVIEW_PAGE + 1} OFFSET ${offset}`;
+    return { items: rows.slice(0, REVIEW_PAGE), nextOffset: rows.length > REVIEW_PAGE ? offset + REVIEW_PAGE : null };
+  },
   // Neon Auth send.otp 웹훅 → Solapi 문자 발송. Neon 콘솔 Auth > Webhooks 에 이 주소(HTTPS)를 등록
   async "POST /api/webhooks/neon"(req) {
     const raw = await readBody(req);
@@ -192,8 +248,8 @@ createServer(async (req, res) => {
     res.end(JSON.stringify(body));
   };
   try {
-    // /api/recipes/123 처럼 숫자 id 가 붙은 주소는 routes 의 ":id" 키로 찾는다
-    const pathname = new URL(req.url, "http://localhost").pathname.replace(/^(\/api\/recipes)\/\d+$/, "$1/:id");
+    // /api/recipes/123, /api/recipes/123/review(s) 처럼 숫자 id 가 붙은 주소는 routes 의 ":id" 키로 찾는다
+    const pathname = new URL(req.url, "http://localhost").pathname.replace(/^(\/api\/recipes)\/\d+(\/reviews?)?$/, "$1/:id$2");
     const publicHandler = publicRoutes[`${req.method} ${pathname}`];
     if (publicHandler) return send(200, await publicHandler(req));
     const handler = routes[`${req.method} ${pathname}`];
