@@ -15,6 +15,7 @@ const sql = neon(DATABASE_URL);
 const JWKS = createRemoteJWKSet(new URL(`${VITE_NEON_AUTH_URL}/.well-known/jwks.json`));
 const AUTH_ORIGIN = new URL(VITE_NEON_AUTH_URL).origin;
 const MAX_BODY = 10_000;
+const PROFILE_IMAGE_MAX = 150_000; // 프로필 사진 data URL 최대 글자 수 (브라우저에서 160px 로 줄이면 보통 10~20KB)
 
 // Authorization: Bearer <JWT> 를 검증해 로그인 사용자(payload.sub = neon_auth.user.id)를 돌려준다. 실패하면 null
 async function getAuthUser(req) {
@@ -33,19 +34,20 @@ async function getAuthUser(req) {
 }
 
 // 본문 원본 바이트 (웹훅 서명 검증은 파싱 전 원본이 필요)
-async function readBody(req) {
+async function readBody(req, limit = MAX_BODY) {
   const chunks = [];
   let size = 0;
   for await (const chunk of req) {
     size += chunk.length;
-    if (size > MAX_BODY) throw new HttpError(413, "요청이 너무 큽니다");
+    if (size > limit) throw new HttpError(413, "요청이 너무 큽니다");
     chunks.push(chunk);
   }
   return Buffer.concat(chunks);
 }
 
-async function readJson(req) {
-  const raw = (await readBody(req)).toString("utf8");
+// limit 는 기본 10KB. 프로필 사진처럼 큰 본문을 받는 곳만 늘려 줌
+async function readJson(req, limit) {
+  const raw = (await readBody(req, limit)).toString("utf8");
   if (!raw) return {};
   try {
     return JSON.parse(raw);
@@ -71,11 +73,48 @@ function parseName(value) {
 
 // "METHOD /path" → 처리 함수. 로그인 필요 (user = 검증된 JWT payload). 로그인 없는 경로는 아래 publicRoutes
 const routes = {
-  // 내 프로필
+  // 내 프로필 + 마이페이지 숫자 (북마크·팔로잉·팔로워 수)
   async "GET /api/me"(req, user) {
-    const [me] = await sql`SELECT id, name, profile_image_url, created_at FROM users WHERE id = ${user.sub}`;
+    const [me] = await sql`
+      SELECT id, name, profile_image_url, created_at,
+             (SELECT count(*)::int FROM recipe_bookmarks WHERE user_id = u.id) AS bookmark_count,
+             (SELECT count(*)::int FROM follows WHERE user_id = u.id) AS following_count,
+             (SELECT count(*)::int FROM follows WHERE following_id = u.id) AS follower_count
+      FROM users u WHERE id = ${user.sub}`;
     if (!me) throw new HttpError(404, "프로필이 없습니다");
     return me;
+  },
+  // 프로필 사진 바꾸기. 파일 저장소가 없어 브라우저에서 작게 줄인 사진을 data URL 글자로 받아 그대로 저장
+  // shortcut: data URL 을 users 행에 저장 (약 10KB), 파일 저장소(S3·R2 등)가 생기면 업로드 후 주소만 저장
+  async "PATCH /api/me"(req, user) {
+    const { profileImage } = await readJson(req, PROFILE_IMAGE_MAX + 1_000);
+    if (profileImage !== null) {
+      const ok = typeof profileImage === "string" && profileImage.length <= PROFILE_IMAGE_MAX
+        && /^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+/]+=*$/.test(profileImage);
+      if (!ok) throw new HttpError(400, "사진은 150KB 이하의 JPG·PNG·WEBP 만 올릴 수 있어요");
+    }
+    await ensureProfile(user);
+    const [me] = await sql`UPDATE users SET profile_image_url = ${profileImage} WHERE id = ${user.sub} RETURNING profile_image_url`;
+    return me;
+  },
+  // 내가 북마크한 레시피 (최근 저장한 순)
+  async "GET /api/me/bookmarks"(req, user) {
+    return sql`
+      SELECT r.id, r.title, r.image_url
+      FROM recipe_bookmarks b JOIN recipes r ON r.id = b.recipe_id
+      WHERE b.user_id = ${user.sub}
+      ORDER BY b.created_at DESC
+      LIMIT 50`;
+  },
+  // 팔로우 현황. type=following(내가 팔로우한 사람, 기본) | followers(나를 팔로우한 사람)
+  async "GET /api/me/follows"(req, user) {
+    const type = new URL(req.url, "http://localhost").searchParams.get("type") ?? "following";
+    if (type !== "following" && type !== "followers") throw new HttpError(400, "type 이 올바르지 않습니다");
+    return type === "following"
+      ? sql`SELECT u.id, u.name, u.profile_image_url FROM follows f JOIN users u ON u.id = f.following_id
+            WHERE f.user_id = ${user.sub} ORDER BY f.created_at DESC LIMIT 100`
+      : sql`SELECT u.id, u.name, u.profile_image_url FROM follows f JOIN users u ON u.id = f.user_id
+            WHERE f.following_id = ${user.sub} ORDER BY f.created_at DESC LIMIT 100`;
   },
   // 가입·로그인 직후 프로필 행을 만든다(이미 있으면 그대로). 닉네임이 없으면 가입 때 이름 사용
   async "POST /api/me"(req, user) {

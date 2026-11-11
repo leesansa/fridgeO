@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router";
 import Header from "../components/Header.jsx";
 import { apiFetch, isLoggedIn } from "../utils/auth.js";
 import { fridgeIngredients } from "../utils/fridgeData";
+import { addRecentRecipe } from "../utils/recentRecipes";
 import "../vendor/lucian-icons/check.js"; // 065번 check 아이콘
 import "../vendor/lucian-icons/edit.js"; // 079번 edit(연필) 아이콘
 import "../vendor/lucian-icons/bookmark.js"; // 012번 bookmark 아이콘
@@ -119,6 +120,7 @@ const RecipeDetail = () => {
             .then((data) => {
                 if (ignore) return;
                 setLoaded({ id, recipe: data, error: "" });
+                addRecentRecipe(data); // 마이페이지 "최근 본 레시피"에 기록
                 setSaved(data.bookmarked);
                 setMarkError("");
                 setChecked(new Set(data.ingredients.filter((ing) => inFridge.has(norm(ing.name))).map((ing) => ing.name)));
