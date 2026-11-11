@@ -65,7 +65,8 @@
 
 .detail-hero-actions {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+  align-items: center;
   padding: 10px 16px;
 }
 
@@ -235,7 +236,21 @@
   font-size: 14px;
 }
 
-.detail-page :is(button, input):focus-visible {
+/* 담기 버튼이 <a> 라서 버튼처럼 가운데 정렬 */
+.detail-ing-btn {
+  display: grid;
+  place-items: center;
+  text-decoration: none;
+}
+
+.detail-popup-note {
+  margin: 8px 0 0;
+  color: var(--red);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.detail-page :is(button, input, a):focus-visible {
   outline: 2px solid #689d4b;
   outline-offset: 2px;
 }
@@ -265,8 +280,12 @@
   object-fit: cover;
 }
 
+/* 사진이 없는 단계도 같은 자리를 차지하게 회색 칸 */
 .detail-step-photo {
   position: relative;
+  aspect-ratio: 16 / 9;
+  border-radius: 10px;
+  background: #eee;
 }
 
 /* 번호는 사진 왼쪽 위 모서리에 */
@@ -331,4 +350,115 @@
   display: block;
   height: 100%;
   background: var(--green);
+}
+
+.detail-bookmark {
+  display: flex;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+
+/* 북마크는 테두리·배경 없이 선만 보이게 (공통 포커스 테두리와 아이콘 면 색도 끔) */
+.detail-page .detail-bookmark,
+.detail-page .detail-bookmark:focus-visible {
+  outline: none;
+  background: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.detail-bookmark lucian-bookmark {
+  --li-tint: 0;
+}
+
+/* ---- 다른 사람들의 리뷰 ---- */
+.detail-review-count {
+  color: var(--green-text);
+}
+
+.detail-review-empty {
+  margin: 10px 0 0;
+  color: var(--text-sub);
+  font-size: 14px;
+}
+
+.detail-review-list {
+  margin: 8px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.detail-review-item {
+  display: flex;
+  gap: 10px;
+  padding: 12px 0;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.detail-review-item:last-child {
+  border-bottom: 0;
+}
+
+.detail-review-avatar {
+  flex: 0 0 36px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #e2d7d7; /* 레시피 목록 카드의 기본 프로필 색 */
+}
+
+.detail-review-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.detail-review-meta {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 14px;
+}
+
+.detail-review-meta time {
+  flex: none;
+  color: var(--text-sub);
+  font-size: 12px;
+}
+
+.detail-review-stars {
+  display: block;
+  margin-top: 2px;
+  color: #ffb600; /* 레시피 목록 별과 같은 색 */
+  font-size: 13px;
+  letter-spacing: 1px;
+}
+
+.detail-review-stars .off {
+  color: #ddd;
+}
+
+.detail-review-text {
+  margin: 6px 0 0;
+  font-size: 14px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+/* 흰 바탕 + 초록 테두리 버튼 (리뷰 더보기) */
+.detail-btn--line {
+  background: #fff;
+  box-shadow: inset 0 0 0 1px var(--green);
+  color: var(--green-text);
+}
+
+.detail-btn:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+/* 북마크 저장 실패 문구: 사진 카드(안쪽 여백 0) 아래 버튼 줄과 맞춤 */
+.detail-bookmark-error {
+  margin: 0 16px 12px;
 }
