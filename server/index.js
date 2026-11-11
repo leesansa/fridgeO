@@ -133,7 +133,111 @@ const routes = {
     await sql`DELETE FROM recipe_bookmarks WHERE user_id = ${user.sub} AND recipe_id = ${recipeIdOf(req)}`;
     return { bookmarked: false };
   },
+  // 내 냉장고 재료 (무한 스크롤). sort = expiry(기본)|name|storage, q = 재료 이름 검색, offset = 이미 받은 개수
+  // shortcut: OFFSET 페이지라 한 사람 재료가 수천 개가 되면 느려짐, 그때 정렬 기준별 커서로 교체
+  async "GET /api/ingredients"(req, user) {
+    const params = new URL(req.url, "http://localhost").searchParams;
+    const sort = params.get("sort") ?? "expiry";
+    if (!["expiry", "name", "storage"].includes(sort)) throw new HttpError(400, "sort 가 올바르지 않습니다");
+    const offset = Number(params.get("offset") ?? 0);
+    if (!Number.isSafeInteger(offset) || offset < 0) throw new HttpError(400, "offset 이 올바르지 않습니다");
+    const q = params.get("q")?.trim() || null;
+    if (q && q.length > 30) throw new HttpError(400, "검색어는 30자 이하로 입력하세요");
+    const pattern = q && `%${q.replace(/[\\%_]/g, "\\$&")}%`;
+    // 날짜는 시간대 영향 없게 'YYYY-MM-DD' 글자로, 수량은 1.50 → 1.5 처럼 끝 0 제거
+    const rows = await sql`
+      SELECT i.id, c.name, c.image_url, trim_scale(i.quantity)::text AS quantity, i.unit, i.storage,
+             to_char(i.expiry_date, 'YYYY-MM-DD') AS expiry_date
+      FROM ingredients i
+      LEFT JOIN ingredient_catalog c ON c.id = i.catalog_id
+      WHERE i.user_id = ${user.sub} AND (${pattern}::text IS NULL OR c.name ILIKE ${pattern})
+      ORDER BY
+        CASE WHEN ${sort} = 'name' THEN c.name END,
+        CASE WHEN ${sort} = 'storage' THEN array_position(ARRAY['냉장', '냉동', '실온'], i.storage) END,
+        i.expiry_date NULLS LAST, i.id
+      LIMIT ${INGREDIENT_PAGE + 1} OFFSET ${offset}`;
+    return { items: rows.slice(0, INGREDIENT_PAGE), nextOffset: rows.length > INGREDIENT_PAGE ? offset + INGREDIENT_PAGE : null };
+  },
+  // 내 냉장고에 재료 추가
+  async "POST /api/ingredients"(req, user) {
+    const input = parseIngredient(await readJson(req));
+    await ensureProfile(user);
+    const catalogId = await catalogIdFor(input.name);
+    const [row] = await sql`
+      INSERT INTO ingredients (user_id, catalog_id, quantity, unit, storage, expiry_date)
+      VALUES (${user.sub}, ${catalogId}, ${input.quantity}, ${input.unit}, ${input.storage}, ${input.expiryDate})
+      RETURNING id`;
+    return { id: row.id };
+  },
+  // 내 재료 하나 (편집 화면용). 다른 사람 재료는 없는 것처럼 404
+  async "GET /api/ingredients/:id"(req, user) {
+    const [row] = await sql`
+      SELECT i.id, c.name, trim_scale(i.quantity)::text AS quantity, i.unit, i.storage,
+             to_char(i.expiry_date, 'YYYY-MM-DD') AS expiry_date
+      FROM ingredients i
+      LEFT JOIN ingredient_catalog c ON c.id = i.catalog_id
+      WHERE i.id = ${ingredientIdOf(req)} AND i.user_id = ${user.sub}`;
+    if (!row) throw new HttpError(404, "재료를 찾을 수 없습니다");
+    return row;
+  },
+  // 내 재료 수정 (추가와 같은 검사)
+  async "PATCH /api/ingredients/:id"(req, user) {
+    const id = ingredientIdOf(req);
+    const input = parseIngredient(await readJson(req));
+    const catalogId = await catalogIdFor(input.name);
+    const rows = await sql`
+      UPDATE ingredients
+      SET catalog_id = ${catalogId}, quantity = ${input.quantity}, unit = ${input.unit},
+          storage = ${input.storage}, expiry_date = ${input.expiryDate}
+      WHERE id = ${id} AND user_id = ${user.sub}
+      RETURNING id`;
+    if (rows.length === 0) throw new HttpError(404, "재료를 찾을 수 없습니다");
+    return { id: rows[0].id };
+  },
+  // 내 재료 삭제 (다른 사람 재료는 user_id 조건에 걸려 지워지지 않음)
+  async "DELETE /api/ingredients/:id"(req, user) {
+    const rows = await sql`DELETE FROM ingredients WHERE id = ${ingredientIdOf(req)} AND user_id = ${user.sub} RETURNING id`;
+    if (rows.length === 0) throw new HttpError(404, "재료를 찾을 수 없습니다");
+    return { ok: true };
+  },
 };
+
+// /api/ingredients/<id> 주소에서 재료 id
+function ingredientIdOf(req) {
+  const id = Number(new URL(req.url, "http://localhost").pathname.split("/")[3]);
+  if (!Number.isSafeInteger(id) || id < 1) throw new HttpError(404, "재료를 찾을 수 없습니다");
+  return id;
+}
+
+// 재료 추가·수정 입력 검사 → { name, quantity, unit, storage, expiryDate }
+function parseIngredient(body) {
+  const name = typeof body.name === "string" ? body.name.trim() : "";
+  if (name.length < 1 || name.length > 30) throw new HttpError(400, "재료 이름은 1~30자로 입력하세요");
+  const quantity = Number(body.quantity);
+  if (!Number.isFinite(quantity) || quantity <= 0 || quantity > 9999) throw new HttpError(400, "수량은 0보다 크고 9999 이하로 입력하세요");
+  const unit = typeof body.unit === "string" && body.unit.trim() ? body.unit.trim().slice(0, 10) : "개";
+  if (!["냉장", "냉동", "실온"].includes(body.storage)) throw new HttpError(400, "보관 방법을 골라 주세요");
+  const expiryDate = body.expiryDate || null;
+  if (expiryDate !== null && !isDateKey(expiryDate)) throw new HttpError(400, "유통기한 날짜가 올바르지 않습니다");
+  return { name, quantity, unit, storage: body.storage, expiryDate };
+}
+
+// ingredients 에는 이름 칸이 없어서, 이름으로 재료 사전(ingredient_catalog)을 찾고 없으면 등록한 뒤 그 id
+// (DO UPDATE 로 두어야 이미 있는 이름일 때도 RETURNING 이 기존 행을 돌려줌)
+async function catalogIdFor(name) {
+  const [catalog] = await sql`
+    INSERT INTO ingredient_catalog (name) VALUES (${name})
+    ON CONFLICT (name) DO UPDATE SET name = EXCLUDED.name
+    RETURNING id`;
+  return catalog.id;
+}
+
+// "YYYY-MM-DD" 이고 실제로 있는 날짜인지. 2026-02-30 은 3월로 넘어가 원래 글자와 달라지고, 2026-13-01 은 NaN
+function isDateKey(value) {
+  if (typeof value !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
+  const time = Date.parse(`${value}T00:00:00Z`);
+  return !Number.isNaN(time) && new Date(time).toISOString().startsWith(value);
+}
 
 // 프로필 행이 아직 없으면(가입 직후 POST /api/me 실패 등) 만들어 둔다 → reviews·recipe_bookmarks 의 user_id 외래키 통과
 async function ensureProfile(user) {
@@ -153,6 +257,7 @@ const sentOtpEvents = new Set();
 
 const RECIPE_PAGE = 10;
 const REVIEW_PAGE = 5;
+const INGREDIENT_PAGE = 10;
 
 // 로그인 없이 호출되는 경로. 대신 각자 요청을 검증한다
 const publicRoutes = {
@@ -272,8 +377,10 @@ createServer(async (req, res) => {
     res.end(JSON.stringify(body));
   };
   try {
-    // /api/recipes/123, /api/recipes/123/review(s)·bookmark 처럼 숫자 id 가 붙은 주소는 routes 의 ":id" 키로 찾는다
-    const pathname = new URL(req.url, "http://localhost").pathname.replace(/^(\/api\/recipes)\/\d+(\/reviews?|\/bookmark)?$/, "$1/:id$2");
+    // /api/recipes/123(/review(s)·/bookmark), /api/ingredients/123 처럼 숫자 id 가 붙은 주소는 routes 의 ":id" 키로 찾는다
+    const pathname = new URL(req.url, "http://localhost").pathname
+      .replace(/^(\/api\/recipes)\/\d+(\/reviews?|\/bookmark)?$/, "$1/:id$2")
+      .replace(/^(\/api\/ingredients)\/\d+$/, "$1/:id");
     const publicHandler = publicRoutes[`${req.method} ${pathname}`];
     if (publicHandler) return send(200, await publicHandler(req));
     const handler = routes[`${req.method} ${pathname}`];

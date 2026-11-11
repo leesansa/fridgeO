@@ -1,17 +1,61 @@
-import React, { useState } from "react";
-import { Link } from "react-router";
+import { useRef, useState } from "react";
+import { Link, useNavigate } from "react-router";
 import backIcon from "../assets/lucide_chevron_left_icon.png";
+import { apiFetch } from "../utils/auth";
+import { getExpiryBadge, getTodayKey } from "../utils/fridgeUtils";
+
+// "2026-11-11" + 7일 → "2026-11-18" (UTC 로 계산해 시간대 영향 없음)
+const addDays = (dateKey, days) => {
+  const date = new Date(`${dateKey}T00:00:00Z`);
+  date.setUTCDate(date.getUTCDate() + days);
+  return date.toISOString().slice(0, 10);
+};
 
 export default function FridgeRegister() {
+  const navigate = useNavigate();
+  const today = getTodayKey();
   const [ingredient, setIngredient] = useState("사과");
   const [selectedTag, setSelectedTag] = useState("사과");
   const [quantity, setQuantity] = useState(3);
   const [storage, setStorage] = useState("냉장");
-  const [expiryDate, setExpiryDate] = useState("2026-11-10");
+  const [expiryDate, setExpiryDate] = useState(() => addDays(today, 7));
+  const [saving, setSaving] = useState(false); // 저장 중 두 번 눌러 두 개 생기지 않게
+  const badge = getExpiryBadge(expiryDate, today);
 
+  // 숨겨 둔 날짜 칸의 달력 창 열기. showPicker 가 없는 옛 브라우저는 날짜 칸에 포커스만 줌
+  const dateRef = useRef(null);
+  const openPicker = () => {
+    try {
+      dateRef.current.showPicker();
+    } catch {
+      dateRef.current.focus();
+    }
+  };
+
+  // DB(ingredients)에 저장하고 냉장고로 돌아감
+  const handleSubmit = async () => {
+    const name = ingredient.trim();
+    if (!name) {
+      alert("재료 이름을 입력해 주세요.");
+      return;
+    }
+    setSaving(true);
+    try {
+      await apiFetch("/api/ingredients", {
+        method: "POST",
+        body: { name, quantity, unit: "개", storage, expiryDate: expiryDate || null },
+      });
+      navigate("/fridge", { replace: true });
+    } catch (e) {
+      alert(`재료를 추가하지 못했어요. ${e.message}`);
+      setSaving(false);
+    }
+  };
+
+  // 재료 사전(ingredient_catalog)에 있는 이름과 맞춤 ("계란"은 사전에서 "달걀")
   const tags = [
     { name: "사과" },
-    { name: "계란" },
+    { name: "달걀" },
     { name: "대파" },
     { name: "우유" },
   ];
@@ -112,38 +156,47 @@ export default function FridgeRegister() {
           >
             <div style={styles.cardLabel}>유통기한</div>
             <div style={styles.expiryRow}>
-              <input
-                type="text"
-                value={`${expiryDate} 까지`}
-                readOnly
-                style={styles.expiryInput}
-              />
-              <label style={styles.calendarButton} aria-label="유통기한 달력 열기">
+              {/* 날짜 글자와 달력 아이콘 모두 누르면 브라우저 달력 창이 열림 */}
+              <button type="button" style={styles.expiryInput} onClick={openPicker}>
+                {expiryDate ? `${expiryDate} 까지` : "날짜를 골라 주세요"}
+              </button>
+              <button type="button" style={styles.calendarButton} aria-label="유통기한 달력 열기" onClick={openPicker}>
                 <svg viewBox="0 0 24 24" aria-hidden="true" style={styles.calendarButtonSvg}>
                   <rect x="3" y="5" width="18" height="16" rx="2" />
                   <path d="M16 3v4M8 3v4M3 10h18" />
                 </svg>
-                <input
-                  type="date"
-                  value={expiryDate}
-                  onChange={(e) => setExpiryDate(e.target.value)}
-                  aria-label="유통기한 선택"
-                  style={styles.datePickerInput}
-                />
-              </label>
-              <span style={styles.urgentBadge}>D-3 임박</span>
+              </button>
+              {/* 실제 날짜 값. 화면에는 숨기고 위 버튼이 showPicker() 로 달력을 띄움 (달력이 이 근처에 뜨도록 오른쪽에 둠) */}
+              <input
+                ref={dateRef}
+                type="date"
+                value={expiryDate}
+                min={today}
+                onChange={(e) => setExpiryDate(e.target.value)}
+                aria-label="유통기한 선택"
+                tabIndex={-1}
+                style={styles.datePickerInput}
+              />
+              <span
+                style={{
+                  ...styles.urgentBadge,
+                  backgroundColor: badge.className === "is-urgent" ? "#C85A5A" : "#99AB6E",
+                }}
+              >
+                {badge.label}
+              </span>
             </div>
           </div>
 
           {/* Frame 41: 추가완료 버튼 */}
           <div style={styles.submitWrapper}>
             <button
-              style={styles.submitBtn}
-              onClick={() =>
-                alert(`${ingredient} ${quantity}개 (${storage}) 등록 완료!`)
-              }
+              type="button"
+              style={{ ...styles.submitBtn, opacity: saving ? 0.6 : 1 }}
+              disabled={saving}
+              onClick={handleSubmit}
             >
-              추가완료
+              {saving ? "저장 중..." : "추가완료"}
             </button>
           </div>
         </main>
@@ -277,6 +330,7 @@ const styles = {
     transition: "0.2s",
   },
   expiryRow: {
+    position: "relative", // 숨긴 날짜 칸의 기준 (달력 창이 이 줄 근처에 뜸)
     display: "flex",
     alignItems: "center",
     gap: "8px",
@@ -287,32 +341,39 @@ const styles = {
     fontWeight: "700",
     color: "#111",
     border: "none",
-    outline: "none",
     width: "0",
     flex: 1,
     minWidth: 0,
     padding: 0,
     background: "transparent",
     fontFamily: "inherit",
+    textAlign: "left",
+    cursor: "pointer",
   },
   calendarButton: {
-    position: "relative",
     display: "grid",
     placeItems: "center",
     width: "34px",
     height: "34px",
     flexShrink: 0,
+    padding: 0,
+    border: "none",
     borderRadius: "8px",
+    background: "transparent",
     color: "#6E9952",
     cursor: "pointer",
   },
+  // 화면에서는 숨기되 렌더링은 유지 (display: none 이면 showPicker 가 동작하지 않음)
   datePickerInput: {
     position: "absolute",
-    inset: 0,
-    width: "100%",
-    height: "100%",
+    right: 0,
+    bottom: 0,
+    width: "1px",
+    height: "1px",
+    padding: 0,
+    border: 0,
     opacity: 0,
-    cursor: "pointer",
+    pointerEvents: "none",
   },
   calendarButtonSvg: {
     width: "22px",

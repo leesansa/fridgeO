@@ -28,7 +28,7 @@ const Box = ({ items, today, onSelectIngredient, onDeleteIngredient }) => {
               </p>
 
               <p className="ingredient-date">
-                ~{formatDate(item.expiryDate)}
+                {formatDate(item.expiryDate)}
               </p>
             </div>
 
