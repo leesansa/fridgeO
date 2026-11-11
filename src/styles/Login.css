@@ -189,9 +189,10 @@
     top: 201px;
 }
 
+/* 비밀번호 찾기는 새 비밀번호 줄(45px)이 하나 더 있어 버튼·문구를 그만큼 내림 */
 .find-card .find-pw-btn {
     left: calc(50% - 90px);
-    top: 448px;
+    top: 493px;
     width: 180px;
 }
 
@@ -227,8 +228,17 @@
 }
 
 .find-pw-message {
-    top: 506px;
+    top: 551px;
     white-space: pre-line;
+}
+
+/* 회원가입 2단계: 휴대폰 번호 수집 동의 (입력 줄 바로 아래) */
+.signup-consent {
+    display: block;
+    margin: 10px 24px 0 28px;
+    font-size: 14px;
+    line-height: 20px;
+    color: #000;
 }
 
 .signup-submit:disabled {

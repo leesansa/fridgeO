@@ -3,6 +3,7 @@
 import { createServer } from "node:http";
 import { neon } from "@neondatabase/serverless";
 import { createRemoteJWKSet, jwtVerify } from "jose";
+import { sendSms, toKoreanNumber, verifyNeonWebhook } from "./otpWebhook.js";
 
 const { DATABASE_URL, VITE_NEON_AUTH_URL, PORT = 3001 } = process.env;
 if (!DATABASE_URL || !VITE_NEON_AUTH_URL) {
@@ -31,12 +32,20 @@ async function getAuthUser(req) {
   }
 }
 
-async function readJson(req) {
-  let raw = "";
+// 본문 원본 바이트 (웹훅 서명 검증은 파싱 전 원본이 필요)
+async function readBody(req) {
+  const chunks = [];
+  let size = 0;
   for await (const chunk of req) {
-    raw += chunk;
-    if (raw.length > MAX_BODY) throw new HttpError(413, "요청이 너무 큽니다");
+    size += chunk.length;
+    if (size > MAX_BODY) throw new HttpError(413, "요청이 너무 큽니다");
+    chunks.push(chunk);
   }
+  return Buffer.concat(chunks);
+}
+
+async function readJson(req) {
+  const raw = (await readBody(req)).toString("utf8");
   if (!raw) return {};
   try {
     return JSON.parse(raw);
@@ -60,7 +69,7 @@ function parseName(value) {
   return name;
 }
 
-// "METHOD /path" → 처리 함수. 모든 경로는 로그인 필요 (user = 검증된 JWT payload)
+// "METHOD /path" → 처리 함수. 로그인 필요 (user = 검증된 JWT payload). 로그인 없는 경로는 아래 publicRoutes
 const routes = {
   // 내 프로필
   async "GET /api/me"(req, user) {
@@ -77,13 +86,116 @@ const routes = {
   },
 };
 
+// Neon 재시도(같은 event_id)로 문자가 두 번 가지 않게, 보낸 이벤트를 10분간 기억
+// shortcut: 메모리 보관이라 서버 재시작·여러 대 실행 시 중복 가능, 그때 DB 테이블로 옮길 것
+const sentOtpEvents = new Set();
+
+const RECIPE_PAGE = 10;
+
+// 로그인 없이 호출되는 경로. 대신 각자 요청을 검증한다
+const publicRoutes = {
+  // 레시피 분류 목록
+  async "GET /api/categories"() {
+    return sql`SELECT id, name, icon_url FROM categories ORDER BY id`;
+  },
+  // 레시피 목록 (무한 스크롤). cursor = 지난 페이지 마지막 id, 응답의 nextCursor 가 null 이면 끝
+  // category = 분류 id (없으면 전체)
+  async "GET /api/recipes"(req) {
+    const params = new URL(req.url, "http://localhost").searchParams;
+    const cursor = Number(params.get("cursor") ?? 0);
+    if (!Number.isSafeInteger(cursor) || cursor < 0) throw new HttpError(400, "cursor 가 올바르지 않습니다");
+    const category = params.has("category") ? Number(params.get("category")) : null;
+    if (category !== null && (!Number.isSafeInteger(category) || category < 1)) {
+      throw new HttpError(400, "category 가 올바르지 않습니다");
+    }
+    // q = 검색어 (제목 또는 재료 이름에 포함). %, _, \ 는 글자 그대로 찾도록 escape
+    const q = params.get("q")?.trim() || null;
+    if (q && q.length > 50) throw new HttpError(400, "검색어는 50자 이하로 입력하세요");
+    const pattern = q && `%${q.replace(/[\\%_]/g, "\\$&")}%`;
+    // 한 개 더 가져와서 다음 페이지가 있는지 확인
+    const rows = await sql`
+      SELECT r.id, r.title, r.image_url, u.name AS author, s.review_count, s.rating
+      FROM recipes r
+      LEFT JOIN users u ON u.id = r.user_id
+      CROSS JOIN LATERAL (
+        SELECT count(*)::int AS review_count, round(avg(rating), 1)::float AS rating
+        FROM reviews WHERE recipe_id = r.id
+      ) s
+      WHERE r.id > ${cursor}
+        AND (${category}::bigint IS NULL OR r.category_id = ${category})
+        AND (${q}::text IS NULL
+             OR r.title ILIKE ${pattern}
+             OR EXISTS (SELECT 1 FROM recipe_ingredients i WHERE i.recipe_id = r.id AND i.name ILIKE ${pattern}))
+      ORDER BY r.id
+      LIMIT ${RECIPE_PAGE + 1}`;
+    const items = rows.slice(0, RECIPE_PAGE);
+    return { items, nextCursor: rows.length > RECIPE_PAGE ? Number(items.at(-1).id) : null };
+  },
+  // 레시피 상세: 기본 정보 + 리뷰 통계 + 재료 + 만드는 순서(recipe_steps)
+  async "GET /api/recipes/:id"(req) {
+    const id = Number(new URL(req.url, "http://localhost").pathname.split("/").pop());
+    if (!Number.isSafeInteger(id)) throw new HttpError(404, "레시피를 찾을 수 없습니다");
+    const [recipe] = await sql`
+      SELECT r.id, r.title, r.description, r.image_url, r.servings, r.cook_time, r.difficulty,
+             u.name AS author, s.review_count, s.rating, s.positive_count
+      FROM recipes r
+      LEFT JOIN users u ON u.id = r.user_id
+      CROSS JOIN LATERAL (
+        SELECT count(*)::int AS review_count, round(avg(rating), 1)::float AS rating,
+               count(*) FILTER (WHERE rating >= 4)::int AS positive_count
+        FROM reviews WHERE recipe_id = r.id
+      ) s
+      WHERE r.id = ${id}`;
+    if (!recipe) throw new HttpError(404, "레시피를 찾을 수 없습니다");
+    const [ingredients, steps] = await Promise.all([
+      sql`SELECT name, amount FROM recipe_ingredients WHERE recipe_id = ${id} ORDER BY position`,
+      sql`SELECT position, text, image_url FROM recipe_steps WHERE recipe_id = ${id} ORDER BY position`,
+    ]);
+    return { ...recipe, ingredients, steps };
+  },
+  // Neon Auth send.otp 웹훅 → Solapi 문자 발송. Neon 콘솔 Auth > Webhooks 에 이 주소(HTTPS)를 등록
+  async "POST /api/webhooks/neon"(req) {
+    const raw = await readBody(req);
+    let event;
+    try {
+      event = await verifyNeonWebhook(raw, req.headers, JWKS);
+    } catch {
+      throw new HttpError(401, "웹훅 서명이 올바르지 않습니다");
+    }
+    // 이메일 인증번호는 Neon이 직접 보낸다. 문자(전화번호 플러그인)만 처리
+    if (event.event_type !== "send.otp" || event.event_data?.delivery_preference === "email") return { ok: true };
+    if (sentOtpEvents.has(event.event_id)) return { ok: true };
+
+    // 문서상 번호 위치가 명시돼 있지 않아 두 곳을 확인한다
+    const to = toKoreanNumber(event.event_data?.phone_number ?? event.user?.phone_number);
+    if (!to) {
+      // 인증번호는 남기지 않고 필드 이름만 기록 (번호 위치 확인용)
+      console.warn("send.otp 에 국내 휴대폰 번호 없음", Object.keys(event.event_data ?? {}), Object.keys(event.user ?? {}));
+      throw new HttpError(422, "문자를 보낼 전화번호가 없습니다");
+    }
+
+    sentOtpEvents.add(event.event_id);
+    try {
+      await sendSms(to, `[fridgeO] 인증번호는 ${event.event_data.otp_code} 입니다.`);
+    } catch (e) {
+      sentOtpEvents.delete(event.event_id); // 실패하면 Neon 재시도 때 다시 보낼 수 있게
+      throw e;
+    }
+    setTimeout(() => sentOtpEvents.delete(event.event_id), 10 * 60_000).unref();
+    return { ok: true };
+  },
+};
+
 createServer(async (req, res) => {
   const send = (status, body) => {
     res.writeHead(status, { "Content-Type": "application/json; charset=utf-8" });
     res.end(JSON.stringify(body));
   };
   try {
-    const { pathname } = new URL(req.url, "http://localhost");
+    // /api/recipes/123 처럼 숫자 id 가 붙은 주소는 routes 의 ":id" 키로 찾는다
+    const pathname = new URL(req.url, "http://localhost").pathname.replace(/^(\/api\/recipes)\/\d+$/, "$1/:id");
+    const publicHandler = publicRoutes[`${req.method} ${pathname}`];
+    if (publicHandler) return send(200, await publicHandler(req));
     const handler = routes[`${req.method} ${pathname}`];
     if (!handler) return send(404, { error: "없는 주소입니다" });
     const user = await getAuthUser(req);

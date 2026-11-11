@@ -8,6 +8,7 @@
     "server": "node --env-file=.env --watch server/index.js",
     "build": "vite build",
     "lint": "eslint .",
+    "test": "node --test server/",
     "preview": "vite preview"
   },
   "dependencies": {
