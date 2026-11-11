@@ -90,8 +90,61 @@ const routes = {
 // shortcut: 메모리 보관이라 서버 재시작·여러 대 실행 시 중복 가능, 그때 DB 테이블로 옮길 것
 const sentOtpEvents = new Set();
 
+const RECIPE_PAGE = 10;
+
 // 로그인 없이 호출되는 경로. 대신 각자 요청을 검증한다
 const publicRoutes = {
+  // 레시피 분류 목록
+  async "GET /api/categories"() {
+    return sql`SELECT id, name, icon_url FROM categories ORDER BY id`;
+  },
+  // 레시피 목록 (무한 스크롤). cursor = 지난 페이지 마지막 id, 응답의 nextCursor 가 null 이면 끝
+  // category = 분류 id (없으면 전체)
+  async "GET /api/recipes"(req) {
+    const params = new URL(req.url, "http://localhost").searchParams;
+    const cursor = Number(params.get("cursor") ?? 0);
+    if (!Number.isSafeInteger(cursor) || cursor < 0) throw new HttpError(400, "cursor 가 올바르지 않습니다");
+    const category = params.has("category") ? Number(params.get("category")) : null;
+    if (category !== null && (!Number.isSafeInteger(category) || category < 1)) {
+      throw new HttpError(400, "category 가 올바르지 않습니다");
+    }
+    // 한 개 더 가져와서 다음 페이지가 있는지 확인
+    const rows = await sql`
+      SELECT r.id, r.title, r.image_url, u.name AS author, s.review_count, s.rating
+      FROM recipes r
+      LEFT JOIN users u ON u.id = r.user_id
+      CROSS JOIN LATERAL (
+        SELECT count(*)::int AS review_count, round(avg(rating), 1)::float AS rating
+        FROM reviews WHERE recipe_id = r.id
+      ) s
+      WHERE r.id > ${cursor} AND (${category}::bigint IS NULL OR r.category_id = ${category})
+      ORDER BY r.id
+      LIMIT ${RECIPE_PAGE + 1}`;
+    const items = rows.slice(0, RECIPE_PAGE);
+    return { items, nextCursor: rows.length > RECIPE_PAGE ? Number(items.at(-1).id) : null };
+  },
+  // 레시피 상세: 기본 정보 + 리뷰 통계 + 재료 + 만드는 순서(recipe_steps)
+  async "GET /api/recipes/:id"(req) {
+    const id = Number(new URL(req.url, "http://localhost").pathname.split("/").pop());
+    if (!Number.isSafeInteger(id)) throw new HttpError(404, "레시피를 찾을 수 없습니다");
+    const [recipe] = await sql`
+      SELECT r.id, r.title, r.description, r.image_url, r.servings, r.cook_time, r.difficulty,
+             u.name AS author, s.review_count, s.rating, s.positive_count
+      FROM recipes r
+      LEFT JOIN users u ON u.id = r.user_id
+      CROSS JOIN LATERAL (
+        SELECT count(*)::int AS review_count, round(avg(rating), 1)::float AS rating,
+               count(*) FILTER (WHERE rating >= 4)::int AS positive_count
+        FROM reviews WHERE recipe_id = r.id
+      ) s
+      WHERE r.id = ${id}`;
+    if (!recipe) throw new HttpError(404, "레시피를 찾을 수 없습니다");
+    const [ingredients, steps] = await Promise.all([
+      sql`SELECT name, amount FROM recipe_ingredients WHERE recipe_id = ${id} ORDER BY position`,
+      sql`SELECT position, text, image_url FROM recipe_steps WHERE recipe_id = ${id} ORDER BY position`,
+    ]);
+    return { ...recipe, ingredients, steps };
+  },
   // Neon Auth send.otp 웹훅 → Solapi 문자 발송. Neon 콘솔 Auth > Webhooks 에 이 주소(HTTPS)를 등록
   async "POST /api/webhooks/neon"(req) {
     const raw = await readBody(req);
@@ -131,7 +184,8 @@ createServer(async (req, res) => {
     res.end(JSON.stringify(body));
   };
   try {
-    const { pathname } = new URL(req.url, "http://localhost");
+    // /api/recipes/123 처럼 숫자 id 가 붙은 주소는 routes 의 ":id" 키로 찾는다
+    const pathname = new URL(req.url, "http://localhost").pathname.replace(/^(\/api\/recipes)\/\d+$/, "$1/:id");
     const publicHandler = publicRoutes[`${req.method} ${pathname}`];
     if (publicHandler) return send(200, await publicHandler(req));
     const handler = routes[`${req.method} ${pathname}`];
