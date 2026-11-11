@@ -16,9 +16,10 @@ const router = createBrowserRouter([
     element: <Layout />,
     children: [
       { index: true, element:  <MainPage/>},
-      { path: "fridge", element: <Fridge/>},
-      { path: "ingredient", element: <Ingredient/> },
-      { path: "ingredient/edit/:id", element: <IngredientEdit /> },
+      // 내 냉장고 재료는 로그인한 사용자 것만 보여 주므로 로그인 필요
+      { path: "fridge", element: <Fridge/>, loader: requireLogin },
+      { path: "ingredient", element: <Ingredient/>, loader: requireLogin },
+      { path: "ingredient/edit/:id", element: <IngredientEdit />, loader: requireLogin },
       { path: "recipe", element: <RecipeList/> },
       { path: "recipe/:id", element: <RecipeDetail/> },
       { path: "review", element: <ReviewWrite /> },

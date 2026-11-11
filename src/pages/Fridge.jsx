@@ -7,7 +7,7 @@ export default Fridge;
 
 */
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router";
 
 import Header from "../components/Header";
@@ -21,14 +21,90 @@ import "../styles/fridge.css";
 import "../vendor/lucian-icons/sort.js";
 import "../vendor/lucian-icons/grid.js";
 
-import { fridgeIngredients } from "../utils/fridgeData";
+import { apiFetch } from "../utils/auth";
+import { getTodayKey } from "../utils/fridgeUtils";
 
-import {
-  getTodayKey,
-  filterAndSortIngredients,
-} from "../utils/fridgeUtils";
+// DB 행 → List/Box 가 쓰는 모양 ({ id, name, quantity: "300g", storage, expiryDate: "YYYY-MM-DD" | null, image })
+const toItem = (row) => ({
+  id: row.id,
+  name: row.name ?? "이름 없음",
+  quantity: `${row.quantity}${row.unit}`,
+  storage: row.storage,
+  expiryDate: row.expiry_date,
+  image: row.image_url,
+});
 
-import { applyIngredientEdits } from "../utils/fridgeEdit";
+// 내 냉장고 재료 (DB ingredients) 무한 스크롤. 정렬·검색어가 바뀌면 부모가 key 로 새로 만들어서 처음부터 다시
+const FridgeItems = ({ sortBy, q, viewMode, mode, today, rootRef, onSelectIngredient }) => {
+  const [items, setItems] = useState([]);
+  const [nextOffset, setNextOffset] = useState(0); // null = 끝
+  const [error, setError] = useState("");
+  const loadingRef = useRef(false); // 같은 페이지를 두 번 부르지 않게
+  const sentinelRef = useRef(null);
+
+  const loadMore = useCallback(async () => {
+    if (loadingRef.current || nextOffset === null) return;
+    loadingRef.current = true;
+    try {
+      const query = new URLSearchParams({ sort: sortBy, offset: nextOffset });
+      if (q) query.set("q", q);
+      const data = await apiFetch(`/api/ingredients?${query}`);
+      // 첫 페이지는 덮어써서 개발 모드(StrictMode)에서 두 번 불려도 중복되지 않게
+      setItems((prev) => [...(nextOffset === 0 ? [] : prev), ...data.items.map(toItem)]);
+      setNextOffset(data.nextOffset);
+    } catch (e) {
+      setError(e.message);
+    } finally {
+      loadingRef.current = false;
+    }
+  }, [nextOffset, sortBy, q]);
+
+  // 목록 끝(sentinel)이 스크롤 영역에 보이면 다음 페이지. 화면이 찰 때까지 이어 불러옴
+  useEffect(() => {
+    if (error || nextOffset === null) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => entry.isIntersecting && loadMore(),
+      { root: rootRef.current, rootMargin: "200px" },
+    );
+    observer.observe(sentinelRef.current);
+    return () => observer.disconnect();
+  }, [loadMore, error, nextOffset, rootRef]);
+
+  // 화면에서 먼저 빼고 DB 에서 삭제, 실패하면 되돌림
+  async function handleDeleteIngredient(id) {
+    const before = items;
+    setItems((prev) => prev.filter((item) => item.id !== id));
+    try {
+      await apiFetch(`/api/ingredients/${encodeURIComponent(id)}`, { method: "DELETE" });
+    } catch (e) {
+      setItems(before);
+      alert(`삭제하지 못했어요. ${e.message}`);
+    }
+  }
+
+  const viewProps = {
+    items,
+    today,
+    onDeleteIngredient: mode === "delete" ? handleDeleteIngredient : undefined,
+    onSelectIngredient: mode === "edit" ? onSelectIngredient : undefined,
+  };
+  const loaded = nextOffset === null; // 끝까지 받았는데 0개면 "없음" 문구
+
+  return (
+    <>
+      {items.length > 0 && (viewMode === "list" ? <List {...viewProps} /> : <Box {...viewProps} />)}
+      {loaded && items.length === 0 && (
+        <p className="fridge-empty">{q ? "검색한 재료가 없어요." : "냉장고에 재료가 없어요. + 버튼으로 추가해 보세요."}</p>
+      )}
+      {error && (
+        <p className="fridge-empty" role="alert">
+          {error} <button type="button" onClick={() => setError("")}>다시 시도</button>
+        </p>
+      )}
+      <div ref={sentinelRef} aria-hidden="true" />
+    </>
+  );
+};
 
 const filters = [
   { value: "expiry", label: "유통기한순" },
@@ -38,36 +114,13 @@ const filters = [
 
 const Fridge = () => {
   const navigate = useNavigate();
-  const [keyword, setKeyword] = useState("");
+  const [keyword, setKeyword] = useState(""); // 입력창 글자
+  const [q, setQ] = useState(""); // 실제 검색어 (입력이 0.3초 멈추면 반영)
+  const contentRef = useRef(null); // 재료 스크롤 영역 = 무한 스크롤 기준
   const [sortBy, setSortBy] = useState("expiry");
   const [viewMode, setViewMode] = useState("list");
 
   const [mode, setMode] = useState(null);
-
-const [deletedIds, setDeletedIds] = useState(() => {
-  try {
-    const saved = JSON.parse(
-      localStorage.getItem("fridgeo:deleted-ingredient-ids") ?? "[]",
-    );
-    return Array.isArray(saved) ? saved : [];
-  } catch {
-    return [];
-  }
-});
-
-function handleDeleteIngredient(id) {
-  const nextIds = [...new Set([...deletedIds, id])];
-
-  try {
-    localStorage.setItem(
-      "fridgeo:deleted-ingredient-ids",
-      JSON.stringify(nextIds),
-    );
-    setDeletedIds(nextIds);
-  } catch {
-    alert("삭제 내용을 저장하지 못했어요.");
-  }
-}
 
 function handleSelectIngredient(id) {
   navigate(`/ingredient/edit/${encodeURIComponent(id)}`);
@@ -89,21 +142,10 @@ function handleSelectIngredient(id) {
     };
   }, []);
 
-    // 검색어와 정렬 기준을 반영한 재료 목록
-  const visibleIngredients = filterAndSortIngredients(
-  applyIngredientEdits(
-    fridgeIngredients.filter((item) => !deletedIds.includes(item.id)),
-  ),
-  keyword,
-  sortBy,
-);
-
-const ingredientViewProps = {
-  items: visibleIngredients,
-  today,
-  onDeleteIngredient: mode === "delete" ? handleDeleteIngredient : undefined,
-  onSelectIngredient: mode === "edit" ? handleSelectIngredient : undefined,
-};
+  useEffect(() => {
+    const timer = setTimeout(() => setQ(keyword.trim()), 300);
+    return () => clearTimeout(timer);
+  }, [keyword]);
 
   return (
     <div className="fridge-page">
@@ -188,16 +230,20 @@ const ingredientViewProps = {
         </div>
 
         <section
+  ref={contentRef}
   className={`fridge-content fridge-content--${viewMode}`}
   aria-label="보관 중인 식재료"
 >
-  {visibleIngredients.length === 0 ? (
-    <p className="fridge-empty">검색한 재료가 없어요.</p>
-  ) : viewMode === "list" ? (
-    <List {...ingredientViewProps} />
-  ) : (
-    <Box {...ingredientViewProps} />
-  )}
+  <FridgeItems
+    key={`${sortBy}|${q}`}
+    sortBy={sortBy}
+    q={q}
+    viewMode={viewMode}
+    mode={mode}
+    today={today}
+    rootRef={contentRef}
+    onSelectIngredient={handleSelectIngredient}
+  />
 </section>
       </main>
 
