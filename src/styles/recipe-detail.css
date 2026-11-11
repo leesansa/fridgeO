@@ -457,3 +457,8 @@
   opacity: 0.5;
   cursor: default;
 }
+
+/* 북마크 저장 실패 문구: 사진 카드(안쪽 여백 0) 아래 버튼 줄과 맞춤 */
+.detail-bookmark-error {
+  margin: 0 16px 12px;
+}

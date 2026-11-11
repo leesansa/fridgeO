@@ -98,8 +98,7 @@ const routes = {
     if (!Number.isInteger(rating) || rating < 1 || rating > 5) throw new HttpError(400, "별점은 1~5점으로 골라 주세요");
     const comment = typeof body.comment === "string" ? body.comment.trim() : "";
     if (comment.length > 1000) throw new HttpError(400, "리뷰는 1000자 이하로 입력하세요");
-    // 프로필 행이 아직 없으면(가입 직후 POST /api/me 실패 등) 만들어 둔다 → reviews.user_id 외래키 통과
-    await sql`INSERT INTO users (id, name) VALUES (${user.sub}, ${user.name ?? "사용자"}) ON CONFLICT (id) DO NOTHING`;
+    await ensureProfile(user);
     try {
       const [review] = await sql`
         INSERT INTO reviews (user_id, recipe_id, rating, comment)
@@ -117,7 +116,29 @@ const routes = {
     await sql`DELETE FROM reviews WHERE user_id = ${user.sub} AND recipe_id = ${recipeIdOf(req)}`;
     return { ok: true };
   },
+  // 북마크 추가 (이미 있으면 그대로 → 여러 번 눌러도 안전)
+  async "PUT /api/recipes/:id/bookmark"(req, user) {
+    const recipeId = recipeIdOf(req);
+    await ensureProfile(user);
+    try {
+      await sql`INSERT INTO recipe_bookmarks (user_id, recipe_id) VALUES (${user.sub}, ${recipeId}) ON CONFLICT (user_id, recipe_id) DO NOTHING`;
+    } catch (e) {
+      if (e.code === "23503") throw new HttpError(404, "레시피를 찾을 수 없습니다"); // 없는 recipe_id
+      throw e;
+    }
+    return { bookmarked: true };
+  },
+  // 북마크 해제
+  async "DELETE /api/recipes/:id/bookmark"(req, user) {
+    await sql`DELETE FROM recipe_bookmarks WHERE user_id = ${user.sub} AND recipe_id = ${recipeIdOf(req)}`;
+    return { bookmarked: false };
+  },
 };
+
+// 프로필 행이 아직 없으면(가입 직후 POST /api/me 실패 등) 만들어 둔다 → reviews·recipe_bookmarks 의 user_id 외래키 통과
+async function ensureProfile(user) {
+  await sql`INSERT INTO users (id, name) VALUES (${user.sub}, ${user.name ?? "사용자"}) ON CONFLICT (id) DO NOTHING`;
+}
 
 // /api/recipes/<id>/... 주소에서 레시피 id
 function recipeIdOf(req) {
@@ -188,11 +209,14 @@ const publicRoutes = {
       ) s
       WHERE r.id = ${id}`;
     if (!recipe) throw new HttpError(404, "레시피를 찾을 수 없습니다");
-    const [ingredients, steps] = await Promise.all([
+    // 공개 주소지만 로그인 토큰이 같이 오면 내 북마크 여부도 알려 줌 (토큰 없거나 틀리면 false)
+    const user = await getAuthUser(req);
+    const [ingredients, steps, [mark]] = await Promise.all([
       sql`SELECT name, amount FROM recipe_ingredients WHERE recipe_id = ${id} ORDER BY position`,
       sql`SELECT position, text, image_url FROM recipe_steps WHERE recipe_id = ${id} ORDER BY position`,
+      user ? sql`SELECT 1 FROM recipe_bookmarks WHERE user_id = ${user.sub} AND recipe_id = ${id}` : [],
     ]);
-    return { ...recipe, ingredients, steps };
+    return { ...recipe, ingredients, steps, bookmarked: Boolean(mark) };
   },
   // 이 레시피의 리뷰 목록. 내용 있는 리뷰 먼저, 그다음 최신순. offset = 이미 받은 개수, nextOffset 이 null 이면 끝
   // shortcut: OFFSET 페이지라 리뷰가 아주 많아지면 느려짐, 그때 (created_at, id) 커서로 교체
@@ -248,8 +272,8 @@ createServer(async (req, res) => {
     res.end(JSON.stringify(body));
   };
   try {
-    // /api/recipes/123, /api/recipes/123/review(s) 처럼 숫자 id 가 붙은 주소는 routes 의 ":id" 키로 찾는다
-    const pathname = new URL(req.url, "http://localhost").pathname.replace(/^(\/api\/recipes)\/\d+(\/reviews?)?$/, "$1/:id$2");
+    // /api/recipes/123, /api/recipes/123/review(s)·bookmark 처럼 숫자 id 가 붙은 주소는 routes 의 ":id" 키로 찾는다
+    const pathname = new URL(req.url, "http://localhost").pathname.replace(/^(\/api\/recipes)\/\d+(\/reviews?|\/bookmark)?$/, "$1/:id$2");
     const publicHandler = publicRoutes[`${req.method} ${pathname}`];
     if (publicHandler) return send(200, await publicHandler(req));
     const handler = routes[`${req.method} ${pathname}`];

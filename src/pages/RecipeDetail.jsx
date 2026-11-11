@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import Header from "../components/Header.jsx";
-import { apiFetch } from "../utils/auth.js";
+import { apiFetch, isLoggedIn } from "../utils/auth.js";
 import { fridgeIngredients } from "../utils/fridgeData";
 import "../vendor/lucian-icons/check.js"; // 065번 check 아이콘
 import "../vendor/lucian-icons/edit.js"; // 079번 edit(연필) 아이콘
@@ -84,11 +84,34 @@ const RecipeDetail = () => {
     // 체크 = 이미 갖고 있음. 처음엔 냉장고 재료로 채우고, 눌러서 바꿀 수 있음
     const [checked, setChecked] = useState(() => new Set());
 
-    const [saved, setSaved] = useState(false); // shortcut: 화면에만 저장됨(새로고침하면 해제), 저장 목록이 생기면 거기에 연결
+    // 북마크 = DB recipe_bookmarks. 처음 값은 상세 응답의 bookmarked (로그인 안 했으면 false)
+    const [saved, setSaved] = useState(false);
+    const [savingMark, setSavingMark] = useState(false); // 저장 중 연타하면 요청 순서가 꼬이니 잠금
+    const [markError, setMarkError] = useState("");
     // React 가 state 를 속성이 아닌 프로퍼티로 넣으면 getter 만 있어 에러가 나므로 속성으로 직접 지정
     // 불러오는 중에는 북마크가 화면에 없어서 ?. 로 건너뛰고, recipe 가 생기면 다시 지정
     const bookmarkRef = useRef(null);
     useEffect(() => bookmarkRef.current?.setAttribute("state", saved ? "on" : "off"), [saved, recipe]);
+
+    // 아이콘을 먼저 바꾸고 DB에 저장, 실패하면 되돌림. 로그인 안 했으면 로그인 화면으로
+    const toggleBookmark = async () => {
+        if (!(await isLoggedIn())) {
+            navigate("/login");
+            return;
+        }
+        const next = !saved;
+        setSaved(next);
+        setSavingMark(true);
+        setMarkError("");
+        try {
+            await apiFetch(`/api/recipes/${encodeURIComponent(id)}/bookmark`, { method: next ? "PUT" : "DELETE" });
+        } catch (e) {
+            setSaved(!next);
+            setMarkError(e.message);
+        } finally {
+            setSavingMark(false);
+        }
+    };
 
     useEffect(() => {
         let ignore = false; // 다른 레시피로 바로 옮겨 가면 늦게 온 이전 응답은 버림
@@ -96,6 +119,8 @@ const RecipeDetail = () => {
             .then((data) => {
                 if (ignore) return;
                 setLoaded({ id, recipe: data, error: "" });
+                setSaved(data.bookmarked);
+                setMarkError("");
                 setChecked(new Set(data.ingredients.filter((ing) => inFridge.has(norm(ing.name))).map((ing) => ing.name)));
             })
             .catch((e) => !ignore && setLoaded({ id, recipe: null, error: e.message }));
@@ -151,11 +176,12 @@ const RecipeDetail = () => {
                 <section className="detail-card detail-hero">
                     {recipe.image_url && <img src={recipe.image_url} alt={`${recipe.title} 완성 사진`} referrerPolicy="no-referrer" />}
                     <div className="detail-hero-actions">
-                        <button type="button" className="detail-bookmark" aria-label="북마크" aria-pressed={saved} onClick={() => setSaved((s) => !s)}>
+                        <button type="button" className="detail-bookmark" aria-label="북마크" aria-pressed={saved} disabled={savingMark} onClick={toggleBookmark}>
                             <lucian-bookmark size="30" tone="line" accent="#57852f" ref={bookmarkRef} aria-hidden="true" />
                         </button>
                         <button type="button" className="detail-btn" onClick={() => navigate(`/recipe/${id}/review`)}><lucian-edit size="16" tone="line" aria-hidden="true" /> 리뷰 작성하기</button>
                     </div>
+                    {markError && <p className="detail-popup-note detail-bookmark-error" role="alert">{markError}</p>}
                 </section>
 
                 <section className="detail-card">
