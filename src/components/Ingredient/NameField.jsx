@@ -13,12 +13,12 @@ const NameField = ({ value, onChange }) => {
   };
 
   return (
-    <div className="ingredient-add-card">
-      <div className="ingredient-add-label">어떤재료인가요?</div>
-      <input type="text" value={value} onChange={(e) => onChange(e.target.value)} className="ingredient-add-name" />
-      <div className="ingredient-add-tags">
+    <div className="ingredient-form-card">
+      <div className="ingredient-form-label">어떤재료인가요?</div>
+      <input type="text" value={value} onChange={(e) => onChange(e.target.value)} className="ingredient-form-name" />
+      <div className="ingredient-form-tags">
         {TAGS.map((name) => (
-          <button key={name} onClick={() => pick(name)} className={`ingredient-add-tag${selectedTag === name ? " is-selected" : ""}`}>
+          <button key={name} onClick={() => pick(name)} className={`ingredient-form-tag${selectedTag === name ? " is-selected" : ""}`}>
             {name}
           </button>
         ))}

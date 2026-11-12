@@ -48,18 +48,18 @@ export default function FridgeRegister() {
   };
 
   return (
-    <div className="ingredient-add">
+    <div className="ingredient-form">
       {/* 420 * 915 고정 프레임 */}
-      <div className="ingredient-add-frame">
+      <div className="ingredient-form-frame">
         <RegisterHeader />
 
-        <main className="ingredient-add-main">
+        <main className="ingredient-form-main">
           <NameField value={ingredient} onChange={setIngredient} />
-          <div className="ingredient-add-row">
+          <div className="ingredient-form-row">
             <QuantityCounter value={quantity} onChange={setQuantity} />
             <StorageSelect value={storage} onChange={setStorage} />
           </div>
-          <ExpiryField value={expiryDate} onChange={setExpiryDate} today={today} />
+          <ExpiryField value={expiryDate} onChange={setExpiryDate} today={today} min={today} />
           <SubmitButton saving={saving} onClick={handleSubmit} />
         </main>
       </div>

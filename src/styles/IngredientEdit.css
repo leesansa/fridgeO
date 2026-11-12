@@ -1,0 +1,48 @@
+/* 냉장재료 편집 (pages/IngredientEdit.jsx) 에만 있는 부분. 공통 모양은 Ingredient.css 의 .ingredient-form-* */
+
+/* 불러오는 중 / 불러오기 실패 문구 */
+.ingredient-edit-status {
+    margin: 0;
+    padding: 24px;
+    text-align: center;
+}
+
+/* 편집 화면은 프레임 아래에 자체 하단 바가 있어 등록 화면의 아래 여백(68px)이 없음 */
+.ingredient-form-frame.is-edit {
+    padding-bottom: 0;
+}
+
+/* 편집 완료 버튼 아래 여백 */
+.ingredient-form-frame.is-edit .ingredient-form-submit-wrap {
+    padding-bottom: 10px;
+}
+
+/* 수량을 직접 입력할 수 있는 칸 (0 = 다 떨어짐, 소수 가능) */
+.ingredient-edit-quantity {
+    width: 100%;
+    min-width: 0;
+    border: 0;
+    background: transparent;
+    font-size: 16px;
+    font-weight: 600;
+    color: #222;
+    text-align: center;
+}
+
+/* ---------- 하단 바 ---------- */
+.ingredient-edit-nav {
+    display: flex;
+    flex-shrink: 0;
+    justify-content: space-around;
+    align-items: center;
+    height: 68px;
+    background-color: #fff;
+    border-top: 1px solid #e5e5e5;
+}
+
+.ingredient-edit-nav button {
+    padding: 8px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+}

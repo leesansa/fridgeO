@@ -1,7 +1,7 @@
-/* 냉장재료 등록 (pages/Ingredient.jsx), 420 x 915 고정 프레임 */
+/* 냉장재료 등록·편집 공통 (pages/Ingredient.jsx, pages/IngredientEdit.jsx + IngredientEdit.css), 420 x 915 고정 프레임 */
 
 /* ---------- 페이지 틀 ---------- */
-.ingredient-add {
+.ingredient-form {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -11,7 +11,7 @@
     font-family: "Pretendard", "Noto Sans KR", sans-serif;
 }
 
-.ingredient-add-frame {
+.ingredient-form-frame {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -24,7 +24,7 @@
     box-sizing: border-box;
 }
 
-.ingredient-add-header {
+.ingredient-form-header {
     display: flex;
     align-items: center;
     gap: 12px;
@@ -34,13 +34,13 @@
     border-top-right-radius: 20px;
 }
 
-.ingredient-add-header-title {
+.ingredient-form-header-title {
     font-size: 16px;
     font-weight: 700;
     color: #222;
 }
 
-.ingredient-add-main {
+.ingredient-form-main {
     display: flex;
     flex: 1;
     flex-direction: column;
@@ -50,14 +50,14 @@
 }
 
 /* ---------- 카드 공통 ---------- */
-.ingredient-add-card {
+.ingredient-form-card {
     padding: 22px 24px;
     background-color: #fff;
     border-radius: 20px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
 }
 
-.ingredient-add-label {
+.ingredient-form-label {
     margin-bottom: 12px;
     font-size: 13.5px;
     font-weight: 600;
@@ -65,7 +65,7 @@
 }
 
 /* ---------- 어떤재료인가요? ---------- */
-.ingredient-add-name {
+.ingredient-form-name {
     width: 100%;
     margin-bottom: 14px;
     padding: 8px 0 12px 0;
@@ -77,12 +77,12 @@
     color: #222;
 }
 
-.ingredient-add-tags {
+.ingredient-form-tags {
     display: flex;
     gap: 8px;
 }
 
-.ingredient-add-tag {
+.ingredient-form-tag {
     padding: 6px 14px;
     border: none;
     border-radius: 16px;
@@ -93,31 +93,31 @@
     cursor: pointer;
 }
 
-.ingredient-add-tag.is-selected {
+.ingredient-form-tag.is-selected {
     background-color: #7fa766;
     color: #fff;
 }
 
 /* ---------- 수량 & 보관 방법 (한 줄에 두 카드) ---------- */
-.ingredient-add-row {
+.ingredient-form-row {
     display: flex;
     gap: 16px;
 }
 
-.ingredient-add-card.is-quantity,
-.ingredient-add-card.is-storage {
+.ingredient-form-card.is-quantity,
+.ingredient-form-card.is-storage {
     padding: 20px 18px;
 }
 
-.ingredient-add-card.is-quantity {
+.ingredient-form-card.is-quantity {
     flex: 1;
 }
 
-.ingredient-add-card.is-storage {
+.ingredient-form-card.is-storage {
     flex: 1.15;
 }
 
-.ingredient-add-counter {
+.ingredient-form-counter {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -127,7 +127,7 @@
     background-color: #f2f3f2;
 }
 
-.ingredient-add-counter-btn {
+.ingredient-form-counter-btn {
     border: none;
     background: transparent;
     color: #6e9952;
@@ -136,13 +136,13 @@
     cursor: pointer;
 }
 
-.ingredient-add-counter-value {
+.ingredient-form-counter-value {
     font-size: 16px;
     font-weight: 600;
     color: #222;
 }
 
-.ingredient-add-storage {
+.ingredient-form-storage {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -152,7 +152,7 @@
     background-color: #f2f3f2;
 }
 
-.ingredient-add-storage-btn {
+.ingredient-form-storage-btn {
     padding: 6px 11px;
     border: none;
     border-radius: 14px;
@@ -164,18 +164,18 @@
     transition: 0.2s;
 }
 
-.ingredient-add-storage-btn.is-selected {
+.ingredient-form-storage-btn.is-selected {
     background-color: #7fa766;
     color: #fff;
 }
 
 /* ---------- 유통기한 ---------- */
-.ingredient-add-card.is-expiry {
+.ingredient-form-card.is-expiry {
     width: 100%;
     box-sizing: border-box;
 }
 
-.ingredient-add-expiry {
+.ingredient-form-expiry {
     position: relative; /* 숨긴 날짜 칸의 기준 (달력 창이 이 줄 근처에 뜸) */
     display: flex;
     align-items: center;
@@ -183,7 +183,7 @@
     margin-top: 6px;
 }
 
-.ingredient-add-expiry-text {
+.ingredient-form-expiry-text {
     flex: 1;
     width: 0;
     min-width: 0;
@@ -198,7 +198,7 @@
     cursor: pointer;
 }
 
-.ingredient-add-calendar {
+.ingredient-form-calendar {
     display: grid;
     flex-shrink: 0;
     place-items: center;
@@ -212,7 +212,7 @@
     cursor: pointer;
 }
 
-.ingredient-add-calendar svg {
+.ingredient-form-calendar svg {
     width: 22px;
     height: 22px;
     fill: none;
@@ -223,7 +223,7 @@
 }
 
 /* 화면에서는 숨기되 렌더링은 유지 (display: none 이면 showPicker 가 동작하지 않음) */
-.ingredient-add-date-input {
+.ingredient-form-date-input {
     position: absolute;
     right: 0;
     bottom: 0;
@@ -236,7 +236,7 @@
 }
 
 /* 남은 기한 배지: 5일 이하면 빨강, 아니면 초록 */
-.ingredient-add-badge {
+.ingredient-form-badge {
     padding: 7px 16px;
     border-radius: 18px;
     background-color: #99ab6e;
@@ -245,19 +245,19 @@
     font-weight: 600;
 }
 
-.ingredient-add-badge.is-urgent {
+.ingredient-form-badge.is-urgent {
     background-color: #c85a5a;
 }
 
 /* ---------- 추가완료 ---------- */
-.ingredient-add-submit-wrap {
+.ingredient-form-submit-wrap {
     display: flex;
     justify-content: center;
     margin-top: auto;
     padding-bottom: 0;
 }
 
-.ingredient-add-submit {
+.ingredient-form-submit {
     width: 94%;
     padding: 18px 0;
     border: none;
@@ -269,6 +269,6 @@
     cursor: pointer;
 }
 
-.ingredient-add-submit:disabled {
+.ingredient-form-submit:disabled {
     opacity: 0.6;
 }

@@ -2,14 +2,14 @@ const METHODS = ["냉장", "냉동", "실온"]; // DB ingredients.storage 에 �
 
 // 보관 방법: 냉장 · 냉동 · 실온 중 하나
 const StorageSelect = ({ value, onChange }) => (
-  <div className="ingredient-add-card is-storage">
-    <div className="ingredient-add-label">보관 방법</div>
-    <div className="ingredient-add-storage">
+  <div className="ingredient-form-card is-storage">
+    <div className="ingredient-form-label">보관 방법</div>
+    <div className="ingredient-form-storage">
       {METHODS.map((method) => (
         <button
           key={method}
           onClick={() => onChange(method)}
-          className={`ingredient-add-storage-btn${value === method ? " is-selected" : ""}`}
+          className={`ingredient-form-storage-btn${value === method ? " is-selected" : ""}`}
         >
           {method}
         </button>
