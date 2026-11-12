@@ -1,34 +1,55 @@
-import React, { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router";
-import { fridgeIngredients } from "../utils/fridgeData";
-import { applyIngredientEdits, saveIngredientEdit } from "../utils/fridgeEdit";
+import { apiFetch } from "../utils/auth";
+import { getExpiryBadge, getTodayKey } from "../utils/fridgeUtils";
 import backIcon from "../assets/lucide_chevron_left_icon.png";
 
+// /ingredient/edit/:id — DB(ingredients)의 내 재료를 불러와 고치고 저장 (로그인은 router 에서 확인)
 export default function IngredientEdit() {
   const { id } = useParams();
-  const item = applyIngredientEdits(fridgeIngredients).find(
-    (ingredient) => ingredient.id === id,
-  );
+  // 응답을 어느 id 것인지와 함께 보관 → 주소의 id 가 바뀌면 자동으로 "불러오는 중"
+  const [loaded, setLoaded] = useState({ id: null, item: null, error: "" });
 
-  if (!item) {
-    return <Link to="/fridge">재료를 찾을 수 없어요. 냉장고로 돌아가기</Link>;
+  useEffect(() => {
+    let ignore = false;
+    apiFetch(`/api/ingredients/${encodeURIComponent(id)}`)
+      .then((item) => !ignore && setLoaded({ id, item, error: "" }))
+      .catch((e) => !ignore && setLoaded({ id, item: null, error: e.message }));
+    return () => { ignore = true; };
+  }, [id]);
+
+  if (loaded.id !== id) return <p style={styles.status}>재료를 불러오는 중...</p>;
+  if (!loaded.item) {
+    return <p style={styles.status} role="alert">{loaded.error} <Link to="/fridge">냉장고로 돌아가기</Link></p>;
   }
 
-  return <IngredientEditForm key={item.id} item={item} />;
+  return <IngredientEditForm key={loaded.item.id} item={loaded.item} />;
 }
 
 function IngredientEditForm({ item }) {
   const navigate = useNavigate();
-  const quantityParts = item.quantity.match(/^(\d+(?:\.\d+)?)(.*)$/);
-  const unit = quantityParts?.[2] ?? "";
+  const today = getTodayKey();
+  const unit = item.unit;
 
-  const [ingredient, setIngredient] = useState(item.name);
+  const [ingredient, setIngredient] = useState(item.name ?? "");
   const [selectedTag, setSelectedTag] = useState(item.name);
-  const [quantity, setQuantity] = useState(quantityParts?.[1] ?? "1");
+  const [quantity, setQuantity] = useState(item.quantity);
   const [storage, setStorage] = useState(item.storage);
-  const [expiryDate, setExpiryDate] = useState(item.expiryDate);
+  const [expiryDate, setExpiryDate] = useState(item.expiry_date ?? "");
+  const [saving, setSaving] = useState(false); // 저장 중 연타 방지
+  const badge = getExpiryBadge(expiryDate, today);
 
-  function handleSave() {
+  // 숨겨 둔 날짜 칸의 달력 창 열기. showPicker 가 없는 옛 브라우저는 날짜 칸에 포커스만 줌
+  const dateRef = useRef(null);
+  const openPicker = () => {
+    try {
+      dateRef.current.showPicker();
+    } catch {
+      dateRef.current.focus();
+    }
+  };
+
+  async function handleSave() {
     const name = ingredient.trim();
 
     if (!name || !expiryDate) {
@@ -36,38 +57,30 @@ function IngredientEditForm({ item }) {
       return;
     }
 
-const amount = Number(quantity);
+    const amount = Number(quantity);
 
-if (!Number.isFinite(amount) || amount <= 0) {
-  alert("수량은 0보다 큰 숫자로 입력해 주세요.");
-  return;
-}
-
-const changes = {
-  name,
-  quantity: `${amount}${unit}`,
-  storage,
-  expiryDate,
-};
-
-    try {
-      saveIngredientEdit(item.id, changes);
-    } catch {
-      alert("편집 내용을 저장하지 못했어요.");
+    if (!Number.isFinite(amount) || amount <= 0) {
+      alert("수량은 0보다 큰 숫자로 입력해 주세요.");
       return;
     }
 
-    alert(
-      `편집 완료!\n${changes.name} ${changes.quantity} (${changes.storage})\n` +
-        `소비기한: ${changes.expiryDate}`,
-    );
-
-    navigate("/fridge", { replace: true });
+    setSaving(true);
+    try {
+      await apiFetch(`/api/ingredients/${encodeURIComponent(item.id)}`, {
+        method: "PATCH",
+        body: { name, quantity: amount, unit, storage, expiryDate },
+      });
+      navigate("/fridge", { replace: true });
+    } catch (e) {
+      alert(`편집 내용을 저장하지 못했어요. ${e.message}`);
+      setSaving(false);
+    }
   }
 
+  // 재료 사전(ingredient_catalog)에 있는 이름과 맞춤 ("계란"은 사전에서 "달걀")
   const tags = [
     { name: "사과" },
-    { name: "계란" },
+    { name: "달걀" },
     { name: "대파" },
     { name: "우유" },
   ];
@@ -192,33 +205,46 @@ const changes = {
           >
             <div style={styles.cardLabel}>유통기한</div>
             <div style={styles.expiryRow}>
-              <input
-                type="text"
-                value={`${expiryDate} 까지`}
-                readOnly
-                style={styles.expiryInput}
-              />
-              <label style={styles.calendarButton} aria-label="유통기한 달력 열기">
+              {/* 날짜 글자와 달력 아이콘 모두 누르면 브라우저 달력 창이 열림 */}
+              <button type="button" style={styles.expiryInput} onClick={openPicker}>
+                {expiryDate ? `${expiryDate} 까지` : "날짜를 골라 주세요"}
+              </button>
+              <button type="button" style={styles.calendarButton} aria-label="유통기한 달력 열기" onClick={openPicker}>
                 <svg viewBox="0 0 24 24" aria-hidden="true" style={styles.calendarButtonSvg}>
                   <rect x="3" y="5" width="18" height="16" rx="2" />
                   <path d="M16 3v4M8 3v4M3 10h18" />
                 </svg>
-                <input
-                  type="date"
-                  value={expiryDate}
-                  onChange={(e) => setExpiryDate(e.target.value)}
-                  aria-label="유통기한 선택"
-                  style={styles.datePickerInput}
-                />
-              </label>
-              <span style={styles.urgentBadge}>D-3 임박</span>
+              </button>
+              {/* 실제 날짜 값. 화면에는 숨기고 위 버튼이 showPicker() 로 달력을 띄움 */}
+              <input
+                ref={dateRef}
+                type="date"
+                value={expiryDate}
+                onChange={(e) => setExpiryDate(e.target.value)}
+                aria-label="유통기한 선택"
+                tabIndex={-1}
+                style={styles.datePickerInput}
+              />
+              <span
+                style={{
+                  ...styles.urgentBadge,
+                  backgroundColor: badge.className === "is-urgent" ? "#C85A5A" : "#99AB6E",
+                }}
+              >
+                {badge.label}
+              </span>
             </div>
           </div>
 
           {/* Frame 41: 편집완료 버튼 */}
           <div style={styles.submitWrapper}>
-            <button type="button" style={styles.submitBtn} onClick={handleSave}>
-            편집 완료
+            <button
+              type="button"
+              style={{ ...styles.submitBtn, opacity: saving ? 0.6 : 1 }}
+              disabled={saving}
+              onClick={handleSave}
+            >
+              {saving ? "저장 중..." : "편집 완료"}
           </button>
           </div>
         </main>
@@ -418,7 +444,13 @@ const styles = {
     cursor: "pointer",
     transition: "0.2s",
   },
+  status: {
+    margin: 0,
+    padding: "24px",
+    textAlign: "center",
+  },
   expiryRow: {
+    position: "relative", // 숨긴 날짜 칸의 기준 (달력 창이 이 줄 근처에 뜸)
     display: "flex",
     alignItems: "center",
     gap: "8px",
@@ -429,32 +461,39 @@ const styles = {
     fontWeight: "700",
     color: "#111",
     border: "none",
-    outline: "none",
     width: "0",
     flex: 1,
     minWidth: 0,
     padding: 0,
     background: "transparent",
     fontFamily: "inherit",
+    textAlign: "left",
+    cursor: "pointer",
   },
   calendarButton: {
-    position: "relative",
     display: "grid",
     placeItems: "center",
     width: "34px",
     height: "34px",
     flexShrink: 0,
+    padding: 0,
+    border: "none",
     borderRadius: "8px",
+    background: "transparent",
     color: "#6E9952",
     cursor: "pointer",
   },
+  // 화면에서는 숨기되 렌더링은 유지 (display: none 이면 showPicker 가 동작하지 않음)
   datePickerInput: {
     position: "absolute",
-    inset: 0,
-    width: "100%",
-    height: "100%",
+    right: 0,
+    bottom: 0,
+    width: "1px",
+    height: "1px",
+    padding: 0,
+    border: 0,
     opacity: 0,
-    cursor: "pointer",
+    pointerEvents: "none",
   },
   calendarButtonSvg: {
     width: "22px",

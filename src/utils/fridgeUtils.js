@@ -25,48 +25,24 @@ export function getDaysLeft(expiryDate, today) {
   return getDayNumber(expiryDate) - getDayNumber(today);
 }
 
+// 남은 기한: D-3(3일 남음) → D-day(오늘까지) → D+2(2일 지남). 기한이 없는 재료는 "기한 없음"
 export function getExpiryBadge(expiryDate, today) {
+  if (!expiryDate) return { label: "기한 없음", className: "is-safe" };
+
   const daysLeft = getDaysLeft(expiryDate, today);
 
   return {
     label:
-      daysLeft < 0
-        ? `기한 ${Math.abs(daysLeft)}일 경과`
-        : daysLeft === 0
-          ? "D-day"
-          : `D-${daysLeft}`,
+      daysLeft === 0
+        ? "D-day"
+        : daysLeft > 0
+          ? `D-${daysLeft}`
+          : `D+${-daysLeft}`,
     className: daysLeft <= 5 ? "is-urgent" : "is-safe",
   };
 }
 
+// "2026-11-30" → "~2026.11.30", 기한이 없으면 빈 글자
 export function formatDate(dateString) {
-  return dateString.replaceAll("-", ".");
-}
-
-export function filterAndSortIngredients(
-  ingredients,
-  keyword,
-  sortBy,
-) {
-  const query = keyword.trim().toLocaleLowerCase("ko-KR");
-  const storageOrder = { 냉장: 0, 냉동: 1, 실온: 2 };
-
-  return ingredients
-    .filter((item) =>
-      item.name.toLocaleLowerCase("ko-KR").includes(query),
-    )
-    .sort((a, b) => {
-      if (sortBy === "name") {
-        return a.name.localeCompare(b.name, "ko");
-      }
-
-      if (sortBy === "storage") {
-        return (
-          storageOrder[a.storage] - storageOrder[b.storage] ||
-          a.expiryDate.localeCompare(b.expiryDate)
-        );
-      }
-
-      return a.expiryDate.localeCompare(b.expiryDate);
-    });
+  return dateString ? `~${dateString.replaceAll("-", ".")}` : "";
 }

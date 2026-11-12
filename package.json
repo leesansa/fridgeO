@@ -5,11 +5,16 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "server": "node --env-file=.env --watch server/index.js",
     "build": "vite build",
     "lint": "eslint .",
+    "test": "node --test server/",
     "preview": "vite preview"
   },
   "dependencies": {
+    "@neon/neon-js": "^0.10.2",
+    "@neondatabase/serverless": "^1.2.0",
+    "jose": "^6.2.17",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "react-router": "^8.5.1"

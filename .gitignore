@@ -9,6 +9,11 @@ lerna-debug.log*
 
 node_modules
 dist
+
+# 환경 변수 (DB 비밀번호 등). 값 없는 .env.example만 올린다
+.env
+.env.*
+!.env.example
 dist-ssr
 *.local
 

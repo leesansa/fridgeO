@@ -1,0 +1,333 @@
+/* 리뷰 작성 페이지 (피그마 "리뷰창", 420px 기준) */
+.review-page {
+  --green: #94ad6e;
+
+  width: 100%;
+  max-width: 420px;
+  min-height: 100dvh;
+  margin: 0 auto;
+  padding-bottom: 90px; /* 하단 탭 높이만큼 */
+  background: #f2f2f2;
+  color: #000;
+  font-family: "Paperlogy", system-ui, sans-serif;
+}
+
+.review-page,
+.review-page * {
+  box-sizing: border-box;
+}
+
+.review-header {
+  position: relative;
+  height: 80px;
+}
+
+.review-header h1 {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 30px;
+  margin: 0;
+  font-size: 24px;
+  text-align: center;
+  pointer-events: none; /* 전체 너비라 뒤로가기 버튼 클릭을 가리지 않게 */
+}
+
+.review-back {
+  position: absolute;
+  left: 0;
+  top: 21px;
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  border: 0;
+  background: none;
+  z-index: 1;
+  cursor: pointer;
+}
+
+.review-back svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  fill: none;
+  stroke: var(--green);
+  stroke-width: 2.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.review-logo {
+  position: absolute;
+  left: 36px;
+  top: 0;
+  width: 80px;
+  height: 80px;
+}
+
+.review-main {
+  padding: 0 10px;
+}
+
+.review-recipe-name {
+  margin: 0 0 10px 10px;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+/* 사진 카드: 400 x 290, 사진은 410 x 264 로 가운데 위쪽 */
+.review-photo {
+  height: 290px;
+  overflow: hidden;
+  border-radius: 10px;
+  background: #fff;
+}
+
+.review-photo img {
+  display: block;
+  width: 410px;
+  max-width: none;
+  height: 264px;
+  margin: 11px 0 0 -5px;
+  object-fit: cover;
+}
+
+.review-rate {
+  padding: 18px 9px 0;
+}
+
+.review-rate-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.review-rate-head > img:first-child {
+  width: 40px;
+  height: 40px;
+}
+
+.review-rate h2,
+.review-detail h2 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+/* 별 이미지는 그대로 두고, 회색 별 위에 선택한 개수만큼만 원래 색 별을 보여줌 */
+.review-stars {
+  position: relative;
+  flex-shrink: 0;
+  width: 144px;
+  height: 29px;
+  margin-left: 8px;
+}
+
+.review-stars img {
+  display: block;
+  width: 144px;
+  height: 29px;
+  max-width: none;
+}
+
+.review-stars-off {
+  filter: grayscale(1);
+  opacity: 0.35;
+}
+
+.review-stars-on {
+  position: absolute;
+  inset: 0 auto 0 0;
+  overflow: hidden;
+}
+
+.review-stars label {
+  position: absolute;
+  top: 0;
+  width: 20%;
+  height: 100%;
+  cursor: pointer;
+}
+
+.review-stars input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  margin: 0;
+  cursor: pointer;
+}
+
+.review-stars:has(input:focus-visible) {
+  outline: 2px solid #689d4b;
+}
+
+.review-q {
+  margin: 20px 0 0 42px;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.review-taste {
+  margin: 14px 0 0 42px;
+  padding: 0;
+  border: 0;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.review-taste legend {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0;
+  margin-bottom: 6px;
+}
+
+.review-taste legend img {
+  width: 30px;
+  height: 30px;
+}
+
+.review-taste label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 29px;
+  padding-left: 10px;
+  cursor: pointer;
+}
+
+.review-taste label input {
+  position: absolute;
+  opacity: 0;
+}
+
+.review-taste label img {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+/* 선택된 항목은 회색 점 대신 빨간색 */
+.review-taste input:checked + img {
+  background: #dd635f; /* 로고의 빨간색 */
+  box-shadow: 0 0 0 3px #f6d6d5;
+  transform: scale(1.4);
+  /* 회색 동그라미 이미지가 배경색을 가리므로 밖으로 밀어내 빨간 배경이 보이게 함 */
+  object-fit: none;
+  object-position: 100px 0;
+}
+
+.review-taste input:focus-visible + img {
+  outline: 2px solid #689d4b;
+  outline-offset: 3px;
+}
+
+.review-detail h2 {
+  margin: 44px 0 8px 12px;
+  font-size: 16px;
+}
+
+.review-box {
+  display: flex;
+  flex-direction: column;
+  height: 150px;
+  padding: 18px 18px 14px;
+  border-radius: 10px;
+  background: #fff;
+}
+
+.review-box textarea {
+  flex: 1;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  resize: none;
+  background: none;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+
+
+/* 버튼: 레시피 상세(.detail-btn--wide)·냉장고 버튼과 같은 모양 (42px, 둥근 10px, 14px 보통 굵기) */
+.review-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 17px;
+}
+
+.review-submit {
+  flex: none;
+  height: 42px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: 10px;
+  background: var(--green);
+  color: #fff;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 400;
+  cursor: pointer;
+}
+
+.review-submit:not(.review-submit--sub) {
+  flex: 1; /* 작성 완료가 주 버튼이라 남는 폭을 차지 */
+}
+
+.review-submit--sub {
+  background: #fff;
+  box-shadow: inset 0 0 0 1px var(--green);
+  color: #789f4b;
+}
+
+.review-submit:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.review-error {
+  margin: 12px 4px 0;
+  color: #c06563;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.review-page :is(button, textarea):focus-visible {
+  outline: 2px solid #689d4b;
+}
+
+
+
+/* 사진 첨부 (상세 리뷰 칸 아래쪽) */
+.review-attach {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.review-attach img {
+  width: 20px;
+  height: 20px;
+}
+
+.review-attached {
+  display: block;
+  width: 100%;
+  max-height: 300px;
+  margin-top: 10px;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+.review-box textarea::placeholder {
+  color: #b9b9b9;
+}
+

@@ -94,7 +94,7 @@
   left: 26px;
   top: 34px;
   width: 348px;
-  height: 62px;
+  height: 64px;
   overflow: hidden;
   outline: none;
 }
@@ -121,7 +121,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px;
+  gap: 4px;
   width: 100%;
   padding: 2px 0 0;
   border: none;
@@ -147,10 +147,22 @@
 .cat span {
   font-family: "42dot Sans", "Malgun Gothic", sans-serif;
   font-size: 10.5px;
-  line-height: 13px;
+  line-height: 11px;
   letter-spacing: -0.03em;
-  white-space: nowrap;
+  word-break: keep-all; /* 긴 이름은 "/" 뒤에서만 두 줄로 */
+  text-align: center;
   color: #333;
+}
+
+/* 고른 분류: 그림 테두리 + 초록 글자 */
+.cat[aria-pressed="true"] img,
+.cat[aria-pressed="true"] svg {
+  box-shadow: 0 0 0 2px var(--green);
+}
+
+.cat[aria-pressed="true"] span {
+  font-weight: 700;
+  color: #6aa121;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -159,11 +171,35 @@
   }
 }
 
-/* ---- 레시피 카드: 400 너비, 가운데 ---- */
-.card {
+/* ---- 레시피 카드 목록: 분류 아래부터 하단 바(60px) 위까지, 안에서 무한 스크롤 ---- */
+.card-list {
   position: absolute;
   left: 10px;
+  top: 201px;
+  bottom: 60px;
   width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding-bottom: 24px;
+  overflow-y: auto;
+  scrollbar-width: none; /* 디자인 폭 유지, 휠·터치 스크롤은 그대로 */
+}
+
+.list-status {
+  margin: 0;
+  text-align: center;
+  font-family: var(--f-sans);
+  font-size: 14px;
+  color: #666;
+}
+
+/* ---- 레시피 카드: 400 x 130 ---- */
+.card {
+  position: relative;
+  flex: none;
+  width: 400px;
+  height: 130px;
   background: #fff;
   border-radius: 5px;
   overflow: hidden;
@@ -174,18 +210,16 @@
   box-sizing: border-box;
 }
 
-/* 사진 파일 왼쪽 위에 순번 상자가 박혀 있어서, 사진을 키워 그 모서리(위·왼쪽 약 17%)를 잘라냄 */
 .card-photo {
   overflow: hidden;
   border-radius: 2px;
+  background: var(--placeholder);
 }
 
 .card-photo img {
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  width: 120%;
-  height: 120%;
+  display: block;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
 }
 
@@ -195,7 +229,12 @@
   font-weight: 400;
   font-size: 16px;
   line-height: 21px;
-  white-space: nowrap; /* 줄바꿈은 디자인처럼 <br /> 자리에서만 */
+  word-break: keep-all;
+  /* DB 제목은 길이가 제각각이라 두 줄까지만 보이고 나머지는 … */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
   color: #000;
 }
 
@@ -231,6 +270,10 @@
     center / 80% 76% no-repeat;
   mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpolygon points='50,0 61.8,35.4 100,38.2 69.1,61.8 79.4,100 50,76.4 20.6,100 30.9,61.8 0,38.2 38.2,35.4'/%3E%3C/svg%3E")
     center / 80% 76% no-repeat;
+}
+
+.star--off {
+  background: #ddd;
 }
 
 /* 화면에는 안 보이고 화면 읽기 프로그램만 읽는 글자 */

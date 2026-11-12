@@ -148,3 +148,23 @@
     line-height: 18px;
     color: #303030;
 }
+
+/* 유통기한 알림의 D-day 배지 (냉장고 화면 배지와 같은 색) */
+.notification-badge {
+    margin-left: 6px;
+    padding: 1px 7px;
+    border-radius: 8px;
+    font-size: 11px;
+    font-style: normal;
+    font-weight: 600;
+    color: #fff;
+    vertical-align: 1px;
+}
+
+.notification-badge.is-urgent {
+    background: #c06563;
+}
+
+.notification-badge.is-safe {
+    background: #99ab6e;
+}
