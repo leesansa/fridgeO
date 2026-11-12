@@ -1,0 +1,274 @@
+/* 냉장재료 등록 (pages/Ingredient.jsx), 420 x 915 고정 프레임 */
+
+/* ---------- 페이지 틀 ---------- */
+.ingredient-add {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    background-color: #e5e7eb;
+    font-family: "Pretendard", "Noto Sans KR", sans-serif;
+}
+
+.ingredient-add-frame {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 420px;
+    height: 915px;
+    padding-bottom: 68px;
+    background-color: #f3f4f3;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+.ingredient-add-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 22px 24px;
+    background-color: #fff;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+}
+
+.ingredient-add-header-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #222;
+}
+
+.ingredient-add-main {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 22px;
+    padding: 28px 26px;
+    box-sizing: border-box;
+}
+
+/* ---------- 카드 공통 ---------- */
+.ingredient-add-card {
+    padding: 22px 24px;
+    background-color: #fff;
+    border-radius: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+}
+
+.ingredient-add-label {
+    margin-bottom: 12px;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: #444;
+}
+
+/* ---------- 어떤재료인가요? ---------- */
+.ingredient-add-name {
+    width: 100%;
+    margin-bottom: 14px;
+    padding: 8px 0 12px 0;
+    border: none;
+    border-bottom: 1px solid #eaeaea;
+    outline: none;
+    font-size: 18px;
+    font-weight: 600;
+    color: #222;
+}
+
+.ingredient-add-tags {
+    display: flex;
+    gap: 8px;
+}
+
+.ingredient-add-tag {
+    padding: 6px 14px;
+    border: none;
+    border-radius: 16px;
+    background-color: #efefef;
+    color: #444;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.ingredient-add-tag.is-selected {
+    background-color: #7fa766;
+    color: #fff;
+}
+
+/* ---------- 수량 & 보관 방법 (한 줄에 두 카드) ---------- */
+.ingredient-add-row {
+    display: flex;
+    gap: 16px;
+}
+
+.ingredient-add-card.is-quantity,
+.ingredient-add-card.is-storage {
+    padding: 20px 18px;
+}
+
+.ingredient-add-card.is-quantity {
+    flex: 1;
+}
+
+.ingredient-add-card.is-storage {
+    flex: 1.15;
+}
+
+.ingredient-add-counter {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 8px;
+    padding: 8px 14px;
+    border-radius: 18px;
+    background-color: #f2f3f2;
+}
+
+.ingredient-add-counter-btn {
+    border: none;
+    background: transparent;
+    color: #6e9952;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.ingredient-add-counter-value {
+    font-size: 16px;
+    font-weight: 600;
+    color: #222;
+}
+
+.ingredient-add-storage {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 8px;
+    padding: 5px;
+    border-radius: 18px;
+    background-color: #f2f3f2;
+}
+
+.ingredient-add-storage-btn {
+    padding: 6px 11px;
+    border: none;
+    border-radius: 14px;
+    background-color: transparent;
+    color: #444;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.ingredient-add-storage-btn.is-selected {
+    background-color: #7fa766;
+    color: #fff;
+}
+
+/* ---------- 유통기한 ---------- */
+.ingredient-add-card.is-expiry {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.ingredient-add-expiry {
+    position: relative; /* 숨긴 날짜 칸의 기준 (달력 창이 이 줄 근처에 뜸) */
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 6px;
+}
+
+.ingredient-add-expiry-text {
+    flex: 1;
+    width: 0;
+    min-width: 0;
+    padding: 0;
+    border: none;
+    background: transparent;
+    font-family: inherit;
+    font-size: 17px;
+    font-weight: 700;
+    color: #111;
+    text-align: left;
+    cursor: pointer;
+}
+
+.ingredient-add-calendar {
+    display: grid;
+    flex-shrink: 0;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    border: none;
+    border-radius: 8px;
+    background: transparent;
+    color: #6e9952;
+    cursor: pointer;
+}
+
+.ingredient-add-calendar svg {
+    width: 22px;
+    height: 22px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+/* 화면에서는 숨기되 렌더링은 유지 (display: none 이면 showPicker 가 동작하지 않음) */
+.ingredient-add-date-input {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    border: 0;
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* 남은 기한 배지: 5일 이하면 빨강, 아니면 초록 */
+.ingredient-add-badge {
+    padding: 7px 16px;
+    border-radius: 18px;
+    background-color: #99ab6e;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.ingredient-add-badge.is-urgent {
+    background-color: #c85a5a;
+}
+
+/* ---------- 추가완료 ---------- */
+.ingredient-add-submit-wrap {
+    display: flex;
+    justify-content: center;
+    margin-top: auto;
+    padding-bottom: 0;
+}
+
+.ingredient-add-submit {
+    width: 94%;
+    padding: 18px 0;
+    border: none;
+    border-radius: 28px;
+    background-color: #4e7a36;
+    color: #fff;
+    font-size: 19px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.ingredient-add-submit:disabled {
+    opacity: 0.6;
+}
