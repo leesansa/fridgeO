@@ -10,7 +10,7 @@ import ReviewWrite from "./pages/ReviewWrite";
 import MyPage from "./pages/MyPage";
 import PrivacyInfo from "./pages/PrivacyInfo";
 import Settings from "./pages/Settings";
-import Search from "./pages/Search";
+import Search from "./components/Search";
 import Loading from "./pages/Loading";
 import Notification from "./pages/Notification";
 import IngredientEdit from "./pages/IngredientEdit";

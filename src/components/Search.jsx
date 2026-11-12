@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router";
-import Header from "../components/Header";
+import Header from "./Header";
 import { apiFetch, isLoggedIn } from "../utils/auth";
 import { getExpiryBadge, getTodayKey } from "../utils/fridgeUtils";
 import "../styles/recipes.css";
