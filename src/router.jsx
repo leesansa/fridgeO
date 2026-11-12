@@ -8,6 +8,7 @@ import RecipeList from "./pages/RecipeList";
 import RecipeDetail from "./pages/RecipeDetail";
 import ReviewWrite from "./pages/ReviewWrite";
 import MyPage from "./pages/MyPage";
+import Search from "./pages/Search";
 import Loading from "./pages/Loading";
 import Notification from "./pages/Notification";
 import IngredientEdit from "./pages/IngredientEdit";
@@ -32,6 +33,8 @@ const router = createBrowserRouter([
       // 리뷰는 로그인한 사용자 이름으로 DB(reviews)에 저장되므로 로그인 필요
       { path: "recipe/:id/review", element: <ReviewWrite />, loader: requireLogin },
       { path: "mypage", element: <MyPage/>, loader: requireLogin },
+      // 통합 검색: 레시피는 누구나, 내 냉장고 재료는 로그인했을 때만 함께 보여 줌
+      { path: "search", element: <Search/> },
       { path: "notification", element: <Notification/> },
       { path: "login", element: <Login/> },
       { path: "signup", element: <SignUp/> },
