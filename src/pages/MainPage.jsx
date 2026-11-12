@@ -14,7 +14,6 @@ const MainPage = () => {
     const { hasUnread } = useOutletContext();
     const bellRef = useRef(null);
 
-    // 확인 안 한 알림이 있는 동안 종을 3초마다 흔든다 (움직임 줄이기 설정이면 아이콘이 알아서 생략)
     useEffect(() => {
         if (!hasUnread) return;
         const bell = bellRef.current;
