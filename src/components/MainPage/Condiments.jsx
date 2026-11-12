@@ -33,7 +33,13 @@ const Condiments = () => {
             <ul className="condiment-list">
                 {condiments.map((condiment) => (
                     <li key={condiment.name}>
-                        <button type="button" className="condiment-item" aria-label={condiment.name} onClick={goFridge}>
+                        {/* 누르면 냉장고에서 이 조미료 이름으로 바로 걸러서 보여 줌 (없으면 "검색한 재료가 없어요") */}
+                        <button
+                            type="button"
+                            className="condiment-item"
+                            aria-label={`내 냉장고에서 ${condiment.name} 보기`}
+                            onClick={() => navigate(`/fridge?${new URLSearchParams({ q: condiment.name })}`)}
+                        >
                             <img src={condiment.icon} alt="" />
                         </button>
                     </li>

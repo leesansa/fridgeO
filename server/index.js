@@ -85,7 +85,7 @@ const routes = {
                        'id', i.id, 'name', COALESCE(c.name, '재료'), 'expiry_date', to_char(i.expiry_date, 'YYYY-MM-DD'))
                      ORDER BY i.expiry_date, i.id), '[]')
               FROM ingredients i LEFT JOIN ingredient_catalog c ON c.id = i.catalog_id
-              WHERE i.user_id = u.id
+              WHERE i.user_id = u.id AND i.quantity > 0 -- 수량 0 = 다 떨어진 재료는 뺌
                 AND i.expiry_date <= (now() AT TIME ZONE 'Asia/Seoul')::date + ${EXPIRY_ALERT_DAYS}::int) AS urgent_ingredients
       FROM users u WHERE id = ${user.sub}`;
     if (!me) throw new HttpError(404, "프로필이 없습니다");
@@ -212,6 +212,23 @@ const routes = {
       LIMIT ${INGREDIENT_PAGE + 1} OFFSET ${offset}`;
     return { items: rows.slice(0, INGREDIENT_PAGE), nextOffset: rows.length > INGREDIENT_PAGE ? offset + INGREDIENT_PAGE : null };
   },
+  // 메인 "지금 확인해야할 내 재료들" 요약: 임박(0~5일)·기한 지남·다 떨어짐(수량 0) 개수 + 기한이 가장 빠른 재료
+  // 수량 0 인 재료는 냉장고에 없는 것으로 보고 임박·지남·가장 급한 재료에서 뺀다
+  async "GET /api/fridge/summary"(req, user) {
+    const [summary] = await sql`
+      WITH today AS (SELECT (now() AT TIME ZONE 'Asia/Seoul')::date AS d)
+      SELECT
+        count(*) FILTER (WHERE i.quantity > 0 AND i.expiry_date BETWEEN t.d AND t.d + ${EXPIRY_ALERT_DAYS}::int)::int AS urgent,
+        count(*) FILTER (WHERE i.quantity > 0 AND i.expiry_date < t.d)::int AS expired,
+        count(*) FILTER (WHERE i.quantity = 0)::int AS empty,
+        (SELECT json_build_object('name', COALESCE(c.name, '재료'), 'expiry_date', to_char(s.expiry_date, 'YYYY-MM-DD'))
+         FROM ingredients s LEFT JOIN ingredient_catalog c ON c.id = s.catalog_id
+         WHERE s.user_id = ${user.sub} AND s.quantity > 0 AND s.expiry_date >= t.d
+         ORDER BY s.expiry_date, s.id LIMIT 1) AS soonest
+      FROM today t LEFT JOIN ingredients i ON i.user_id = ${user.sub}
+      GROUP BY t.d`;
+    return summary;
+  },
   // 내 냉장고에 재료 추가
   async "POST /api/ingredients"(req, user) {
     const input = parseIngredient(await readJson(req));
@@ -234,10 +251,10 @@ const routes = {
     if (!row) throw new HttpError(404, "재료를 찾을 수 없습니다");
     return row;
   },
-  // 내 재료 수정 (추가와 같은 검사)
+  // 내 재료 수정 (추가와 같은 검사, 단 수량 0 = 다 떨어짐 허용)
   async "PATCH /api/ingredients/:id"(req, user) {
     const id = ingredientIdOf(req);
-    const input = parseIngredient(await readJson(req));
+    const input = parseIngredient(await readJson(req), { allowZero: true });
     const catalogId = await catalogIdFor(input.name);
     // 고치기 전 기한(old)과 비교해 기한이 바뀌었는지도 함께 돌려받음
     const rows = await sql`
@@ -261,7 +278,7 @@ const routes = {
       SELECT i.user_id, 'expiry', COALESCE(c.name, '재료') || '의 유통기한이 ' || to_char(i.expiry_date, 'YYYY-MM-DD') || '까지예요', i.id
       FROM ingredients i
       LEFT JOIN ingredient_catalog c ON c.id = i.catalog_id
-      WHERE i.user_id = ${user.sub}
+      WHERE i.user_id = ${user.sub} AND i.quantity > 0 -- 다 떨어진 재료(수량 0)는 알림 안 만듦
         AND i.expiry_date <= (now() AT TIME ZONE 'Asia/Seoul')::date + ${EXPIRY_ALERT_DAYS}::int
         AND EXISTS (SELECT 1 FROM users WHERE id = ${user.sub} AND expiry_alert) -- 알림 설정에서 끈 사람은 새로 안 만듦
       ON CONFLICT (ingredient_id) WHERE type = 'expiry' DO NOTHING`;
@@ -301,11 +318,14 @@ function ingredientIdOf(req) {
 }
 
 // 재료 추가·수정 입력 검사 → { name, quantity, unit, storage, expiryDate }
-function parseIngredient(body) {
+// 수정할 때는 수량 0 허용 (다 쓴 재료를 지우지 않고 남겨 두면 메인 "다 떨어진 상품"에 잡힘)
+function parseIngredient(body, { allowZero = false } = {}) {
   const name = typeof body.name === "string" ? body.name.trim() : "";
   if (name.length < 1 || name.length > 30) throw new HttpError(400, "재료 이름은 1~30자로 입력하세요");
   const quantity = Number(body.quantity);
-  if (!Number.isFinite(quantity) || quantity <= 0 || quantity > 9999) throw new HttpError(400, "수량은 0보다 크고 9999 이하로 입력하세요");
+  if (!Number.isFinite(quantity) || quantity < 0 || (quantity === 0 && !allowZero) || quantity > 9999) {
+    throw new HttpError(400, allowZero ? "수량은 0 이상 9999 이하로 입력하세요" : "수량은 0보다 크고 9999 이하로 입력하세요");
+  }
   const unit = typeof body.unit === "string" && body.unit.trim() ? body.unit.trim().slice(0, 10) : "개";
   if (!["냉장", "냉동", "실온"].includes(body.storage)) throw new HttpError(400, "보관 방법을 골라 주세요");
   const expiryDate = body.expiryDate || null;
@@ -389,6 +409,36 @@ const publicRoutes = {
       LIMIT ${RECIPE_PAGE + 1}`;
     const items = rows.slice(0, RECIPE_PAGE);
     return { items, nextCursor: rows.length > RECIPE_PAGE ? Number(items.at(-1).id) : null };
+  },
+  // 메인 추천 레시피 5개. 로그인했으면 내 냉장고 재료(수량 > 0)가 들어가는 레시피를 기한 급한 재료 순으로 먼저,
+  // 모자라면(또는 로그인 안 했으면) 별점·리뷰 많은 순으로 채움. reason = 이 레시피에 쓰이는 내 재료 이름
+  // shortcut: 레시피마다 재료를 ILIKE 로 맞춰 봄 (레시피 160개 기준 충분), 수천 개가 되면 재료 사전 id 로 연결할 것
+  async "GET /api/recipes/recommend"(req) {
+    const userId = (await getAuthUser(req))?.sub ?? null;
+    return sql`
+      WITH mine AS (
+        SELECT c.name, min(i.expiry_date) AS expiry_date
+        FROM ingredients i JOIN ingredient_catalog c ON c.id = i.catalog_id
+        WHERE i.user_id = ${userId}::uuid AND i.quantity > 0
+        GROUP BY c.name
+      )
+      SELECT r.id, r.title, r.image_url, m.name AS reason, s.review_count, s.rating
+      FROM recipes r
+      LEFT JOIN LATERAL (
+        SELECT mine.name, mine.expiry_date FROM recipe_ingredients ri
+        JOIN mine ON ri.name ILIKE '%' || mine.name || '%'
+        WHERE ri.recipe_id = r.id
+        ORDER BY mine.expiry_date NULLS LAST LIMIT 1
+      ) m ON true
+      CROSS JOIN LATERAL (
+        SELECT count(*)::int AS review_count, round(avg(rating), 1)::float AS rating
+        FROM reviews WHERE recipe_id = r.id
+      ) s
+      ORDER BY m.name IS NULL,
+               -- 한 재료에 몰리지 않게: 재료마다 별점 제일 좋은 레시피 1개씩 먼저 (기한 급한 재료부터)
+               row_number() OVER (PARTITION BY m.name ORDER BY s.rating DESC NULLS LAST, s.review_count DESC, r.id),
+               m.expiry_date NULLS LAST, s.rating DESC NULLS LAST, s.review_count DESC, r.id
+      LIMIT 5`;
   },
   // 레시피 상세: 기본 정보 + 리뷰 통계 + 재료 + 만드는 순서(recipe_steps)
   async "GET /api/recipes/:id"(req) {

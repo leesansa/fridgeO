@@ -10,6 +10,7 @@ import ReviewWrite from "./pages/ReviewWrite";
 import MyPage from "./pages/MyPage";
 import PrivacyInfo from "./pages/PrivacyInfo";
 import Settings from "./pages/Settings";
+import Search from "./pages/Search";
 import Loading from "./pages/Loading";
 import Notification from "./pages/Notification";
 import IngredientEdit from "./pages/IngredientEdit";
@@ -37,6 +38,8 @@ const router = createBrowserRouter([
       // 개인정보 관리: 들어온 뒤 비밀번호를 한 번 더 확인
       { path: "mypage/privacy", element: <PrivacyInfo/>, loader: requireLogin },
       { path: "mypage/settings", element: <Settings/>, loader: requireLogin },
+      // 통합 검색: 레시피는 누구나, 내 냉장고 재료는 로그인했을 때만 함께 보여 줌
+      { path: "search", element: <Search/> },
       { path: "notification", element: <Notification/> },
       { path: "login", element: <Login/> },
       { path: "signup", element: <SignUp/> },

@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- 가장 급한 재료: 모래시계 + 주황 빨리감기 배지 (expiry/restock.png 스타일) -->
+  <g stroke="#4a1d1d" stroke-width="14" stroke-linecap="round" stroke-linejoin="round">
+    <!-- 유리 -->
+    <path d="M140 132h160c0 68-60 98-72 124 12 26 72 56 72 124H140c0-68 60-98 72-124-12-26-72-56-72-124z" fill="#e3f1f8"/>
+    <!-- 모래 -->
+    <path d="M168 176h104c-10 28-36 48-52 66-16-18-42-38-52-66z" fill="#f9c02c" stroke-width="10"/>
+    <path d="M152 372c8-34 44-50 68-54 24 4 60 20 68 54z" fill="#f9c02c" stroke-width="10"/>
+    <!-- 위·아래 받침 -->
+    <rect x="104" y="96" width="232" height="40" rx="14" fill="#c98b5a"/>
+    <rect x="104" y="376" width="232" height="40" rx="14" fill="#c98b5a"/>
+    <!-- 배지 -->
+    <circle cx="350" cy="370" r="70" fill="#f86902"/>
+  </g>
+  <path d="M220 248v64" stroke="#f9c02c" stroke-width="8" stroke-linecap="round"/>
+  <path d="M164 150c4 30 20 48 30 60" fill="none" stroke="#fff" stroke-width="10" stroke-linecap="round" opacity=".9"/>
+  <!-- 빨리감기(서둘러요) -->
+  <path d="M318 338l34 32-34 32M356 338l34 32-34 32" fill="none" stroke="#fff" stroke-width="20" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

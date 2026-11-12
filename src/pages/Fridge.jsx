@@ -8,7 +8,7 @@ export default Fridge;
 */
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Link, useNavigate } from "react-router";
+import { Link, useNavigate, useSearchParams } from "react-router";
 
 import Header from "../components/Header";
 import Box from "../components/fridge/Box";
@@ -114,8 +114,10 @@ const filters = [
 
 const Fridge = () => {
   const navigate = useNavigate();
-  const [keyword, setKeyword] = useState(""); // 입력창 글자
-  const [q, setQ] = useState(""); // 실제 검색어 (입력이 0.3초 멈추면 반영)
+  // 메인 조미료 아이콘에서 /fridge?q=케첩 처럼 오면 그 이름으로 바로 걸러서 보여 줌
+  const [searchParams] = useSearchParams();
+  const [keyword, setKeyword] = useState(() => searchParams.get("q")?.trim() ?? ""); // 입력창 글자
+  const [q, setQ] = useState(keyword); // 실제 검색어 (입력이 0.3초 멈추면 반영)
   const contentRef = useRef(null); // 재료 스크롤 영역 = 무한 스크롤 기준
   const [sortBy, setSortBy] = useState("expiry");
   const [viewMode, setViewMode] = useState("list");
