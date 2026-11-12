@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- 유통기한 지남: 상한 반찬통 + 빨간 ! 배지 (expiry/restock.png 스타일) -->
+  <g stroke="#4a1d1d" stroke-width="14" stroke-linecap="round" stroke-linejoin="round">
+    <!-- 냄새 -->
+    <path d="M150 128c-14-16 14-28 0-44M216 120c-14-16 14-28 0-44M282 128c-14-16 14-28 0-44" fill="none" stroke="#8e9aa6" stroke-width="12"/>
+    <!-- 통 -->
+    <rect x="96" y="196" width="244" height="196" rx="26" fill="#f3f0ea"/>
+    <!-- 뚜껑 -->
+    <rect x="80" y="156" width="276" height="52" rx="18" fill="#e53935"/>
+    <!-- 곰팡이 -->
+    <g stroke-width="8"><circle cx="160" cy="300" r="20" fill="#8db255"/>
+    <circle cx="220" cy="262" r="13" fill="#8db255"/>
+    <circle cx="206" cy="338" r="11" fill="#8db255"/></g>
+    <!-- 배지 -->
+    <circle cx="350" cy="370" r="70" fill="#e53935"/>
+  </g>
+  <path d="M120 236v80M120 340v12" stroke="#fff" stroke-width="12" stroke-linecap="round" opacity=".9"/>
+  <path d="M104 172h28" stroke="#fff" stroke-width="10" stroke-linecap="round" opacity=".7"/>
+  <path d="M350 330v50" stroke="#fff" stroke-width="22" stroke-linecap="round"/>
+  <circle cx="350" cy="410" r="12" fill="#fff"/>
+</svg>

@@ -197,6 +197,23 @@ const routes = {
       LIMIT ${INGREDIENT_PAGE + 1} OFFSET ${offset}`;
     return { items: rows.slice(0, INGREDIENT_PAGE), nextOffset: rows.length > INGREDIENT_PAGE ? offset + INGREDIENT_PAGE : null };
   },
+  // 메인 "지금 확인해야할 내 재료들" 요약: 임박(0~5일)·기한 지남·다 떨어짐(수량 0) 개수 + 기한이 가장 빠른 재료
+  // 수량 0 인 재료는 냉장고에 없는 것으로 보고 임박·지남·가장 급한 재료에서 뺀다
+  async "GET /api/fridge/summary"(req, user) {
+    const [summary] = await sql`
+      WITH today AS (SELECT (now() AT TIME ZONE 'Asia/Seoul')::date AS d)
+      SELECT
+        count(*) FILTER (WHERE i.quantity > 0 AND i.expiry_date BETWEEN t.d AND t.d + ${EXPIRY_ALERT_DAYS}::int)::int AS urgent,
+        count(*) FILTER (WHERE i.quantity > 0 AND i.expiry_date < t.d)::int AS expired,
+        count(*) FILTER (WHERE i.quantity = 0)::int AS empty,
+        (SELECT json_build_object('name', COALESCE(c.name, '재료'), 'expiry_date', to_char(s.expiry_date, 'YYYY-MM-DD'))
+         FROM ingredients s LEFT JOIN ingredient_catalog c ON c.id = s.catalog_id
+         WHERE s.user_id = ${user.sub} AND s.quantity > 0 AND s.expiry_date >= t.d
+         ORDER BY s.expiry_date, s.id LIMIT 1) AS soonest
+      FROM today t LEFT JOIN ingredients i ON i.user_id = ${user.sub}
+      GROUP BY t.d`;
+    return summary;
+  },
   // 내 냉장고에 재료 추가
   async "POST /api/ingredients"(req, user) {
     const input = parseIngredient(await readJson(req));
@@ -219,10 +236,10 @@ const routes = {
     if (!row) throw new HttpError(404, "재료를 찾을 수 없습니다");
     return row;
   },
-  // 내 재료 수정 (추가와 같은 검사)
+  // 내 재료 수정 (추가와 같은 검사, 단 수량 0 = 다 떨어짐 허용)
   async "PATCH /api/ingredients/:id"(req, user) {
     const id = ingredientIdOf(req);
-    const input = parseIngredient(await readJson(req));
+    const input = parseIngredient(await readJson(req), { allowZero: true });
     const catalogId = await catalogIdFor(input.name);
     // 고치기 전 기한(old)과 비교해 기한이 바뀌었는지도 함께 돌려받음
     const rows = await sql`
@@ -285,11 +302,14 @@ function ingredientIdOf(req) {
 }
 
 // 재료 추가·수정 입력 검사 → { name, quantity, unit, storage, expiryDate }
-function parseIngredient(body) {
+// 수정할 때는 수량 0 허용 (다 쓴 재료를 지우지 않고 남겨 두면 메인 "다 떨어진 상품"에 잡힘)
+function parseIngredient(body, { allowZero = false } = {}) {
   const name = typeof body.name === "string" ? body.name.trim() : "";
   if (name.length < 1 || name.length > 30) throw new HttpError(400, "재료 이름은 1~30자로 입력하세요");
   const quantity = Number(body.quantity);
-  if (!Number.isFinite(quantity) || quantity <= 0 || quantity > 9999) throw new HttpError(400, "수량은 0보다 크고 9999 이하로 입력하세요");
+  if (!Number.isFinite(quantity) || quantity < 0 || (quantity === 0 && !allowZero) || quantity > 9999) {
+    throw new HttpError(400, allowZero ? "수량은 0 이상 9999 이하로 입력하세요" : "수량은 0보다 크고 9999 이하로 입력하세요");
+  }
   const unit = typeof body.unit === "string" && body.unit.trim() ? body.unit.trim().slice(0, 10) : "개";
   if (!["냉장", "냉동", "실온"].includes(body.storage)) throw new HttpError(400, "보관 방법을 골라 주세요");
   const expiryDate = body.expiryDate || null;

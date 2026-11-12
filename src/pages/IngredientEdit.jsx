@@ -59,8 +59,9 @@ function IngredientEditForm({ item }) {
 
     const amount = Number(quantity);
 
-    if (!Number.isFinite(amount) || amount <= 0) {
-      alert("수량은 0보다 큰 숫자로 입력해 주세요.");
+    // 0 = 다 떨어짐 (지우지 않고 남겨 두면 메인 "다 떨어진 상품"에 표시)
+    if (!Number.isFinite(amount) || amount < 0) {
+      alert("수량은 0 이상의 숫자로 입력해 주세요.");
       return;
     }
 
@@ -142,7 +143,7 @@ function IngredientEditForm({ item }) {
     style={styles.counterBtn}
     aria-label="수량 줄이기"
     onClick={() =>
-      setQuantity((value) => String(Math.max(1, Number(value) - 1)))
+      setQuantity((value) => String(Math.max(0, Number(value) - 1)))
     }
   >
     −
