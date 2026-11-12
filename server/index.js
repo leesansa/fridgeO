@@ -461,10 +461,19 @@ const publicRoutes = {
       ) s
       WHERE r.id = ${id}`;
     if (!recipe) throw new HttpError(404, "레시피를 찾을 수 없습니다");
-    // 공개 주소지만 로그인 토큰이 같이 오면 내 북마크 여부도 알려 줌 (토큰 없거나 틀리면 false)
+    // 공개 주소지만 로그인 토큰이 같이 오면 내 북마크 여부와 재료별 내 냉장고에 있는지(in_fridge)도 알려 줌 (토큰 없거나 틀리면 false)
     const user = await getAuthUser(req);
+    const userId = user?.sub ?? null;
     const [ingredients, steps, [mark]] = await Promise.all([
-      sql`SELECT name, amount FROM recipe_ingredients WHERE recipe_id = ${id} ORDER BY position`,
+      // 재료 이름은 공백을 빼고 같으면 같은 재료 ("소 금" = "소금"), 수량 0(다 떨어짐)은 없는 것으로
+      sql`
+        SELECT ri.name, ri.amount,
+               EXISTS (
+                 SELECT 1 FROM ingredients i JOIN ingredient_catalog c ON c.id = i.catalog_id
+                 WHERE i.user_id = ${userId}::uuid AND i.quantity > 0
+                   AND replace(c.name, ' ', '') = replace(ri.name, ' ', '')
+               ) AS in_fridge
+        FROM recipe_ingredients ri WHERE ri.recipe_id = ${id} ORDER BY ri.position`,
       sql`SELECT position, text, image_url FROM recipe_steps WHERE recipe_id = ${id} ORDER BY position`,
       user ? sql`SELECT 1 FROM recipe_bookmarks WHERE user_id = ${user.sub} AND recipe_id = ${id}` : [],
     ]);
