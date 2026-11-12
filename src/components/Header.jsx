@@ -1,5 +1,5 @@
 import { useNavigate, useSearchParams } from "react-router";
-import logo from "../assets/recipe/logo.png";
+import logo from "../assets/Logo_FridgeO.svg";
 import "../styles/Header.css";
 
 // 모든 페이지 공통 헤더.
