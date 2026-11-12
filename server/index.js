@@ -394,6 +394,36 @@ const publicRoutes = {
     const items = rows.slice(0, RECIPE_PAGE);
     return { items, nextCursor: rows.length > RECIPE_PAGE ? Number(items.at(-1).id) : null };
   },
+  // 메인 추천 레시피 5개. 로그인했으면 내 냉장고 재료(수량 > 0)가 들어가는 레시피를 기한 급한 재료 순으로 먼저,
+  // 모자라면(또는 로그인 안 했으면) 별점·리뷰 많은 순으로 채움. reason = 이 레시피에 쓰이는 내 재료 이름
+  // shortcut: 레시피마다 재료를 ILIKE 로 맞춰 봄 (레시피 160개 기준 충분), 수천 개가 되면 재료 사전 id 로 연결할 것
+  async "GET /api/recipes/recommend"(req) {
+    const userId = (await getAuthUser(req))?.sub ?? null;
+    return sql`
+      WITH mine AS (
+        SELECT c.name, min(i.expiry_date) AS expiry_date
+        FROM ingredients i JOIN ingredient_catalog c ON c.id = i.catalog_id
+        WHERE i.user_id = ${userId}::uuid AND i.quantity > 0
+        GROUP BY c.name
+      )
+      SELECT r.id, r.title, r.image_url, m.name AS reason, s.review_count, s.rating
+      FROM recipes r
+      LEFT JOIN LATERAL (
+        SELECT mine.name, mine.expiry_date FROM recipe_ingredients ri
+        JOIN mine ON ri.name ILIKE '%' || mine.name || '%'
+        WHERE ri.recipe_id = r.id
+        ORDER BY mine.expiry_date NULLS LAST LIMIT 1
+      ) m ON true
+      CROSS JOIN LATERAL (
+        SELECT count(*)::int AS review_count, round(avg(rating), 1)::float AS rating
+        FROM reviews WHERE recipe_id = r.id
+      ) s
+      ORDER BY m.name IS NULL,
+               -- 한 재료에 몰리지 않게: 재료마다 별점 제일 좋은 레시피 1개씩 먼저 (기한 급한 재료부터)
+               row_number() OVER (PARTITION BY m.name ORDER BY s.rating DESC NULLS LAST, s.review_count DESC, r.id),
+               m.expiry_date NULLS LAST, s.rating DESC NULLS LAST, s.review_count DESC, r.id
+      LIMIT 5`;
+  },
   // 레시피 상세: 기본 정보 + 리뷰 통계 + 재료 + 만드는 순서(recipe_steps)
   async "GET /api/recipes/:id"(req) {
     const id = Number(new URL(req.url, "http://localhost").pathname.split("/").pop());

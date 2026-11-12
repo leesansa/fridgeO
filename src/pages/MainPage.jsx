@@ -6,7 +6,7 @@ import FridgeAlerts from "../components/MainPage/FridgeAlerts.jsx";
 import Condiments from "../components/MainPage/Condiments.jsx";
 import Recommends from "../components/MainPage/Recommends.jsx";
 
-// assets/main의 이미지를 한 번에 불러와 확장자를 뺀 파일명으로 꺼낸다 (예: eggs-photo.jpg → "eggs-photo")
+// assets/main의 이미지를 한 번에 불러와 확장자를 뺀 파일명으로 꺼낸다 (예: logo.png → "logo")
 const images = Object.fromEntries(
     Object.entries(import.meta.glob("../assets/main/*", { eager: true, import: "default" }))
         .map(([path, url]) => [path.split("/").pop().replace(/\.\w+$/, ""), url]),
