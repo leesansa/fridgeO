@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router";
-import { apiFetch, isLoggedIn } from "../../utils/auth.js";
-import "../../vendor/lucian-icons/edit.js"; // 079번 edit(연필) 아이콘
-import "../../vendor/lucian-icons/bookmark.js"; // 012번 bookmark 아이콘
+import { apiFetch, isLoggedIn } from "../../../utils/auth.js";
+import "../../../vendor/lucian-icons/edit.js"; // 079번 edit(연필) 아이콘
+import "../../../vendor/lucian-icons/bookmark.js"; // 012번 bookmark 아이콘
 
 // 레시피 상세 맨 위: 완성 사진 + 북마크(DB recipe_bookmarks) + 리뷰 작성하기
 // 사진이 없어도 북마크·리뷰 작성 버튼은 보이게 칸은 항상 그림

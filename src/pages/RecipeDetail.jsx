@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import Header from "../components/Header.jsx";
-import DetailHero from "../components/Recipe/DetailHero.jsx";
-import DetailInfo from "../components/Recipe/DetailInfo.jsx";
-import IngredientChecklist from "../components/Recipe/IngredientChecklist.jsx";
-import RecipeSteps from "../components/Recipe/RecipeSteps.jsx";
-import ReviewSummary from "../components/Recipe/ReviewSummary.jsx";
-import ReviewList from "../components/Recipe/ReviewList.jsx";
+import DetailHero from "../components/Recipe/Detail/DetailHero.jsx";
+import DetailInfo from "../components/Recipe/Detail/DetailInfo.jsx";
+import IngredientChecklist from "../components/Recipe/Detail/IngredientChecklist.jsx";
+import RecipeSteps from "../components/Recipe/Detail/RecipeSteps.jsx";
+import ReviewSummary from "../components/Recipe/Review/ReviewSummary.jsx";
+import ReviewList from "../components/Recipe/Review/ReviewList.jsx";
 import { apiFetch } from "../utils/auth.js";
 import { addRecentRecipe } from "../utils/recentRecipes";
 import "../styles/recipe-detail.css";

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import "../../vendor/lucian-icons/check.js"; // 065번 check 아이콘
+import "../../../vendor/lucian-icons/check.js"; // 065번 check 아이콘
 
 const coupangUrl = (name) => `https://www.coupang.com/np/search?q=${encodeURIComponent(name)}`;
 

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { apiFetch } from "../../utils/auth.js";
+import { apiFetch } from "../../../utils/auth.js";
 
 // 다른 사람들의 리뷰 (DB reviews). 5개씩, "리뷰 더보기"로 이어서. 레시피가 바뀌면 부모가 key 로 새로 만듦
 const ReviewList = ({ recipeId, total }) => {

@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router";
 import Header from "../components/Header.jsx";
-import CategoryBar from "../components/Recipe/CategoryBar.jsx";
-import RecipeCards from "../components/Recipe/RecipeCards.jsx";
+import CategoryBar from "../components/Recipe/List/CategoryBar.jsx";
+import RecipeCards from "../components/Recipe/List/RecipeCards.jsx";
 import { apiFetch } from "../utils/auth.js";
 import "../styles/recipes.css";
 

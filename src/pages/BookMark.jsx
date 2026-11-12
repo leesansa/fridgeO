@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import Header from "../components/Header.jsx";
-import BookmarkList from "../components/Recipe/BookmarkList.jsx";
+import BookmarkList from "../components/Recipe/Bookmark/BookmarkList.jsx";
 import { apiFetch } from "../utils/auth";
 import "../styles/bookmark.css";
 

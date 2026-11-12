@@ -1,4 +1,4 @@
-import "../../vendor/lucian-icons/bookmark.js"; // 레시피 상세와 같은 북마크 아이콘
+import "../../../vendor/lucian-icons/bookmark.js"; // 레시피 상세와 같은 북마크 아이콘
 
 // 북마크한 레시피 카드 하나. 카드를 누르면 상세로, 오른쪽 북마크 아이콘을 누르면 북마크 해제
 const BookmarkCard = ({ recipe, onOpen, onRemove, removing }) => (

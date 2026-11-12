@@ -1,9 +1,9 @@
 // 레시피 분류 아이콘: DB icon_url → 그림 파일 → 직접 그린 SVG → (새 분류) 첫 글자 순
-import all from "../../assets/recipe/category/all.png";
-import side from "../../assets/recipe/category/side.png";
-import main from "../../assets/recipe/category/main.png";
-import soup from "../../assets/recipe/category/soup.png";
-import stew from "../../assets/recipe/category/stew.png";
+import all from "../../../assets/recipe/category/all.png";
+import side from "../../../assets/recipe/category/side.png";
+import main from "../../../assets/recipe/category/main.png";
+import soup from "../../../assets/recipe/category/soup.png";
+import stew from "../../../assets/recipe/category/stew.png";
 
 const circle = (fill) => <circle cx="20" cy="20" r="20" fill={fill} />;
 const bowl = <path d="M10 21h20a10 8 0 0 1-20 0Z" fill="#2b2b2b" />;
