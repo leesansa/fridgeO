@@ -294,6 +294,89 @@
     -webkit-line-clamp: 2;
 }
 
+/* ---------- 내가 쓴 레시피: 사진·제목(누르면 상세) + 수정·삭제 ---------- */
+.mypage-my-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.mypage-my-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.mypage-my-open {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+    padding: 0;
+    border: none;
+    background: none;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+}
+
+.mypage-my-thumb {
+    flex: none;
+    width: 52px;
+    height: 52px;
+    border-radius: 10px;
+    background-color: #e2d7d7;
+    object-fit: cover;
+}
+
+.mypage-my-title {
+    overflow: hidden;
+    font-size: 14px;
+    font-weight: 700;
+    color: #222;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.mypage-my-btn {
+    flex: none;
+    padding: 8px 12px;
+    border: 1px solid #7fa766;
+    border-radius: 10px;
+    background: #fff;
+    color: #4e7a36;
+    font: inherit;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.mypage-my-btn.is-danger {
+    border-color: #c85a5a;
+    color: #c85a5a;
+}
+
+.mypage-my-btn:disabled {
+    opacity: 0.5;
+    cursor: default;
+}
+
+.mypage-my-empty,
+.mypage-my-error {
+    margin: 0 0 10px;
+    font-size: 13px;
+    color: #777;
+}
+
+.mypage-my-error {
+    color: #c85a5a;
+    font-weight: 700;
+}
+
 /* ---------- 하단 메뉴 ---------- */
 .mypage-menu {
     padding: 20px 24px;

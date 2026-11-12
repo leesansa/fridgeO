@@ -4,6 +4,7 @@ import ProfileCard from "../components/MyPage/ProfileCard.jsx";
 import StatSummary from "../components/MyPage/StatSummary.jsx";
 import StatPanel from "../components/MyPage/StatPanel.jsx";
 import RecentRecipes from "../components/MyPage/RecentRecipes.jsx";
+import MyRecipes from "../components/MyPage/MyRecipes.jsx";
 import MenuList from "../components/MyPage/MenuList.jsx";
 import { apiFetch } from "../utils/auth";
 import "../styles/MyPage.css";
@@ -31,6 +32,7 @@ const MyPage = () => {
           <ProfileCard me={me} onImageSaved={(url) => setMe((prev) => ({ ...prev, profile_image_url: url }))} />
           <StatSummary me={me} openStat={openStat} onToggle={toggleStat} />
           {me && openStat && <StatPanel key={openStat} kind={openStat} me={me} />}
+          <MyRecipes />
           <RecentRecipes />
           <MenuList me={me} />
         </main>

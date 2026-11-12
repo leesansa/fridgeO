@@ -67,7 +67,13 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 6px;
   padding: 10px 16px;
+}
+
+/* 북마크는 왼쪽, 리뷰 작성하기·레시피 수정은 오른쪽에 붙여서 */
+.detail-bookmark + .detail-btn {
+  margin-left: auto;
 }
 
 .detail-hero-actions .detail-btn {

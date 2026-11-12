@@ -45,6 +45,12 @@ const DetailHero = ({ recipe }) => {
                 <button type="button" className="detail-btn" onClick={() => navigate(`/recipe/${recipe.id}/review`)}>
                     <lucian-edit size="16" tone="line" aria-hidden="true" /> 리뷰 작성하기
                 </button>
+                {/* 내가 쓴 레시피일 때만 (서버가 로그인 계정과 작성자를 비교한 mine) */}
+                {recipe.mine && (
+                    <button type="button" className="detail-btn" onClick={() => navigate(`/recipe/${recipe.id}/edit`)}>
+                        레시피 수정
+                    </button>
+                )}
             </div>
             {markError && <p className="detail-popup-note detail-bookmark-error" role="alert">{markError}</p>}
         </section>

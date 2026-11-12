@@ -1,0 +1,263 @@
+/* 레시피 작성 (pages/RecipeWrite.jsx). 머리·버튼·오류 문구는 review-write.css 를 그대로 쓰고 입력 칸만 여기 */
+.recipe-write .review-main {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.recipe-write > .rw-status,
+.recipe-write > .review-error {
+  margin: 0;
+  padding: 40px 20px;
+  text-align: center;
+}
+
+/* 대표 사진: 비어 있으면 "사진 고르기", 고르면 미리보기 */
+.rw-photo {
+  display: grid;
+  place-items: center;
+  height: 220px;
+  overflow: hidden;
+  border-radius: 10px;
+  background: #fff;
+  cursor: pointer;
+}
+
+.rw-photo > img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.rw-photo span {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #789f4b;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.rw-photo span img {
+  width: 24px;
+  height: 24px;
+}
+
+.rw-photo:has(input:focus-visible) {
+  outline: 2px solid #689d4b;
+}
+
+.rw-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px 18px;
+  border-radius: 10px;
+  background: #fff;
+}
+
+.rw-card h2 {
+  margin: 0;
+  font-size: 16px;
+}
+
+.recipe-write :is(input:not([type="radio"]), textarea, select) {
+  width: 100%;
+  min-width: 0;
+  padding: 8px 10px;
+  border: 1px solid #e3e3e3;
+  border-radius: 8px;
+  background: #fafafa;
+  font: inherit;
+  font-size: 14px;
+}
+
+.recipe-write :is(input, textarea, select):focus-visible {
+  outline: 2px solid #689d4b;
+  border-color: transparent;
+}
+
+.recipe-write ::placeholder {
+  color: #b9b9b9;
+}
+
+.recipe-write .rw-title {
+  border: 0;
+  border-bottom: 1px solid #e3e3e3;
+  border-radius: 0;
+  background: none;
+  padding: 4px 0 10px;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.rw-desc,
+.rw-row textarea {
+  height: 70px;
+  resize: vertical;
+}
+
+/* 분류·인분·시간: 2칸씩, 난이도는 한 줄 전체 */
+.rw-info {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.rw-info > label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.rw-info > label:first-child,
+.rw-info fieldset {
+  grid-column: 1 / -1;
+}
+
+.rw-info fieldset {
+  display: flex;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.rw-info legend {
+  margin-bottom: 4px;
+  padding: 0;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.rw-info fieldset label {
+  flex: 1;
+  padding: 8px 0;
+  border-radius: 8px;
+  background: #efefef;
+  font-size: 13px;
+  font-weight: 700;
+  text-align: center;
+  cursor: pointer;
+}
+
+.rw-info fieldset label.is-selected {
+  background: var(--green);
+  color: #fff;
+}
+
+.rw-info fieldset input {
+  position: absolute;
+  opacity: 0;
+}
+
+.rw-info fieldset label:has(input:focus-visible) {
+  outline: 2px solid #689d4b;
+}
+
+/* 재료·순서 한 줄: 입력칸 + 삭제 버튼 */
+.rw-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+.rw-row .rw-amount {
+  flex: 0 0 90px;
+}
+
+.rw-no {
+  flex: none;
+  width: 24px;
+  height: 24px;
+  margin-top: 6px;
+  border-radius: 50%;
+  background: var(--green);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 24px;
+  text-align: center;
+}
+
+/* 단계: 글 + 사진(추가 버튼 또는 미리보기) */
+.rw-step-body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.rw-step-attach {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  align-self: flex-start;
+  color: #789f4b;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.rw-step-attach img {
+  width: 18px;
+  height: 18px;
+}
+
+.rw-step-attach:has(input:focus-visible) {
+  outline: 2px solid #689d4b;
+}
+
+.rw-step-photo {
+  position: relative;
+}
+
+.rw-step-photo img {
+  display: block;
+  width: 100%;
+  max-height: 180px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.rw-step-photo button {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 28px;
+  height: 28px;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.55);
+  color: #fff;
+  font-size: 18px;
+  line-height: 28px;
+  cursor: pointer;
+}
+
+.rw-del {
+  flex: none;
+  width: 34px;
+  height: 36px;
+  border: 0;
+  border-radius: 8px;
+  background: none;
+  color: #999;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.rw-add {
+  height: 38px;
+  border: 1px dashed var(--green);
+  border-radius: 8px;
+  background: none;
+  color: #789f4b;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}

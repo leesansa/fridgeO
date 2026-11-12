@@ -4,6 +4,7 @@ import { createServer } from "node:http";
 import { neon } from "@neondatabase/serverless";
 import { createRemoteJWKSet, jwtVerify } from "jose";
 import { sendSms, toKoreanNumber, verifyNeonWebhook } from "./otpWebhook.js";
+import { IMAGE_MAX, deleteImages, imageTypeOf, isImageUploadReady, isOwnImageUrl, uploadImage } from "./imageUpload.js";
 
 const { DATABASE_URL, VITE_NEON_AUTH_URL, PORT = 3001 } = process.env;
 if (!DATABASE_URL || !VITE_NEON_AUTH_URL) {
@@ -126,6 +127,10 @@ const routes = {
       ORDER BY b.created_at DESC
       LIMIT 50`;
   },
+  // 내가 쓴 레시피 (최근 쓴 순). 로그인한 계정(JWT sub)으로 작성한 것만
+  async "GET /api/me/recipes"(req, user) {
+    return sql`SELECT id, title, image_url FROM recipes WHERE user_id = ${user.sub} ORDER BY created_at DESC, id DESC LIMIT 100`;
+  },
   // 팔로우 현황. type=following(내가 팔로우한 사람, 기본) | followers(나를 팔로우한 사람)
   async "GET /api/me/follows"(req, user) {
     const type = new URL(req.url, "http://localhost").searchParams.get("type") ?? "following";
@@ -142,6 +147,87 @@ const routes = {
     await sql`INSERT INTO users (id, name) VALUES (${user.sub}, ${name}) ON CONFLICT (id) DO NOTHING`;
     const [me] = await sql`SELECT id, name, profile_image_url, created_at FROM users WHERE id = ${user.sub}`;
     return me;
+  },
+  // 사진 올리기: 본문 = 사진 파일 그대로 (JSON 아님). R2 에 저장하고 { url } 을 돌려줌 → 레시피 등에 이 주소를 저장
+  async "POST /api/images"(req, user) {
+    if (!isImageUploadReady()) throw new HttpError(503, "사진 저장소가 설정되지 않았습니다 (.env 의 R2_* 확인)");
+    const buf = await readBody(req, IMAGE_MAX);
+    const kind = imageTypeOf(buf);
+    if (!kind) throw new HttpError(400, "JPG·PNG·WEBP 사진만 올릴 수 있어요");
+    return { url: await uploadImage(buf, kind, "recipes", user.sub) };
+  },
+  // 레시피 작성. 레시피·재료·순서를 SQL 한 문장으로 넣어 중간에 실패해도 반쪽 레시피가 남지 않음. 응답 { id }
+  async "POST /api/recipes"(req, user) {
+    const { title, description, imageUrl, categoryId, servings, cookTime, difficulty, ingredients, steps } =
+      parseRecipe(await readJson(req, 60_000), user); // 순서가 많으면 10KB 를 넘을 수 있음
+    await ensureProfile(user);
+    try {
+      const [recipe] = await sql`
+        WITH r AS (
+          INSERT INTO recipes (title, description, image_url, user_id, category_id, servings, cook_time, difficulty)
+          VALUES (${title}, ${description}, ${imageUrl}, ${user.sub}, ${categoryId}, ${servings}, ${cookTime}, ${difficulty})
+          RETURNING id
+        ), i AS (
+          INSERT INTO recipe_ingredients (recipe_id, position, name, amount)
+          SELECT r.id, t.ord, t.name, t.amount
+          FROM r, ROWS FROM (jsonb_to_recordset(${JSON.stringify(ingredients)}::jsonb) AS (name text, amount text)) WITH ORDINALITY AS t(name, amount, ord)
+        ), s AS (
+          INSERT INTO recipe_steps (recipe_id, position, text, image_url)
+          SELECT r.id, t.ord, t.text, t.image_url
+          FROM r, ROWS FROM (jsonb_to_recordset(${JSON.stringify(steps)}::jsonb) AS (text text, image_url text)) WITH ORDINALITY AS t(text, image_url, ord)
+        )
+        SELECT id FROM r`;
+      return { id: Number(recipe.id) };
+    } catch (e) {
+      if (e.code === "23503") throw new HttpError(400, "없는 분류입니다"); // 없는 category_id
+      throw e;
+    }
+  },
+  // 레시피 수정: 로그인한 계정(JWT sub)이 작성자(recipes.user_id)일 때만. 재료·순서는 통째로 바꿔 넣음
+  // shortcut: 바꾸거나 뺀 예전 사진은 R2 에 남음, 저장 공간이 문제가 되면 지울 것
+  async "PUT /api/recipes/:id"(req, user) {
+    const id = recipeIdOf(req);
+    const [owner] = await sql`SELECT user_id FROM recipes WHERE id = ${id}`;
+    if (!owner) throw new HttpError(404, "레시피를 찾을 수 없습니다");
+    if (owner.user_id !== user.sub) throw new HttpError(403, "내가 쓴 레시피만 수정할 수 있어요");
+    const { title, description, imageUrl, categoryId, servings, cookTime, difficulty, ingredients, steps } =
+      parseRecipe(await readJson(req, 60_000), user);
+    // 한 트랜잭션: 중간에 실패하면 전부 취소. 모든 문장에 작성자 조건을 다시 걸어 둠
+    try {
+      await sql.transaction([
+        sql`UPDATE recipes SET title = ${title}, description = ${description}, image_url = ${imageUrl}, category_id = ${categoryId},
+                   servings = ${servings}, cook_time = ${cookTime}, difficulty = ${difficulty}
+            WHERE id = ${id} AND user_id = ${user.sub}`,
+        sql`DELETE FROM recipe_ingredients WHERE recipe_id = ${id} AND EXISTS (SELECT 1 FROM recipes WHERE id = ${id} AND user_id = ${user.sub})`,
+        sql`DELETE FROM recipe_steps WHERE recipe_id = ${id} AND EXISTS (SELECT 1 FROM recipes WHERE id = ${id} AND user_id = ${user.sub})`,
+        sql`INSERT INTO recipe_ingredients (recipe_id, position, name, amount)
+            SELECT ${id}, t.ord, t.name, t.amount
+            FROM ROWS FROM (jsonb_to_recordset(${JSON.stringify(ingredients)}::jsonb) AS (name text, amount text)) WITH ORDINALITY AS t(name, amount, ord)
+            WHERE EXISTS (SELECT 1 FROM recipes WHERE id = ${id} AND user_id = ${user.sub})`,
+        sql`INSERT INTO recipe_steps (recipe_id, position, text, image_url)
+            SELECT ${id}, t.ord, t.text, t.image_url
+            FROM ROWS FROM (jsonb_to_recordset(${JSON.stringify(steps)}::jsonb) AS (text text, image_url text)) WITH ORDINALITY AS t(text, image_url, ord)
+            WHERE EXISTS (SELECT 1 FROM recipes WHERE id = ${id} AND user_id = ${user.sub})`,
+      ]);
+    } catch (e) {
+      if (e.code === "23503") throw new HttpError(400, "없는 분류입니다");
+      throw e;
+    }
+    return { id };
+  },
+  // 레시피 삭제: 로그인한 계정이 작성자일 때만. 재료·순서·리뷰·북마크는 DB 가 같이 지움(ON DELETE CASCADE), 사진은 R2 에서 지움
+  async "DELETE /api/recipes/:id"(req, user) {
+    const id = recipeIdOf(req);
+    const [owner] = await sql`SELECT user_id FROM recipes WHERE id = ${id}`;
+    if (!owner) throw new HttpError(404, "레시피를 찾을 수 없습니다");
+    if (owner.user_id !== user.sub) throw new HttpError(403, "내가 쓴 레시피만 삭제할 수 있어요");
+    const images = await sql`
+      SELECT image_url FROM recipes WHERE id = ${id} AND image_url IS NOT NULL
+      UNION ALL SELECT image_url FROM recipe_steps WHERE recipe_id = ${id} AND image_url IS NOT NULL`;
+    const [deleted] = await sql`DELETE FROM recipes WHERE id = ${id} AND user_id = ${user.sub} RETURNING id`;
+    if (!deleted) throw new HttpError(404, "레시피를 찾을 수 없습니다");
+    if (isImageUploadReady()) await deleteImages(images.map((row) => row.image_url), "recipes", user.sub);
+    return { ok: true };
   },
   // 이 레시피에 내가 쓴 리뷰 (없으면 null). 레시피당 한 사람 1개 (reviews UNIQUE(user_id, recipe_id))
   async "GET /api/recipes/:id/review"(req, user) {
@@ -355,6 +441,48 @@ function isDateKey(value) {
   return !Number.isNaN(time) && new Date(time).toISOString().startsWith(value);
 }
 
+// 레시피 작성·수정 본문 검사. 사진은 이 사용자가 우리 저장소(R2)에 올린 주소만 받음
+function parseRecipe(body, user) {
+  const text = (value, label, max, required = false) => {
+    const s = typeof value === "string" ? value.trim() : "";
+    if (required && !s) throw new HttpError(400, `${label}을(를) 입력하세요`);
+    if (s.length > max) throw new HttpError(400, `${label}은(는) ${max}자 이하로 입력하세요`);
+    return s || null;
+  };
+  const int = (value, label, max) => {
+    if (value === null || value === undefined || value === "") return null;
+    const n = Number(value);
+    if (!Number.isInteger(n) || n < 1 || n > max) throw new HttpError(400, `${label}은(는) 1~${max} 사이 숫자로 입력하세요`);
+    return n;
+  };
+  const list = (value, label, max) => {
+    if (!Array.isArray(value) || value.length < 1) throw new HttpError(400, `${label}을(를) 1개 이상 입력하세요`);
+    if (value.length > max) throw new HttpError(400, `${label}은(는) ${max}개까지 입력할 수 있어요`);
+    return value;
+  };
+
+  const title = text(body.title, "제목", 50, true);
+  const description = text(body.description, "소개", 500);
+  const categoryId = int(body.categoryId, "분류", Number.MAX_SAFE_INTEGER);
+  const servings = int(body.servings, "인분", 20);
+  const cookTime = int(body.cookTime, "조리 시간(분)", 600);
+  const difficulty = body.difficulty || null;
+  if (difficulty !== null && !["쉬움", "보통", "어려움"].includes(difficulty)) throw new HttpError(400, "난이도가 올바르지 않습니다");
+  const imageUrl = body.imageUrl || null;
+  if (imageUrl !== null && !isOwnImageUrl(imageUrl, "recipes", user.sub)) throw new HttpError(400, "사진 주소가 올바르지 않습니다");
+  const ingredients = list(body.ingredients, "재료", 50).map((item) => ({
+    name: text(item?.name, "재료 이름", 30, true),
+    amount: text(item?.amount, "재료 양", 30),
+  }));
+  const steps = list(body.steps, "만드는 순서", 30).map((step, i) => {
+    const stepImage = step?.imageUrl || null;
+    if (stepImage !== null && !isOwnImageUrl(stepImage, "recipes", user.sub)) throw new HttpError(400, `${i + 1}단계 사진 주소가 올바르지 않습니다`);
+    return { text: text(step?.text, "만드는 순서", 500, true), image_url: stepImage };
+  });
+
+  return { title, description, imageUrl, categoryId, servings, cookTime, difficulty, ingredients, steps };
+}
+
 // 프로필 행이 아직 없으면(가입 직후 POST /api/me 실패 등) 만들어 둔다 → reviews·recipe_bookmarks 의 user_id 외래키 통과
 async function ensureProfile(user) {
   await sql`INSERT INTO users (id, name) VALUES (${user.sub}, ${user.name ?? "사용자"}) ON CONFLICT (id) DO NOTHING`;
@@ -455,7 +583,7 @@ const publicRoutes = {
     const id = Number(new URL(req.url, "http://localhost").pathname.split("/").pop());
     if (!Number.isSafeInteger(id)) throw new HttpError(404, "레시피를 찾을 수 없습니다");
     const [recipe] = await sql`
-      SELECT r.id, r.title, r.description, r.image_url, r.servings, r.cook_time, r.difficulty,
+      SELECT r.id, r.title, r.description, r.image_url, r.servings, r.cook_time, r.difficulty, r.category_id, r.user_id,
              u.name AS author, s.review_count, s.rating, s.positive_count
       FROM recipes r
       LEFT JOIN users u ON u.id = r.user_id
@@ -482,7 +610,9 @@ const publicRoutes = {
       sql`SELECT position, text, image_url FROM recipe_steps WHERE recipe_id = ${id} ORDER BY position`,
       user ? sql`SELECT 1 FROM recipe_bookmarks WHERE user_id = ${user.sub} AND recipe_id = ${id}` : [],
     ]);
-    return { ...recipe, ingredients, steps, bookmarked: Boolean(mark) };
+    // mine = 로그인한 계정이 작성자인지 (화면의 "수정" 버튼용. 실제 권한 확인은 PUT 에서 다시 함). 작성자 id 는 내보내지 않음
+    const { user_id: authorId, ...rest } = recipe;
+    return { ...rest, ingredients, steps, bookmarked: Boolean(mark), mine: userId !== null && authorId === userId };
   },
   // 이 레시피의 리뷰 목록. 내용 있는 리뷰 먼저, 그다음 최신순. offset = 이미 받은 개수, nextOffset 이 null 이면 끝
   // shortcut: OFFSET 페이지라 리뷰가 아주 많아지면 느려짐, 그때 (created_at, id) 커서로 교체

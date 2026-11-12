@@ -6,6 +6,7 @@ import Fridge from "./pages/Fridge";
 import Ingredient from "./pages/Ingredient";
 import RecipeList from "./pages/RecipeList";
 import RecipeDetail from "./pages/RecipeDetail";
+import RecipeWrite from "./pages/RecipeWrite";
 import ReviewWrite from "./pages/ReviewWrite";
 import MyPage from "./pages/MyPage";
 import BookMark from "./pages/BookMark";
@@ -32,7 +33,11 @@ const router = createBrowserRouter([
       { path: "ingredient", element: <Ingredient/>, loader: requireLogin },
       { path: "ingredient/edit/:id", element: <IngredientEdit />, loader: requireLogin },
       { path: "recipe", element: <RecipeList/> },
+      // 레시피 작성: 작성자 이름으로 DB(recipes)에 저장되므로 로그인 필요
+      { path: "recipe/new", element: <RecipeWrite/>, loader: requireLogin },
       { path: "recipe/:id", element: <RecipeDetail/> },
+      // 레시피 수정: 내가 쓴 레시피인지는 화면과 서버(PUT)에서 계정으로 확인
+      { path: "recipe/:id/edit", element: <RecipeWrite/>, loader: requireLogin },
       // 리뷰는 로그인한 사용자 이름으로 DB(reviews)에 저장되므로 로그인 필요
       { path: "recipe/:id/review", element: <ReviewWrite />, loader: requireLogin },
       { path: "mypage", element: <MyPage/>, loader: requireLogin },
