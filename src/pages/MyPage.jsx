@@ -3,6 +3,7 @@ import { useNavigate } from "react-router";
 import Header from "../components/Header";
 import { apiFetch, authClient } from "../utils/auth";
 import { readRecentRecipes } from "../utils/recentRecipes";
+import { getExpiryBadge, getTodayKey } from "../utils/fridgeUtils";
 
 const AVATAR_PX = 160; // 프로필 사진 저장 크기 (화면에는 72px, 선명하게 2배 남짓)
 
@@ -97,6 +98,7 @@ export default function MyPage() {
   const [uploading, setUploading] = useState(false);
   const fileRef = useRef(null);
   const [recentRecipes] = useState(readRecentRecipes); // 이 브라우저에 기록된 최근 본 레시피
+  const [today] = useState(getTodayKey);
 
   useEffect(() => {
     apiFetch("/api/me").then(setMe).catch(() => setMe(null));
@@ -213,10 +215,24 @@ export default function MyPage() {
 
           {/* 하단 메뉴 리스트 */}
           <div style={{ ...styles.card, padding: "20px 24px" }}>
-            <div style={styles.menuRow}>
-              <span style={styles.menuText}>내 냉장고 관리</span>
-              <span style={styles.urgentBadgeSmall}>임박 2개 &gt;</span>
-            </div>
+            {/* 유통기한 5일 이하 재료 (DB). 누르면 내 냉장고로 */}
+            <button type="button" onClick={() => navigate("/fridge")} style={{ ...styles.menuButton, display: "block" }}>
+              <span style={styles.menuRow}>
+                <span style={styles.menuText}>내 냉장고 관리</span>
+                {me?.urgent_ingredients?.length
+                  ? <span style={styles.urgentBadgeSmall}>임박 {me.urgent_ingredients.length}개 &gt;</span>
+                  : <span style={styles.menuArrow}>&gt;</span>}
+              </span>
+              {me?.urgent_ingredients?.length > 0 && (
+                <span style={styles.urgentList}>
+                  {me.urgent_ingredients.map((item) => (
+                    <span key={item.id} style={styles.urgentChip}>
+                      {item.name} {getExpiryBadge(item.expiry_date, today).label}
+                    </span>
+                  ))}
+                </span>
+              )}
+            </button>
             <div style={styles.menuDivider} />
             <div style={styles.menuRow}>
               <span style={styles.menuText}>개인정보 관리</span>
@@ -231,7 +247,7 @@ export default function MyPage() {
             <button
               type="button"
               onClick={handleLogout}
-              style={{ ...styles.menuRow, paddingBottom: 0, width: "100%", border: 0, background: "none", font: "inherit", cursor: "pointer" }}
+              style={{ ...styles.menuButton, ...styles.menuRow, paddingBottom: 0 }}
             >
               <span style={styles.menuText}>로그아웃</span>
               <span style={styles.menuArrow}>&gt;</span>
@@ -503,6 +519,16 @@ const styles = {
     fontWeight: "600",
     padding: "5px 12px",
     borderRadius: "16px",
+  },
+  menuButton: { width: "100%", border: 0, padding: 0, background: "none", font: "inherit", textAlign: "left", cursor: "pointer" },
+  urgentList: { display: "flex", flexWrap: "wrap", gap: "6px", paddingBottom: "8px" },
+  urgentChip: {
+    backgroundColor: "#FBEAEA",
+    color: "#C85A5A",
+    fontSize: "12px",
+    fontWeight: "600",
+    padding: "4px 10px",
+    borderRadius: "12px",
   },
   menuArrow: {
     color: "#6E9952",

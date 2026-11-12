@@ -79,7 +79,14 @@ const routes = {
       SELECT id, name, profile_image_url, created_at,
              (SELECT count(*)::int FROM recipe_bookmarks WHERE user_id = u.id) AS bookmark_count,
              (SELECT count(*)::int FROM follows WHERE user_id = u.id) AS following_count,
-             (SELECT count(*)::int FROM follows WHERE following_id = u.id) AS follower_count
+             (SELECT count(*)::int FROM follows WHERE following_id = u.id) AS follower_count,
+             -- 유통기한 임박(5일 이하, 지난 것 포함) 내 재료. 알림 기준과 같음
+             (SELECT COALESCE(json_agg(json_build_object(
+                       'id', i.id, 'name', COALESCE(c.name, '재료'), 'expiry_date', to_char(i.expiry_date, 'YYYY-MM-DD'))
+                     ORDER BY i.expiry_date, i.id), '[]')
+              FROM ingredients i LEFT JOIN ingredient_catalog c ON c.id = i.catalog_id
+              WHERE i.user_id = u.id
+                AND i.expiry_date <= (now() AT TIME ZONE 'Asia/Seoul')::date + ${EXPIRY_ALERT_DAYS}::int) AS urgent_ingredients
       FROM users u WHERE id = ${user.sub}`;
     if (!me) throw new HttpError(404, "프로필이 없습니다");
     return me;
