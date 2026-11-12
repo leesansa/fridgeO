@@ -8,6 +8,7 @@ import ExpiryField from "../components/Ingredient/Fields/ExpiryField";
 import SubmitButton from "../components/Ingredient/Frame/SubmitButton";
 import { apiFetch } from "../utils/auth";
 import { getTodayKey } from "../utils/fridgeUtils";
+import { useIngredientCatalog } from "../utils/ingredientCatalog";
 import "../styles/Ingredient.css";
 
 // "2026-11-11" + 7일 → "2026-11-18" (UTC 로 계산해 시간대 영향 없음)
@@ -24,7 +25,11 @@ export default function FridgeRegister() {
   const [ingredient, setIngredient] = useState("사과");
   const [quantity, setQuantity] = useState(3);
   const [storage, setStorage] = useState("냉장");
-  const [expiryDate, setExpiryDate] = useState(() => addDays(today, 7));
+  const catalog = useIngredientCatalog();
+  // 직접 고른 날짜. 고르기 전(null)에는 오늘 + 재료의 기본 보관 일수 (사전에 없는 재료는 7일)
+  const [pickedExpiry, setPickedExpiry] = useState(null);
+  const shelfLife = catalog.find((item) => item.name === ingredient.trim())?.shelf_life_days ?? 7;
+  const expiryDate = pickedExpiry ?? addDays(today, shelfLife);
   const [saving, setSaving] = useState(false); // 저장 중 두 번 눌러 두 개 생기지 않게
 
   // DB(ingredients)에 저장하고 냉장고로 돌아감
@@ -54,12 +59,12 @@ export default function FridgeRegister() {
         <RegisterHeader />
 
         <main className="ingredient-form-main">
-          <NameField value={ingredient} onChange={setIngredient} />
+          <NameField value={ingredient} onChange={setIngredient} catalog={catalog} />
           <div className="ingredient-form-row">
             <QuantityCounter value={quantity} onChange={setQuantity} />
             <StorageSelect value={storage} onChange={setStorage} />
           </div>
-          <ExpiryField value={expiryDate} onChange={setExpiryDate} today={today} min={today} />
+          <ExpiryField value={expiryDate} onChange={setPickedExpiry} today={today} min={today} />
           <SubmitButton saving={saving} onClick={handleSubmit} />
         </main>
       </div>

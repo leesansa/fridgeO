@@ -9,6 +9,7 @@ import SubmitButton from "../components/Ingredient/Frame/SubmitButton";
 import EditBottomNav from "../components/Ingredient/Frame/EditBottomNav";
 import { apiFetch } from "../utils/auth";
 import { getTodayKey } from "../utils/fridgeUtils";
+import { useIngredientCatalog } from "../utils/ingredientCatalog";
 import "../styles/Ingredient.css";
 import "../styles/IngredientEdit.css";
 
@@ -39,6 +40,7 @@ function IngredientEditForm({ item }) {
   const navigate = useNavigate();
   const today = getTodayKey();
   const unit = item.unit;
+  const catalog = useIngredientCatalog(); // 이름 자동완성용
 
   const [ingredient, setIngredient] = useState(item.name ?? "");
   const [quantity, setQuantity] = useState(item.quantity); // 입력칸 글자 그대로 (저장할 때 숫자로 검사)
@@ -82,7 +84,7 @@ function IngredientEditForm({ item }) {
         <RegisterHeader title="홈 | 냉장재료 편집" />
 
         <main className="ingredient-form-main">
-          <NameField value={ingredient} onChange={setIngredient} />
+          <NameField value={ingredient} onChange={setIngredient} catalog={catalog} />
           <div className="ingredient-form-row">
             <EditQuantityField value={quantity} unit={unit} onChange={setQuantity} />
             <StorageSelect value={storage} onChange={setStorage} />

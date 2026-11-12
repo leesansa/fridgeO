@@ -375,7 +375,14 @@ body {
   object-fit: cover;
 }
 
+/* 사진이 없는 재료: 이름 첫 글자 */
 .ingredient-photo > span {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  background: #edf1e7;
+  color: #6b7a45;
   font-size: 40px;
 }
 

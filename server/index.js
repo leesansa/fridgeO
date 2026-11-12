@@ -382,6 +382,11 @@ const publicRoutes = {
   async "GET /api/categories"() {
     return sql`SELECT id, name, icon_url FROM categories ORDER BY id`;
   },
+  // 재료 사전 [{ name, shelf_life_days }]: 등록 화면의 이름 자동완성 + 유통기한 기본값(오늘 + 보관 일수)
+  // 보관 일수가 있는 = 검수된 항목만 (사용자가 새로 입력해 생긴 이름은 오타·중복이 섞여 있어 추천하지 않음)
+  async "GET /api/ingredient-catalog"() {
+    return sql`SELECT name, shelf_life_days FROM ingredient_catalog WHERE shelf_life_days IS NOT NULL ORDER BY name`;
+  },
   // 레시피 목록 (무한 스크롤). cursor = 지난 페이지 마지막 id, 응답의 nextCursor 가 null 이면 끝
   // category = 분류 id (없으면 전체)
   async "GET /api/recipes"(req) {

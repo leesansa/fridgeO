@@ -15,7 +15,7 @@ const List = ({ items, today, onSelectIngredient, onDeleteIngredient }) => {
               {item.image ? (
                 <img src={item.image} alt="" />
               ) : (
-                <span>{item.emoji}</span>
+                <span>{item.name[0]}</span>
               )}
             </div>
 
