@@ -1,0 +1,373 @@
+/* 마이페이지 (pages/MyPage.jsx), 420 x 915 고정 프레임 */
+
+/* ---------- 페이지 틀 ---------- */
+.mypage {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    background-color: #e5e7eb;
+    font-family: "Pretendard", "Noto Sans KR", sans-serif;
+}
+
+.mypage-frame {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 420px;
+    height: 915px;
+    background-color: #f3f4f3;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+.mypage-main {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 20px;
+    min-height: 0;
+    overflow-y: auto; /* 북마크·팔로우 목록을 펼쳐도 아래 메뉴가 잘리지 않고 스크롤됨 */
+    padding: 20px 26px 90px; /* 아래쪽은 하단 바에 가리지 않게 */
+    box-sizing: border-box;
+}
+
+.mypage-card {
+    padding: 22px 24px;
+    background-color: #fff;
+    border-radius: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+}
+
+.mypage-section-title {
+    margin-bottom: 14px;
+    font-size: 14px;
+    font-weight: 700;
+    color: #333;
+}
+
+/* 회색 둥근 버튼 (최근 본 레시피 없음, 북마크 전체 보기) */
+.mypage-soft-button {
+    width: 100%;
+    padding: 16px;
+    border: none;
+    border-radius: 16px;
+    background-color: #f3f4f3;
+    color: #555;
+    font: inherit;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+/* ---------- 프로필 ---------- */
+.mypage-profile {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+
+.mypage-avatar {
+    position: relative;
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    width: 72px;
+    height: 72px;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background-color: #86a96f;
+    font-size: 36px;
+    cursor: pointer;
+}
+
+.mypage-avatar.is-uploading {
+    opacity: 0.5;
+}
+
+.mypage-avatar-img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+/* 사진을 바꿀 수 있다는 표시 (오른쪽 아래 작은 연필) */
+.mypage-avatar-badge {
+    position: absolute;
+    right: -2px;
+    bottom: -2px;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background-color: #fff;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+    color: #4e7a36;
+    font-size: 13px;
+    line-height: 24px;
+    text-align: center;
+}
+
+.mypage-profile-name {
+    margin-bottom: 6px;
+    font-size: 16px;
+    font-weight: 700;
+    color: #222;
+}
+
+.mypage-profile-sub {
+    font-size: 13px;
+    color: #555;
+}
+
+/* ---------- 북마크 / 팔로우 숫자 ---------- */
+.mypage-stats {
+    display: flex;
+    padding: 14px 12px;
+}
+
+.mypage-stat {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    align-items: center;
+    padding: 8px 0;
+    border: none;
+    border-radius: 14px;
+    background-color: transparent;
+    font: inherit;
+    cursor: pointer;
+}
+
+.mypage-stat.is-active {
+    background-color: #eef3e8;
+}
+
+.mypage-stat-num {
+    margin-bottom: 6px;
+    font-size: 18px;
+    font-weight: 700;
+    color: #4e7a36;
+}
+
+.mypage-stat-label {
+    font-size: 13px;
+    color: #555;
+}
+
+.mypage-stat-divider {
+    width: 1px;
+    margin: 6px 4px;
+    background-color: #eaeaea;
+}
+
+/* ---------- 펼친 목록 (북마크 / 팔로잉·팔로워) ---------- */
+.mypage-tabs {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 12px;
+}
+
+.mypage-tab {
+    flex: 1;
+    height: 34px;
+    border: none;
+    border-radius: 10px;
+    background-color: #f3f4f3;
+    color: #555;
+    font: inherit;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.mypage-tab.is-active {
+    background-color: #7fa766;
+    color: #fff;
+}
+
+.mypage-panel-note {
+    margin: 0;
+    font-size: 13px;
+    color: #777;
+    text-align: center;
+}
+
+.mypage-panel-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+/* 북마크 목록 아래 "전체 보기" 버튼 */
+.mypage-panel-list + .mypage-soft-button {
+    margin-top: 12px;
+}
+
+.mypage-panel-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    padding: 0;
+    border: none;
+    background: none;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+}
+
+.mypage-panel-thumb {
+    flex-shrink: 0;
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    background-color: #e2d7d7;
+    object-fit: cover;
+}
+
+.mypage-panel-thumb.is-round {
+    border-radius: 50%;
+}
+
+.mypage-panel-text {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 14px;
+    font-weight: 700;
+    color: #222;
+}
+
+/* ---------- 최근 본 레시피: 가로로 넘겨 보는 카드 줄 (두 장 반 정도 보여 옆으로 더 있다는 걸 알 수 있게) ---------- */
+.mypage-recent-list {
+    display: flex;
+    gap: 12px;
+    margin: 0;
+    padding: 0 0 6px;
+    list-style: none;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+}
+
+.mypage-recent-card {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 128px;
+    padding: 8px;
+    border: none;
+    border-radius: 16px;
+    background-color: #f3f4f3;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+    scroll-snap-align: start;
+}
+
+.mypage-recent-thumb {
+    display: block;
+    width: 112px;
+    height: 80px;
+    border-radius: 10px;
+    background-color: #e2d7d7;
+    object-fit: cover;
+}
+
+/* 제목이 길어도 두 줄까지만 */
+.mypage-recent-title {
+    display: -webkit-box;
+    overflow: hidden;
+    word-break: keep-all;
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 18px;
+    color: #222;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+}
+
+/* ---------- 하단 메뉴 ---------- */
+.mypage-menu {
+    padding: 20px 24px;
+}
+
+/* 버튼 기본 모양 지우기 (아래 .mypage-menu-row 가 뒤에 있어 패딩은 row 가 이김) */
+.mypage-menu-button {
+    display: block;
+    width: 100%;
+    padding: 0;
+    border: 0;
+    background: none;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+}
+
+.mypage-menu-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    cursor: pointer;
+}
+
+.mypage-menu-row.is-last {
+    padding-bottom: 0;
+}
+
+.mypage-menu-text {
+    font-size: 14px;
+    font-weight: 700;
+    color: #222;
+}
+
+.mypage-menu-arrow {
+    font-size: 18px;
+    font-weight: bold;
+    color: #6e9952;
+}
+
+.mypage-menu-divider {
+    height: 1px;
+    margin: 4px 0;
+    background-color: #f0f0f0;
+}
+
+/* 내 냉장고 관리: 유통기한 임박 재료 */
+.mypage-urgent-badge {
+    padding: 5px 12px;
+    border-radius: 16px;
+    background-color: #c85a5a;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.mypage-urgent-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding-bottom: 8px;
+}
+
+.mypage-urgent-chip {
+    padding: 4px 10px;
+    border-radius: 12px;
+    background-color: #fbeaea;
+    color: #c85a5a;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+/* 버튼·구분선 묶음이 레이아웃에 끼지 않게 (자식이 .mypage-stats 의 flex 항목이 됨) */
+.mypage-stat-slot {
+    display: contents;
+}
