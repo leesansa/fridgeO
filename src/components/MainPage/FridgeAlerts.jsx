@@ -17,12 +17,19 @@ const countCard = (title, n, icon, iconPos = ICON_POS) => ({
   ...(n > 0 ? { status: "확인!", tone: "warn", desc: `${n}개 있음` } : { status: "정상", tone: "ok", desc: "없음" }),
 });
 
-// DB 요약(GET /api/fridge/summary) → 카드 4개. summary 가 없으면(불러오는 중·로그아웃) 안내 문구
-function toCards(summary, today, loggedIn) {
+// summary 가 없을 때 카드 위 상태·아래 설명 (상태 줄이 비어 보이지 않게)
+const PENDING = {
+  loggedOut: { status: "로그인 필요", tone: "warn", desc: "로그인 후 확인" },
+  error: { status: "오류", tone: "warn", desc: "불러오지 못했어요" },
+  loading: { status: "확인 중", tone: "ok", desc: "불러오는 중…" },
+};
+
+// DB 요약(GET /api/fridge/summary) → 카드 4개. summary 가 없으면(로그아웃·실패·불러오는 중) 안내 문구
+function toCards(summary, today, loggedIn, failed) {
   if (!summary) {
-    const desc = loggedIn === false ? "로그인 후 확인" : "불러오는 중…";
+    const state = PENDING[loggedIn === false ? "loggedOut" : failed ? "error" : "loading"];
     return [["유통기한 임박", expiry], ["유통기한 지남", expired], ["다 떨어진 상품", restock], ["가장 급한 재료", soonestIcon]]
-      .map(([title, icon]) => ({ title, icon, iconPos: ICON_POS, status: "", tone: "ok", desc }));
+      .map(([title, icon]) => ({ title, icon, iconPos: ICON_POS, ...state }));
   }
   const { soonest } = summary;
   const soonestBadge = soonest && getExpiryBadge(soonest.expiry_date, today);
@@ -47,6 +54,7 @@ const FridgeAlerts = () => {
   const navigate = useNavigate();
   const [loggedIn, setLoggedIn] = useState(null); // 확인 전 null
   const [summary, setSummary] = useState(null);
+  const [failed, setFailed] = useState(false); // 요약을 못 받았으면 "불러오는 중"에 멈춰 있지 않고 오류로 표시
   const [today] = useState(getTodayKey);
 
   useEffect(() => {
@@ -60,6 +68,7 @@ const FridgeAlerts = () => {
         if (alive) setSummary(data);
       } catch (e) {
         console.error("냉장고 요약을 불러오지 못했습니다:", e);
+        if (alive) setFailed(true);
       }
     });
     return () => { alive = false; };
@@ -70,7 +79,7 @@ const FridgeAlerts = () => {
       <h2 className="section-title fridge-title">지금 확인해야할 내 재료들!</h2>
       <img className="divider" src={line} alt="" />
       <div className="fridge-grid">
-        {toCards(summary, today, loggedIn).map((card) => (
+        {toCards(summary, today, loggedIn, failed).map((card) => (
           <button
             type="button"
             className="fridge-card"
