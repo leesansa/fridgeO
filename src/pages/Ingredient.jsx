@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
-import RegisterHeader from "../components/Ingredient/RegisterHeader";
-import NameField from "../components/Ingredient/NameField";
-import QuantityCounter from "../components/Ingredient/QuantityCounter";
-import StorageSelect from "../components/Ingredient/StorageSelect";
-import ExpiryField from "../components/Ingredient/ExpiryField";
-import SubmitButton from "../components/Ingredient/SubmitButton";
+import RegisterHeader from "../components/Ingredient/Frame/RegisterHeader";
+import NameField from "../components/Ingredient/Fields/NameField";
+import QuantityCounter from "../components/Ingredient/Fields/QuantityCounter";
+import StorageSelect from "../components/Ingredient/Fields/StorageSelect";
+import ExpiryField from "../components/Ingredient/Fields/ExpiryField";
+import SubmitButton from "../components/Ingredient/Frame/SubmitButton";
 import { apiFetch } from "../utils/auth";
 import { getTodayKey } from "../utils/fridgeUtils";
 import "../styles/Ingredient.css";

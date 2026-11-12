@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import { getExpiryBadge } from "../../utils/fridgeUtils";
+import { getExpiryBadge } from "../../../utils/fridgeUtils";
 
 // 유통기한: 날짜 글자나 달력 아이콘을 누르면 브라우저 달력 창. 오른쪽 배지는 남은 기한 (5일 이하면 빨강)
 // min: 고를 수 있는 가장 이른 날짜 (등록은 오늘부터, 편집은 이미 지난 날짜도 그대로 두려고 제한 없음)
