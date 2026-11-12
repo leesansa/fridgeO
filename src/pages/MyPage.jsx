@@ -239,10 +239,10 @@ export default function MyPage() {
               <span style={styles.menuArrow}>&gt;</span>
             </button>
             <div style={styles.menuDivider} />
-            <div style={styles.menuRow}>
+            <button type="button" onClick={() => navigate("/mypage/settings")} style={{ ...styles.menuButton, ...styles.menuRow }}>
               <span style={styles.menuText}>알림 설정 | 동의/약관</span>
               <span style={styles.menuArrow}>&gt;</span>
-            </div>
+            </button>
             <div style={styles.menuDivider} />
             <button
               type="button"

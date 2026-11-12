@@ -76,7 +76,7 @@ const routes = {
   // 내 프로필 + 마이페이지 숫자 (북마크·팔로잉·팔로워 수)
   async "GET /api/me"(req, user) {
     const [me] = await sql`
-      SELECT id, name, profile_image_url, created_at,
+      SELECT id, name, profile_image_url, created_at, expiry_alert,
              (SELECT count(*)::int FROM recipe_bookmarks WHERE user_id = u.id) AS bookmark_count,
              (SELECT count(*)::int FROM follows WHERE user_id = u.id) AS following_count,
              (SELECT count(*)::int FROM follows WHERE following_id = u.id) AS follower_count,
@@ -102,6 +102,14 @@ const routes = {
     }
     await ensureProfile(user);
     const [me] = await sql`UPDATE users SET profile_image_url = ${profileImage} WHERE id = ${user.sub} RETURNING profile_image_url`;
+    return me;
+  },
+  // 알림 설정: 유통기한 임박 알림 받기 켜기/끄기
+  async "PATCH /api/me/settings"(req, user) {
+    const { expiryAlert } = await readJson(req, 1_000);
+    if (typeof expiryAlert !== "boolean") throw new HttpError(400, "expiryAlert 는 true/false 여야 합니다");
+    await ensureProfile(user);
+    const [me] = await sql`UPDATE users SET expiry_alert = ${expiryAlert} WHERE id = ${user.sub} RETURNING expiry_alert`;
     return me;
   },
   // 내가 북마크한 레시피 (최근 저장한 순)
@@ -255,6 +263,7 @@ const routes = {
       LEFT JOIN ingredient_catalog c ON c.id = i.catalog_id
       WHERE i.user_id = ${user.sub}
         AND i.expiry_date <= (now() AT TIME ZONE 'Asia/Seoul')::date + ${EXPIRY_ALERT_DAYS}::int
+        AND EXISTS (SELECT 1 FROM users WHERE id = ${user.sub} AND expiry_alert) -- 알림 설정에서 끈 사람은 새로 안 만듦
       ON CONFLICT (ingredient_id) WHERE type = 'expiry' DO NOTHING`;
     const items = await sql`
       SELECT n.id, n.type, n.message, n.created_at, n.read_at IS NOT NULL AS read,

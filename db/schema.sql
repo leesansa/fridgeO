@@ -3,6 +3,7 @@ CREATE TABLE users (
   id                UUID PRIMARY KEY REFERENCES neon_auth."user"(id) ON DELETE CASCADE,
   name              TEXT NOT NULL,                 -- 이름이자 닉네임
   profile_image_url TEXT,
+  expiry_alert      BOOLEAN NOT NULL DEFAULT true, -- 유통기한 임박 알림 받기 (알림 설정)
   created_at        TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
