@@ -5,13 +5,9 @@ import "../vendor/lucian-icons/bell.js";
 import FridgeAlerts from "../components/MainPage/FridgeAlerts.jsx";
 import Condiments from "../components/MainPage/Condiments.jsx";
 import Recommends from "../components/MainPage/Recommends.jsx";
-
-// assets/main의 이미지를 한 번에 불러와 확장자를 뺀 파일명으로 꺼낸다 (예: logo.png → "logo")
-const images = Object.fromEntries(
-    Object.entries(import.meta.glob("../assets/main/*", { eager: true, import: "default" }))
-        .map(([path, url]) => [path.split("/").pop().replace(/\.\w+$/, ""), url]),
-);
-const { logo, search, add } = images;
+import MainSearch from "../components/MainPage/MainSearch.jsx";
+import logo from "../assets/main/logo.png";
+import add from "../assets/main/add.png";
 
 const MainPage = () => {
     const navigate = useNavigate();
@@ -34,21 +30,8 @@ const MainPage = () => {
                 <button type="button" className="main-bell" aria-label={hasUnread ? "알림, 새 알림 있음" : "알림"} onClick={() => navigate("/notification")}>
                     <lucian-bell size="34" ref={bellRef} />
                     {hasUnread && <span className="main-bell-dot" aria-hidden="true" />}
-                </button> 
-                {/* Enter 하면 통합 검색(레시피 + 내 냉장고 재료) 화면으로 */}
-                <form
-                    role="search"
-                    onSubmit={(e) => {
-                        e.preventDefault();
-                        const q = String(new FormData(e.currentTarget).get("search")).trim();
-                        if (q) navigate(`/search?${new URLSearchParams({ q })}`);
-                    }}
-                >
-                    <label className="main-search">
-                        <img src={search} alt="" />
-                        <input type="text" name="search" maxLength={50} enterKeyHint="search" placeholder="레시피나 재료를 검색해보세요" aria-label="레시피나 재료 검색" />
-                    </label>
-                </form>
+                </button>
+                <MainSearch />
             </header>
 
             <main className="main-panel">
