@@ -115,8 +115,13 @@ const routes = {
   // 내가 북마크한 레시피 (최근 저장한 순)
   async "GET /api/me/bookmarks"(req, user) {
     return sql`
-      SELECT r.id, r.title, r.image_url
+      SELECT r.id, r.title, r.image_url, u.name AS author, s.review_count, s.rating
       FROM recipe_bookmarks b JOIN recipes r ON r.id = b.recipe_id
+      LEFT JOIN users u ON u.id = r.user_id
+      CROSS JOIN LATERAL (
+        SELECT count(*)::int AS review_count, round(avg(rating), 1)::float AS rating
+        FROM reviews WHERE recipe_id = r.id
+      ) s
       WHERE b.user_id = ${user.sub}
       ORDER BY b.created_at DESC
       LIMIT 50`;

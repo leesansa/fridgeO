@@ -8,6 +8,7 @@ import RecipeList from "./pages/RecipeList";
 import RecipeDetail from "./pages/RecipeDetail";
 import ReviewWrite from "./pages/ReviewWrite";
 import MyPage from "./pages/MyPage";
+import BookMark from "./pages/BookMark";
 import PrivacyInfo from "./pages/PrivacyInfo";
 import Settings from "./pages/Settings";
 import Search from "./components/Search";
@@ -35,6 +36,8 @@ const router = createBrowserRouter([
       // 리뷰는 로그인한 사용자 이름으로 DB(reviews)에 저장되므로 로그인 필요
       { path: "recipe/:id/review", element: <ReviewWrite />, loader: requireLogin },
       { path: "mypage", element: <MyPage/>, loader: requireLogin },
+      // 내 북마크 목록 (DB recipe_bookmarks)
+      { path: "bookmark", element: <BookMark/>, loader: requireLogin },
       // 개인정보 관리: 들어온 뒤 비밀번호를 한 번 더 확인
       { path: "mypage/privacy", element: <PrivacyInfo/>, loader: requireLogin },
       { path: "mypage/settings", element: <Settings/>, loader: requireLogin },

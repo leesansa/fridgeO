@@ -1,0 +1,119 @@
+/* 내 북마크 페이지 (pages/BookMark.jsx, components/Recipe/Bookmark*.jsx), 420px 화면 기준 */
+.bookmark-page {
+    width: 100%;
+    max-width: 420px;
+    min-height: 100dvh;
+    margin: 0 auto;
+    padding-bottom: 80px; /* 하단 바 60px + 여백 */
+    background: #f2f2f2;
+    box-sizing: border-box;
+}
+
+.bookmark-main {
+    padding: 4px 16px 0;
+}
+
+.bookmark-heading {
+    margin: 0 0 12px 4px;
+    font-size: 16px;
+    font-weight: 700;
+    color: #222;
+}
+
+.bookmark-count {
+    font-size: 13px;
+    font-weight: 600;
+    color: #6f9c4c;
+}
+
+.bookmark-status {
+    margin: 60px 0 0;
+    font-size: 14px;
+    line-height: 1.8;
+    color: #777;
+    text-align: center;
+}
+
+.bookmark-link {
+    padding: 0;
+    border: 0;
+    background: none;
+    font: inherit;
+    color: #6f9c4c;
+    cursor: pointer;
+}
+
+.bookmark-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.bookmark-card {
+    display: flex;
+    align-items: center;
+    padding: 8px 8px 8px 8px;
+    background: #fff;
+    border-radius: 15px;
+}
+
+.bookmark-open {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+    padding: 0;
+    border: 0;
+    background: none;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+}
+
+.bookmark-thumb {
+    flex-shrink: 0;
+    width: 72px;
+    height: 72px;
+    border-radius: 10px;
+    background: #e5e5e5;
+    object-fit: cover;
+}
+
+.bookmark-info {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 0;
+}
+
+.bookmark-title {
+    display: -webkit-box;
+    overflow: hidden;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.35;
+    color: #222;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+}
+
+.bookmark-meta {
+    font-size: 12px;
+    color: #777;
+}
+
+.bookmark-remove {
+    flex-shrink: 0;
+    padding: 6px;
+    border: 0;
+    background: none;
+    cursor: pointer;
+}
+
+.bookmark-remove:disabled {
+    opacity: 0.4;
+}

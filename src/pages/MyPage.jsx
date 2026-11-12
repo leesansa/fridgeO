@@ -85,6 +85,11 @@ function StatPanel({ kind, me }) {
           ))}
         </ul>
       )}
+      {kind === "bookmarks" && !loading && loaded.rows.length > 0 && (
+        <button type="button" style={styles.recentEmpty} onClick={() => navigate("/bookmark")}>
+          북마크 전체 보기 &gt;
+        </button>
+      )}
     </div>
   );
 }
