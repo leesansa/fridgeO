@@ -285,6 +285,19 @@ const routes = {
     await sql`DELETE FROM recipe_bookmarks WHERE user_id = ${user.sub} AND recipe_id = ${recipeIdOf(req)}`;
     return { bookmarked: false };
   },
+  // 레시피 작성자 팔로우 (이미 팔로우 중이면 그대로 → 여러 번 눌러도 안전). 작성자 id 는 화면에 내보내지 않아 레시피 id 로 받음
+  async "PUT /api/recipes/:id/follow"(req, user) {
+    const authorId = await authorIdToFollow(req, user);
+    await ensureProfile(user);
+    await sql`INSERT INTO follows (user_id, following_id) VALUES (${user.sub}, ${authorId}) ON CONFLICT (user_id, following_id) DO NOTHING`;
+    return { following: true };
+  },
+  // 팔로우 해제
+  async "DELETE /api/recipes/:id/follow"(req, user) {
+    const authorId = await authorIdToFollow(req, user);
+    await sql`DELETE FROM follows WHERE user_id = ${user.sub} AND following_id = ${authorId}`;
+    return { following: false };
+  },
   // 내 냉장고 재료 (무한 스크롤). sort = expiry(기본)|name|storage, q = 재료 이름 검색, offset = 이미 받은 개수
   // shortcut: OFFSET 페이지라 한 사람 재료가 수천 개가 되면 느려짐, 그때 정렬 기준별 커서로 교체
   async "GET /api/ingredients"(req, user) {
@@ -505,6 +518,14 @@ async function ensureProfile(user) {
   await sql`INSERT INTO users (id, name) VALUES (${user.sub}, ${user.name ?? "사용자"}) ON CONFLICT (id) DO NOTHING`;
 }
 
+// 팔로우할 레시피 작성자 id. 작성자가 없거나(초기 데이터·탈퇴) 나 자신이면 오류
+async function authorIdToFollow(req, user) {
+  const [recipe] = await sql`SELECT user_id FROM recipes WHERE id = ${recipeIdOf(req)}`;
+  if (!recipe?.user_id) throw new HttpError(404, "작성자를 찾을 수 없습니다");
+  if (recipe.user_id === user.sub) throw new HttpError(400, "내가 쓴 레시피예요");
+  return recipe.user_id;
+}
+
 // /api/recipes/<id>/... 주소에서 레시피 id
 function recipeIdOf(req) {
   const id = Number(new URL(req.url, "http://localhost").pathname.split("/")[3]);
@@ -614,7 +635,7 @@ const publicRoutes = {
     // 공개 주소지만 로그인 토큰이 같이 오면 내 북마크 여부와 재료별 내 냉장고에 있는지(in_fridge)도 알려 줌 (토큰 없거나 틀리면 false)
     const user = await getAuthUser(req);
     const userId = user?.sub ?? null;
-    const [ingredients, steps, [mark]] = await Promise.all([
+    const [ingredients, steps, [mark], [follow]] = await Promise.all([
       // 재료 이름은 공백을 빼고 같으면 같은 재료 ("소 금" = "소금"), 수량 0(다 떨어짐)은 없는 것으로
       sql`
         SELECT ri.name, ri.amount,
@@ -626,10 +647,11 @@ const publicRoutes = {
         FROM recipe_ingredients ri WHERE ri.recipe_id = ${id} ORDER BY ri.position`,
       sql`SELECT position, text, image_url FROM recipe_steps WHERE recipe_id = ${id} ORDER BY position`,
       user ? sql`SELECT 1 FROM recipe_bookmarks WHERE user_id = ${user.sub} AND recipe_id = ${id}` : [],
+      user ? sql`SELECT 1 FROM follows WHERE user_id = ${user.sub} AND following_id = ${recipe.user_id}` : [],
     ]);
     // mine = 로그인한 계정이 작성자인지 (화면의 "수정" 버튼용. 실제 권한 확인은 PUT 에서 다시 함). 작성자 id 는 내보내지 않음
     const { user_id: authorId, ...rest } = recipe;
-    return { ...rest, ingredients, steps, bookmarked: Boolean(mark), mine: userId !== null && authorId === userId };
+    return { ...rest, ingredients, steps, bookmarked: Boolean(mark), following: Boolean(follow), mine: userId !== null && authorId === userId };
   },
   // 이 레시피의 리뷰 목록. 내용 있는 리뷰 먼저, 그다음 최신순. offset = 이미 받은 개수, nextOffset 이 null 이면 끝
   // shortcut: OFFSET 페이지라 리뷰가 아주 많아지면 느려짐, 그때 (created_at, id) 커서로 교체
@@ -685,9 +707,9 @@ createServer(async (req, res) => {
     res.end(JSON.stringify(body));
   };
   try {
-    // /api/recipes/123(/review(s)·/bookmark), /api/ingredients/123 처럼 숫자 id 가 붙은 주소는 routes 의 ":id" 키로 찾는다
+    // /api/recipes/123(/review(s)·/bookmark·/follow), /api/ingredients/123 처럼 숫자 id 가 붙은 주소는 routes 의 ":id" 키로 찾는다
     const pathname = new URL(req.url, "http://localhost").pathname
-      .replace(/^(\/api\/recipes)\/\d+(\/reviews?|\/bookmark)?$/, "$1/:id$2")
+      .replace(/^(\/api\/recipes)\/\d+(\/reviews?|\/bookmark|\/follow)?$/, "$1/:id$2")
       .replace(/^(\/api\/ingredients)\/\d+$/, "$1/:id");
     const publicHandler = publicRoutes[`${req.method} ${pathname}`];
     if (publicHandler) return send(200, await publicHandler(req));
