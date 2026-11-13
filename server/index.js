@@ -296,19 +296,29 @@ const routes = {
     const q = params.get("q")?.trim() || null;
     if (q && q.length > 30) throw new HttpError(400, "검색어는 30자 이하로 입력하세요");
     const pattern = q && `%${q.replace(/[\\%_]/g, "\\$&")}%`;
-    // 날짜는 시간대 영향 없게 'YYYY-MM-DD' 글자로, 수량은 1.50 → 1.5 처럼 끝 0 제거
+    const category = params.get("category") || null; // "조미료" 면 조미료만
+    // 날짜는 시간대 영향 없게 'YYYY-MM-DD' 글자로, 수량은 1.50 → 1.5 처럼 끝 0 제거. 사진이 없는 조미료는 아이콘으로 대신
     const rows = await sql`
-      SELECT i.id, c.name, c.image_url, trim_scale(i.quantity)::text AS quantity, i.unit, i.storage,
+      SELECT i.id, c.name, COALESCE(c.image_url, c.icon_url) AS image_url, trim_scale(i.quantity)::text AS quantity, i.unit, i.storage,
              to_char(i.expiry_date, 'YYYY-MM-DD') AS expiry_date
       FROM ingredients i
       LEFT JOIN ingredient_catalog c ON c.id = i.catalog_id
       WHERE i.user_id = ${user.sub} AND (${pattern}::text IS NULL OR c.name ILIKE ${pattern})
+        AND (${category}::text IS NULL OR c.category = ${category})
       ORDER BY
         CASE WHEN ${sort} = 'name' THEN c.name END,
         CASE WHEN ${sort} = 'storage' THEN array_position(ARRAY['냉장', '냉동', '실온'], i.storage) END,
         i.expiry_date NULLS LAST, i.id
       LIMIT ${INGREDIENT_PAGE + 1} OFFSET ${offset}`;
     return { items: rows.slice(0, INGREDIENT_PAGE), nextOffset: rows.length > INGREDIENT_PAGE ? offset + INGREDIENT_PAGE : null };
+  },
+  // 내가 가진 조미료 (메인 "내 조미료들", 냉장고 조미료 탭 표시 여부). 같은 조미료가 여러 개여도 한 번, 다 떨어진 것(수량 0)은 뺌
+  async "GET /api/fridge/condiments"(req, user) {
+    return sql`
+      SELECT DISTINCT c.name, c.icon_url
+      FROM ingredients i JOIN ingredient_catalog c ON c.id = i.catalog_id
+      WHERE i.user_id = ${user.sub} AND i.quantity > 0 AND c.category = '조미료'
+      ORDER BY c.name`;
   },
   // 메인 "지금 확인해야할 내 재료들" 요약: 임박(0~5일)·기한 지남·다 떨어짐(수량 0) 개수 + 기한이 가장 빠른 재료
   // 수량 0 인 재료는 냉장고에 없는 것으로 보고 임박·지남·가장 급한 재료에서 뺀다

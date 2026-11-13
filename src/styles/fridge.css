@@ -184,6 +184,15 @@ body {
   background-color: #99ab6e;
 }
 
+/* 조미료만 보기: 켜지면 진한 색 */
+.fridge-condiment {
+  background-color: #c9a24a;
+}
+
+.fridge-condiment[aria-pressed="true"] {
+  background-color: #8a6a1f;
+}
+
 .fridge-actions button:disabled {
   cursor: not-allowed;
   opacity: 0.75;

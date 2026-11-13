@@ -264,8 +264,30 @@ body {
     display: flex;
     gap: 15px;
     margin: 0;
-    padding: 5px 0 0 14px;
+    padding: 5px 14px 0;
     list-style: none;
+    /* 조미료가 많으면 옆으로 밀어서 봄 (추천 레시피와 같은 방식: 아이콘 단위로 멈춤, 마우스는 얇은 스크롤 막대) */
+    overflow-x: auto;
+    scroll-snap-type: x proximity;
+    scroll-padding-left: 14px;
+    scrollbar-width: thin;
+    overscroll-behavior-x: contain;
+}
+
+.condiment-list > li {
+    flex-shrink: 0;
+    width: 54px;
+    scroll-snap-align: start;
+}
+
+.condiment-name {
+    display: block;
+    font-size: 8px;
+    line-height: 12px;
+    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .condiment-item {

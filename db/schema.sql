@@ -24,6 +24,7 @@ CREATE TABLE ingredient_catalog (
   name            TEXT NOT NULL UNIQUE,
   image_url       TEXT,
   icon_url        TEXT,
+  category        TEXT,  -- '조미료' 만 씀 (db/condiments.sql 이 채움). NULL = 일반 재료
   shelf_life_days INT CHECK (shelf_life_days > 0)  -- 등록일로부터 기본 보관 일수
 );
 
