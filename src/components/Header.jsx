@@ -1,4 +1,4 @@
-import { useNavigate, useSearchParams } from "react-router";
+import { Link, useNavigate, useSearchParams } from "react-router";
 import logo from "../assets/Logo_FridgeO.svg";
 import "../styles/Header.css";
 
@@ -17,7 +17,7 @@ const Header = ({ value, onChange, onSearch, backTo = -1 }) => {
             <button type="button" className="back-btn" aria-label="뒤로가기" onClick={() => navigate(backTo)}>
                 <svg viewBox="0 0 38 38" aria-hidden="true"><path d="M23 9 14.5 19 23 29" /></svg>
             </button>
-            <img className="logo" src={logo} alt="" />
+            <Link to="/" className="logo" aria-label="홈으로"><img src={logo} alt="" /></Link>
             {/* Enter 로 새로고침은 막고, onSearch 가 있으면 검색어를 넘김. 입력 중 검색은 페이지가 onChange 로 처리 */}
             <form
                 className="search"

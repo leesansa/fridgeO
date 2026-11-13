@@ -77,27 +77,6 @@
     color: #222;
 }
 
-.ingredient-form-tags {
-    display: flex;
-    gap: 8px;
-}
-
-.ingredient-form-tag {
-    padding: 6px 14px;
-    border: none;
-    border-radius: 16px;
-    background-color: #efefef;
-    color: #444;
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-}
-
-.ingredient-form-tag.is-selected {
-    background-color: #7fa766;
-    color: #fff;
-}
-
 /* ---------- 수량 & 보관 방법 (한 줄에 두 카드) ---------- */
 .ingredient-form-row {
     display: flex;

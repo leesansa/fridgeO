@@ -92,10 +92,17 @@ const routes = {
     if (!me) throw new HttpError(404, "프로필이 없습니다");
     return me;
   },
-  // 프로필 사진 바꾸기. 파일 저장소가 없어 브라우저에서 작게 줄인 사진을 data URL 글자로 받아 그대로 저장
+  // 닉네임 또는 프로필 사진 바꾸기. 파일 저장소가 없어 브라우저에서 작게 줄인 사진을 data URL 글자로 받아 그대로 저장
   // shortcut: data URL 을 users 행에 저장 (약 10KB), 파일 저장소(S3·R2 등)가 생기면 업로드 후 주소만 저장
   async "PATCH /api/me"(req, user) {
-    const { profileImage } = await readJson(req, PROFILE_IMAGE_MAX + 1_000);
+    const { profileImage, name } = await readJson(req, PROFILE_IMAGE_MAX + 1_000);
+    // { name } 을 보내면 닉네임 바꾸기
+    if (name !== undefined) {
+      const nickname = parseName(name);
+      await ensureProfile(user);
+      const [me] = await sql`UPDATE users SET name = ${nickname} WHERE id = ${user.sub} RETURNING name`;
+      return me;
+    }
     if (profileImage !== null) {
       const ok = typeof profileImage === "string" && profileImage.length <= PROFILE_IMAGE_MAX
         && /^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+/]+=*$/.test(profileImage);

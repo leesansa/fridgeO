@@ -4,7 +4,6 @@ import Header from "../components/Header.jsx";
 import CategoryBar from "../components/Recipe/List/CategoryBar.jsx";
 import RecipeCards from "../components/Recipe/List/RecipeCards.jsx";
 import { apiFetch } from "../utils/auth.js";
-import plusIcon from "../assets/lucide_circle_plus_icon.png";
 import "../styles/recipes.css";
 
 const ALL = { id: null, name: "전체" };
@@ -41,7 +40,7 @@ const RecipeList = () => {
             <Header value={text} onChange={setText} />
             <RecipeCards key={`${selected ?? "all"}|${q}`} categoryId={selected} q={q} />
             {/* 로그인 안 했으면 router 가 로그인 화면으로 보냄 */}
-            <Link to="/recipe/new" className="recipe-add" aria-label="레시피 작성"><img src={plusIcon} alt="" /></Link>
+            <Link to="/recipe/new" className="recipe-add">레시피 추가</Link>
         </div>
     );
 };

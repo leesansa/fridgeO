@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useNavigate, useParams } from "react-router";
+import { Link, useNavigate, useParams } from "react-router";
 import logo from "../assets/Logo_FridgeO.svg";
 import camera from "../assets/review/camera.png";
 import { apiFetch } from "../utils/auth.js";
@@ -145,7 +145,7 @@ const RecipeForm = ({ recipe }) => {
                 <button type="button" className="review-back" aria-label="뒤로가기" onClick={() => navigate(-1)}>
                     <svg viewBox="0 0 38 38" aria-hidden="true"><path d="M23 9 14.5 19 23 29" /></svg>
                 </button>
-                <img className="review-logo" src={logo} alt="" />
+                <Link to="/" className="review-logo" aria-label="홈으로"><img src={logo} alt="" /></Link>
                 <h1>{recipe ? "레시피 수정하기" : "레시피 작성하기"}</h1>
             </header>
 
