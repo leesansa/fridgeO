@@ -18,6 +18,11 @@ fridgeO React(Vite) 화면을 만들고 팀원 브랜치를 병합하면서 겪�
 | 11 | 레시피 목록이 그림 파일을 전부 불러옴 | `import.meta.glob`으로 `assets/recipe` PNG 전체 import | 쓰는 분류 그림 5개만 import |
 | 12 | 등록 화면과 냉장고 화면 CSS가 섞임 | 둘 다 `ingredient-*` 클래스 사용 | 등록·편집 공통 클래스를 `ingredient-form-*`으로 분리 |
 | 13 | 편집 화면 파일 이름이 `Ingredient copy.jsx` | 등록 화면을 복사해서 만듦 | `IngredientEdit.jsx`로 이름 변경, 라우터 연결 |
+| 14 | `.env.example`에 R2 비밀 키가 실제 값으로 올라감 | 예시 파일에 실제 값을 채워 커밋 | 파일 삭제 (**남은 일**: 키 교체, 빈 예시 파일 복구) |
+| 15 | 냉장고에서 사진 없는 재료 칸이 비어 보임 | DB 재료에는 없는 `item.emoji`를 표시 | 이름 첫 글자(`item.name[0]`) 표시 |
+| 16 | 재료 등록 유통기한이 항상 오늘 + 7일 | 기본값이 고정 7일 | 재료 사전의 `shelf_life_days`로 기본값 계산 |
+| 17 | 메인 "내 조미료들"이 냉장고와 상관없이 항상 같은 6개 | Figma 기준 고정 데이터 | 내 냉장고의 조미료만 DB에서 불러옴, 없으면 숨김 |
+| 18 | 조미료만 보기로 들어왔는데 끌 버튼이 없을 수 있음 | 조미료가 없으면 버튼을 숨기도록 함 | 켜진 채 들어왔으면 버튼 유지 |
 
 ---
 
@@ -247,6 +252,97 @@ import.meta.glob("../assets/recipe/**/*.png", { eager: true, import: "default" }
 **해결** (`b76f66a`)
 - `IngredientEdit.jsx`로 이름 변경
 - `router.jsx`에 `/ingredient/edit/:id` 연결, 냉장고에서 재료를 누르면 이동
+
+---
+
+## 14. `.env.example`에 R2 비밀 키가 실제 값으로 올라감
+
+**증상**
+`f2b8629 Update .env.example` 커밋에서 빈칸이던 `R2_ACCOUNT_ID`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`, `R2_BUCKET`, `R2_PUBLIC_URL`에 실제 값이 들어가 GitHub에 올라감.
+
+**원인**
+`.gitignore`가 `!.env.example`로 예시 파일만 일부러 올리게 되어 있는데, 그 파일에 실제 값을 채웠다. `.env`(4번)와 달리 `.env.example`은 Git이 막아 주지 않는다.
+
+**해결** (`8439300`)
+`.env.example` 삭제.
+
+**남은 일**
+- 삭제해도 Git 기록(`f2b8629`)에는 값이 남는다. Cloudflare R2에서 **API 토큰을 삭제하고 새로 발급**한 뒤 `.env`에만 넣는다.
+- 지금은 예시 파일이 없어 새 팀원이 어떤 키가 필요한지 알 수 없다. 값을 모두 비운 `.env.example`을 다시 올린다 (`fab7a4f` 버전이 빈 예시).
+  ```bash
+  git show fab7a4f:.env.example > .env.example
+  ```
+
+**미리 막는 법**
+커밋 전에 예시 파일에 값이 들어갔는지 확인한다. `=` 뒤가 비어 있어야 한다 (`PORT=3001`처럼 비밀이 아닌 기본값은 예외).
+```bash
+git diff --cached .env.example
+```
+
+---
+
+## 15. 냉장고에서 사진 없는 재료 칸이 비어 보임
+
+**증상**
+내 냉장고 목록·박스 보기에서 사진이 없는 재료는 그림 자리가 빈 칸으로 나옴.
+
+**원인**
+처음 데모 데이터에는 `emoji`가 있었지만, DB로 바꾼 뒤 재료에는 `emoji`가 없어 `item.emoji`가 항상 `undefined`였다.
+
+**해결** (`eeff803`, `components/fridge/Box.jsx`, `List.jsx`, `styles/fridge.css`)
+```diff
+- <span>{item.emoji}</span>
++ <span>{item.name[0]}</span>
+```
+연한 초록 배경에 이름 첫 글자를 가운데 표시.
+
+---
+
+## 16. 재료 등록 유통기한이 항상 오늘 + 7일
+
+**증상**
+우유든 쌀이든 유통기한 기본값이 모두 오늘 + 7일.
+
+**원인**
+```js
+const [expiryDate, setExpiryDate] = useState(() => addDays(today, 7));
+```
+
+**해결** (`eeff803`, `src/pages/Ingredient.jsx`)
+- 재료 사전(`useIngredientCatalog`)에서 이름이 같은 재료의 `shelf_life_days`로 기본값 계산, 사전에 없으면 7일
+- 사용자가 달력에서 고른 날짜(`pickedExpiry`)는 따로 저장해서, 고른 뒤에는 재료 이름을 바꿔도 덮어쓰지 않음
+```js
+const shelfLife = catalog.find((item) => item.name === ingredient.trim())?.shelf_life_days ?? 7;
+const expiryDate = pickedExpiry ?? addDays(today, shelfLife);
+```
+
+---
+
+## 17. 메인 "내 조미료들"이 냉장고와 상관없이 항상 같은 6개
+
+**증상**
+메인 화면 조미료 줄이 냉장고에 없어도 케첩·후추·소금·마요네즈·고추·허브를 항상 보여 줌. 누르면 냉장고에서 "검색한 재료가 없어요."
+
+**원인**
+Figma 화면을 옮기면서 만든 고정 데이터(`assets/main/*.png` 6개)를 그대로 썼다.
+
+**해결** (`7793d5d`, `components/MainPage/Condiments.jsx`)
+- `GET /api/fridge/condiments`로 내 냉장고의 조미료만 불러와 아이콘 + 이름 표시
+- 하나도 없거나 로그아웃이면 영역을 숨김 (`return null`)
+- 아이콘을 누르면 `/fridge?category=조미료&q=이름`, 더보기는 `/fridge?category=조미료`
+
+---
+
+## 18. 조미료만 보기로 들어왔는데 끌 버튼이 없을 수 있음
+
+**상황**
+냉장고 화면의 "조미료" 버튼은 내 조미료가 하나도 없으면 숨긴다. 그런데 조미료가 없는 상태에서 `/fridge?category=조미료` 주소로 바로 들어오면 (저장해 둔 주소, 뒤로가기 등), 필터는 켜진 채 버튼만 사라져 전체 보기로 돌아갈 수 없게 된다.
+
+**해결** (`7793d5d`, `src/pages/Fridge.jsx`)
+조미료가 있거나 **이미 켜져 있으면** 버튼을 보여 준다.
+```jsx
+onCondimentOnlyChange={hasCondiments || condimentOnly ? setCondimentOnly : undefined}
+```
 
 ---
 
