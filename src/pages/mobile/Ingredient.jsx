@@ -30,7 +30,7 @@ export default function FridgeRegister() {
             <QuantityCounter value={f.quantity} onChange={f.setQuantity} />
             <StorageSelect value={f.storage} onChange={f.setStorage} />
           </div>
-          <ExpiryField value={f.expiryDate} onChange={f.setPickedExpiry} today={f.today} min={f.today} />
+          <ExpiryField value={f.expiryDate} onChange={f.setPickedExpiry} today={f.today} min={f.today} quick />
           <SubmitButton saving={f.saving} onClick={handleSubmit} />
         </main>
       </div>
