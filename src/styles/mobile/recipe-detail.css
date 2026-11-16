@@ -92,9 +92,38 @@
 }
 
 .detail-author {
+  display: flex;
+  align-items: center;
+  gap: 6px;
   margin: 4px 0 0;
   color: var(--text-sub);
   font-size: 13px;
+}
+
+/* 작성자 닉네임 옆 작은 팔로우 아이콘: 팔로우 전은 선만, 팔로우 중은 초록 바탕 */
+.detail-follow {
+  display: flex;
+  padding: 3px;
+  border: 1px solid var(--green);
+  border-radius: 50%;
+  background: none;
+  color: var(--green-text);
+  cursor: pointer;
+}
+
+.detail-follow[aria-pressed="true"] {
+  background: var(--green-text);
+  color: #fff;
+}
+
+.detail-follow svg {
+  width: 14px;
+  height: 14px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 .detail-tags {

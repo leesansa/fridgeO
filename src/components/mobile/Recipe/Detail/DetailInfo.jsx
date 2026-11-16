@@ -1,4 +1,6 @@
-// 레시피 제목·작성자·요리 정보(시간·인분·난이도) + 소개글
+import FollowButton from "./FollowButton.jsx";
+
+// 레시피 제목·작성자(+팔로우)·요리 정보(시간·인분·난이도) + 소개글
 const DetailInfo = ({ recipe }) => {
     const tags = [
         recipe.cook_time && `${recipe.cook_time}분`,
@@ -10,7 +12,10 @@ const DetailInfo = ({ recipe }) => {
         <>
             <section className="detail-card">
                 <h1 className="detail-title">{recipe.title}</h1>
-                <p className="detail-author">{recipe.author ?? "알 수 없음"}</p>
+                <p className="detail-author">
+                    {recipe.author ?? "알 수 없음"}
+                    <FollowButton recipe={recipe} />
+                </p>
                 {tags.length > 0 && (
                     <ul className="detail-tags" aria-label="요리 정보">
                         {tags.map((t) => <li key={t}>{t}</li>)}

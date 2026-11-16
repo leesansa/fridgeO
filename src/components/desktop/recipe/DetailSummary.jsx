@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router";
 import { useRecipeBookmark } from "../../../utils/useRecipeBookmark";
+import FollowButton from "../../mobile/Recipe/Detail/FollowButton.jsx";
 import "../../../vendor/lucian-icons/edit.js"; // 079번 edit(연필) 아이콘
 import "../../../vendor/lucian-icons/bookmark.js"; // 012번 bookmark 아이콘
 
@@ -25,7 +26,10 @@ const DetailSummary = ({ recipe, categoryName }) => {
                 <Link to={`/recipe?category=${recipe.category_id}`} className="ddetail-category">{categoryName}</Link>
             )}
             <h1 className="detail-title">{recipe.title}</h1>
-            <p className="detail-author">{recipe.author ?? "알 수 없음"}</p>
+            <p className="detail-author">
+                {recipe.author ?? "알 수 없음"}
+                <FollowButton recipe={recipe} />
+            </p>
             {tags.length > 0 && (
                 <ul className="detail-tags" aria-label="요리 정보">
                     {tags.map((t) => <li key={t}>{t}</li>)}
