@@ -274,4 +274,27 @@
         outline: 2px solid #6f9c4c;
         outline-offset: 2px;
     }
+
+    /* 내 조미료들: 모바일 8px 글자는 넓은 화면에서 안 보여 키움 (높이 고정을 풀어 잘리지 않게) */
+    .condiment-section {
+        height: auto;
+        padding-bottom: 12px;
+    }
+
+    .condiment-head {
+        padding: 14px 0 6px;
+        font-size: 16px;
+        font-weight: 600;
+    }
+
+    .condiment-more {
+        gap: 4px;
+        font-size: 14px;
+        font-weight: 500;
+    }
+
+    .condiment-more .chevron {
+        width: 20px;
+        height: 20px;
+    }
 }
