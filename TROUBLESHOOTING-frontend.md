@@ -23,6 +23,16 @@ fridgeO React(Vite) 화면을 만들고 팀원 브랜치를 병합하면서 겪�
 | 16 | 재료 등록 유통기한이 항상 오늘 + 7일 | 기본값이 고정 7일 | 재료 사전의 `shelf_life_days`로 기본값 계산 |
 | 17 | 메인 "내 조미료들"이 냉장고와 상관없이 항상 같은 6개 | Figma 기준 고정 데이터 | 내 냉장고의 조미료만 DB에서 불러옴, 없으면 숨김 |
 | 18 | 조미료만 보기로 들어왔는데 끌 버튼이 없을 수 있음 | 조미료가 없으면 버튼을 숨기도록 함 | 켜진 채 들어왔으면 버튼 유지 |
+| 19 | 데스크탑에서 "전체 카테고리"를 넣자 앱 전체가 오류 화면으로 멈춤 | React 19가 아이콘(`<lucian-menu>`)의 `state`를 프로퍼티로 넣으려 함 (읽기 전용) | `ref`로 받아 `setState()` 호출 |
+| 20 | lucian-icons 설치 명령이 "Runtime integrity check failed" | git이 아이콘 원본을 CRLF 줄바꿈으로 받아 해시가 달라짐 | LF로 맞춰 해시를 대조한 뒤 `menu.js` 직접 복사 |
+| 21 | 데스크탑 CSS가 모바일 CSS를 못 덮어쓸 위험 | 같은 선택자를 두 파일이 정의 → 불러오는 순서에 따라 결과가 달라짐 | 데스크탑 CSS를 모바일 뒤에 import, 빌드 결과에서 순서 확인 |
+| 22 | 데스크탑 급한 재료 표의 줄이 어긋남 | `<td>`에 `display: flex`를 줘서 표 칸이 아니게 됨 | `<td>` 안의 `<span>`에 flex |
+| 23 | 레시피 작성 오른쪽 칸의 저장 버튼이 화면 밖에 걸림 | 따라오는(sticky) 칸이 창보다 높음 | 칸 높이를 창에 맞추고 칸 안에서만 스크롤 |
+| 24 | 검색 결과 제목 `'두부'`의 따옴표가 벌어짐 | 제목의 flex `gap`이 글자 조각 사이에도 들어감 | 제목 글자를 `<span>` 하나로 묶음 |
+| 25 | ESLint `react-hooks/set-state-in-effect` (알림센터) | effect 안에서 바로 `setState` | 렌더 중 "값이 바뀌면 맞추기" 방식으로 변경 |
+| 26 | main 병합 후 빌드 실패 (`DetailInfo.jsx` import 오류) | main의 팔로우 수정이 `mobile/`로 옮긴 파일에 옛 상대 경로로 들어옴 | 경로 수정 + 팔로우를 `useAuthorFollow`·`FollowButton`으로 공통화 |
+| 27 | 데스크탑 레시피 상세에 팔로우 버튼이 없음 | 데스크탑 상세는 `DetailInfo`를 쓰지 않음 | `FollowButton`을 데스크탑 `DetailSummary`에도 넣음 |
+| 28 | 미리보기에서 냉장고 칸·레시피 목록이 빈 채로 멈춤 | 브라우저 창이 가려져 있으면 무한 스크롤(IntersectionObserver)이 안 불림 | 코드 문제 아님. 창을 보이게 하면 정상 (테스트할 때만 주의) |
 
 ---
 
@@ -346,6 +356,135 @@ onCondimentOnlyChange={hasCondiments || condimentOnly ? setCondimentOnly : undef
 
 ---
 
+## 19. 데스크탑에서 "전체 카테고리"를 넣자 앱 전체가 오류 화면으로 멈춤
+
+**증상** `Cannot set property state of #<LucianIcon> which has only a getter`
+
+**원인**
+React 19는 사용자 정의 태그(`<lucian-menu>`)에 준 값을 속성이 아니라 **프로퍼티**로 넣는다. lucian-icons의 `state`는 읽기 전용(getter)이라 `state={open ? "open" : "closed"}`처럼 주면 오류가 난다.
+
+**해결** (`6c3e36b`, `src/components/desktop/CategoryMenu.jsx`)
+`ref`로 아이콘을 받아 아이콘이 제공하는 `setState()`로 바꾼다. (북마크 아이콘은 같은 이유로 `setAttribute("state", …)`를 씀)
+```jsx
+useEffect(() => { iconRef.current.setState(open ? "open" : "closed"); }, [open]);
+<lucian-menu size="22" ref={iconRef} />
+```
+
+---
+
+## 20. lucian-icons 설치 명령이 "Runtime integrity check failed"
+
+**원인**
+Windows git(`core.autocrlf`)이 `.agents/skills/lucian-icons/code/*.js`를 CRLF로 받아서, 설치 명령이 계산한 해시가 카탈로그 값과 달라졌다. 파일 내용은 같다.
+
+**해결** (`6c3e36b`)
+줄바꿈을 LF로 맞춰 해시를 카탈로그(`catalog.json`)와 대조해 같은 것을 확인한 뒤 `menu.js`만 `src/vendor/lucian-icons/`에 복사. `runtime.js`는 이미 있던 것과 바이트까지 같아서 그대로 둠.
+```bash
+tr -d '\r' < .agents/skills/lucian-icons/code/menu.js | sha256sum
+```
+
+---
+
+## 21. 데스크탑 CSS가 모바일 CSS를 못 덮어쓸 위험
+
+**원인**
+데스크탑 화면도 모바일 클래스(`.main-page`, `.main-nav` 등)를 그대로 쓰고 1024px 이상에서만 값을 바꾼다. 같은 우선순위의 선택자는 **나중에 불러온 CSS가 이긴다**.
+
+**해결** (`6c3e36b`)
+- `pages/mobile/MainPage.jsx`: `styles/mobile/MainPage.css` 다음 줄에 `styles/desktop/MainPage.css` import (순서를 바꾸지 말 것)
+- 하단 바 숨기기(`.main-nav { display: none }`)는 `styles/desktop/DesktopHeader.css`에 두고, `Layout.jsx`에서 `Navigation` 다음에 `DesktopHeader`를 import
+- 빌드 결과 CSS에서 모바일 규칙이 데스크탑 규칙보다 앞에 오는 것을 확인
+
+---
+
+## 22. 데스크탑 급한 재료 표의 줄이 어긋남
+
+**원인** `<td className="dash-name">`에 `display: flex`를 주면 그 칸이 표 칸(table-cell)이 아니게 되어 줄 구분선과 높이가 어긋난다.
+
+**해결** (`6c3e36b`, `components/desktop/MainPage/FridgeDashboard.jsx`) `<td>`는 그대로 두고 안쪽 `<span className="dash-name">`에 flex.
+
+---
+
+## 23. 레시피 작성 오른쪽 칸의 저장 버튼이 화면 밖에 걸림
+
+**원인** 오른쪽 칸(대표 사진·요리 정보·저장)이 `position: sticky`인데 창 높이(900px)보다 길어서, 아래쪽 버튼이 본문 끝까지 스크롤하기 전에는 보이지 않았다.
+
+**해결** (`6c3e36b`, `styles/desktop/recipe-write.css`)
+```css
+.dwrite-side { max-height: calc(100dvh - 174px); overflow-y: auto; }
+```
+
+---
+
+## 24. 검색 결과 제목 `'두부'`의 따옴표가 벌어짐
+
+**원인** `<h1>`이 `display: flex; gap: 14px`라서 `'`, `<em>두부</em>`, `' 검색 결과`가 각각 flex 항목이 되어 사이가 벌어짐.
+
+**해결** (`6c3e36b`, `pages/desktop/Search.jsx`) 제목 글자를 `<span className="dsearch-q">` 하나로 묶고, 개수 표시만 따로 둠.
+
+---
+
+## 25. ESLint `react-hooks/set-state-in-effect` (알림센터)
+
+**원인** 알림센터를 열면 바로 읽음 처리되므로, 열 때 안 읽었던 알림을 "새 알림"으로 기억하려고 effect 안에서 `setFresh(...)`를 부름 → eslint-plugin-react-hooks v7이 오류로 막음.
+
+**해결** (`6c3e36b`, `pages/desktop/Notification.jsx`) 렌더 중에 "안 읽은 목록이 바뀌었으면 state를 맞추기" 방식(React 문서 권장)으로 변경. 알림 id는 DB에서 문자열로 오므로 `Number()`로 바꾸지 않음.
+
+---
+
+## 26. main 병합 후 빌드 실패 (`DetailInfo.jsx` import 오류)
+
+**증상** `Could not resolve '../../../utils/auth.js' in src/components/mobile/Recipe/Detail/DetailInfo.jsx`
+
+**원인**
+이번 작업에서 `src/components/Recipe/...`를 `src/components/mobile/Recipe/...`로 옮겼는데, 그 사이 main에 올라온 팔로우 버튼 수정(`22131d6`)이 옛 파일을 고쳤다. git은 이름 바뀐 파일로 수정을 옮겨 주지만, **파일 안의 상대 경로(`../../../`)는 고쳐 주지 않는다**. 충돌 표시가 없어서 빌드해 보기 전에는 모른다.
+
+**해결** (`0ea409d`)
+- 팔로우 로직을 `utils/useAuthorFollow.js`, 버튼을 `components/mobile/Recipe/Detail/FollowButton.jsx`로 떼어 경로 문제를 없앰
+- 병합한 뒤에는 꼭 `npm run build`까지 돌려 볼 것
+
+---
+
+## 27. 데스크탑 레시피 상세에 팔로우 버튼이 없음
+
+**원인** 데스크탑 상세는 사진 옆 요약 카드(`components/desktop/recipe/DetailSummary.jsx`)를 쓰고 모바일 `DetailInfo`를 쓰지 않는다. 모바일에만 기능을 넣으면 데스크탑에선 빠진다.
+
+**해결** (`0ea409d`) `FollowButton`을 `DetailSummary`에도 넣음. → 모바일 화면에 기능을 더할 때는 **같은 주소의 `pages/desktop/` 화면에도 들어가는지** 확인할 것 (`src/README.md`의 표 참고).
+
+---
+
+## 28. 미리보기에서 냉장고 칸·레시피 목록이 빈 채로 멈춤
+
+**원인** 무한 스크롤은 목록 끝의 빈 칸이 화면에 보일 때(`IntersectionObserver`) 다음 페이지를 부른다. 개발 도구의 미리보기 창이 가려져 있으면 브라우저가 이 신호를 보내지 않아, 첫 페이지도 안 불러온 것처럼 보인다.
+
+**해결** 코드 문제가 아님. 창을 화면에 보이게 하면 바로 불러온다. 자동 테스트나 숨긴 창으로 확인할 때만 주의.
+
+---
+
+## 데스크탑 버전 작업 정리와 의견
+
+**구조** (`6c3e36b`, 자세한 흐름은 [src/README.md](src/README.md))
+- 주소 하나에 `pages/mobile/`과 `pages/desktop/` 화면이 하나씩 있고, `pages/Responsive.jsx`가 화면 폭 1024px을 기준으로 고른다. 기능이 같은 화면을 두 벌 유지하는 대신 **데이터·저장 로직은 `utils/use*.js` 훅 하나**로 모아 모바일·데스크탑이 같이 쓴다.
+- 데스크탑에서만 쓰는 CSS는 `styles/desktop/`에 두고, 모바일 클래스를 덮어쓰는 규칙은 `@media (min-width: 1024px)` 안에만 둔다.
+- 회원가입·계정 찾기는 모바일 입력 양식을 데스크탑 틀(`pages/desktop/AuthFrame.jsx`)에 그대로 넣었다. 인증 흐름이 복잡해서 새로 만들지 않았다.
+
+**좋았던 점**
+- 훅을 공유하니 모바일에서 저장 방식을 고치면 데스크탑도 같이 고쳐진다 (예: 재료 수정의 빈 수량 검사).
+- 화면을 나눌 때 컴포넌트를 처음부터 다시 만들지 않고, 준비물 체크리스트·리뷰 목록처럼 모바일 조각을 가져다 써서 코드가 크게 늘지 않았다.
+
+**주의할 점**
+- 모바일 화면에 기능을 더하면 데스크탑 화면에도 넣어야 한다 (#27). 훅에 넣으면 두 화면이 같이 받는다.
+- 폴더를 `mobile/`·`desktop/`으로 옮겼기 때문에, 예전 main을 기준으로 작업하던 브랜치는 병합할 때 경로 오류가 날 수 있다 (#26). 새 작업은 최신 main에서 시작할 것.
+- 데스크탑 CSS는 모바일 CSS 뒤에 불러와야 한다 (#21).
+
+**남은 일**
+- 로그인한 실제 계정으로 냉장고 끌어다 놓기·재료 저장·레시피 작성·리뷰·개인정보 변경을 끝까지 확인하지 못함 (예시 데이터로만 확인)
+- 리뷰의 맛 평가·첨부 사진은 DB에 칸이 없어 저장되지 않음 (모바일도 같음)
+- 북마크 안에서 찾기·정렬은 서버가 주는 최대 50개 안에서만 됨
+- 재료 등록의 기본 유통기한은 보관 장소와 상관없이 재료 사전 값 (냉동이어도 냉장 기준 일수)
+
+---
+
 ## 참고: 구조 변경 기록
 
 기능은 그대로 두고 파일 위치만 정리한 변경입니다. import 경로가 바뀌었으니 예전 경로로 import 하면 오류가 납니다.
@@ -359,6 +498,8 @@ onCondimentOnlyChange={hasCondiments || condimentOnly ? setCondimentOnly : undef
 | `c647efe` | 내 냉장고: `components/fridge/*` (정렬·툴바·목록·추가 버튼) |
 | `2b58584`, `5b4e86d` | 재료 등록·편집: 스타일 `styles/Ingredient.css`, 입력 칸 `components/Ingredient/*` 공유 |
 | `5c18d1e` | `components/Ingredient`를 `Fields`(입력 칸) · `Frame`(위·아래 바) 폴더로 |
+| `6c3e36b` | `src/components` · `pages` · `styles`를 `mobile/` · `desktop/`으로 나눔 (`components/Layout.jsx`, `pages/Responsive.jsx`는 공통이라 그대로). 모바일 로직은 `utils/use*.js` 훅으로 |
+| `da05595` | 안 쓰던 `utils/fridgeData.js`, 동작 없는 `EditBottomNav.jsx` 삭제, 흐름표 `src/README.md` 추가 |
 
 ---
 
