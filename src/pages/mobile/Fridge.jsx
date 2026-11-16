@@ -19,7 +19,7 @@ const Fridge = () => {
   // 거르기·정렬 탭 (SortFilter). 메인 "내 조미료들"에서 /fridge?category=조미료 로 오면 조미료 탭으로 시작
   const [filter, setFilter] = useState(() => (searchParams.get("category") === "조미료" ? "condiment" : "all"));
   const sortBy = filter === "name" ? "name" : "expiry"; // 기본 유통기한순
-  const status = filter === "urgent" || filter === "expired" ? filter : null;
+  const status = filter === "expired" ? filter : null;
   const category = filter === "condiment" ? "조미료" : null;
   const [viewMode, setViewMode] = useState("list"); // "list" | "box"
   const [mode, setMode] = useState(null); // "delete" | "edit" | null

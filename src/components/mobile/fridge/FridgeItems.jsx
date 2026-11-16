@@ -42,7 +42,7 @@ const FridgeItems = ({ sortBy, q, category, status, viewMode, mode, today, rootR
     <>
       {items.length > 0 && (viewMode === "list" ? <List {...viewProps} /> : <Box {...viewProps} />)}
       {loaded && items.length === 0 && (
-        <p className="fridge-empty">{q ? "검색한 재료가 없어요." : category ? "냉장고에 조미료가 없어요." : status ? `${status === "urgent" ? "기한이 임박한" : "기한이 지난"} 재료가 없어요.` : "냉장고에 재료가 없어요. + 버튼으로 추가해 보세요."}</p>
+        <p className="fridge-empty">{q ? "검색한 재료가 없어요." : category ? "냉장고에 조미료가 없어요." : status ? "기한이 지난 재료가 없어요." : "냉장고에 재료가 없어요. + 버튼으로 추가해 보세요."}</p>
       )}
       {error && (
         <p className="fridge-empty" role="alert">

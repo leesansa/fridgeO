@@ -1,8 +1,7 @@
-// 데스크탑 냉장고와 같은 거르기·정렬 (전체 = 기본 유통기한순). 모바일은 탭 하나만 고름
+// 데스크탑 냉장고와 같은 거르기·정렬 (전체 = 기본 유통기한순), 단 모바일은 임박 없음. 탭 하나만 고름
 const filters = [
   { value: "all", label: "전체" },
   { value: "name", label: "이름순" },
-  { value: "urgent", label: "임박" },
   { value: "expired", label: "지남" },
   { value: "condiment", label: "조미료" },
 ];
