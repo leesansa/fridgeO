@@ -5,7 +5,6 @@ import EditQuantityField from "../../components/mobile/Ingredient/Fields/EditQua
 import StorageSelect from "../../components/mobile/Ingredient/Fields/StorageSelect";
 import ExpiryField from "../../components/mobile/Ingredient/Fields/ExpiryField";
 import SubmitButton from "../../components/mobile/Ingredient/Frame/SubmitButton";
-import EditBottomNav from "../../components/mobile/Ingredient/Frame/EditBottomNav";
 import { useEditableIngredient, useIngredientEditForm } from "../../utils/useIngredientEdit";
 import "../../styles/mobile/Ingredient.css";
 import "../../styles/mobile/IngredientEdit.css";
@@ -35,7 +34,7 @@ function IngredientEditForm({ item }) {
   return (
     <div className="ingredient-form">
       {/* 420 * 915 고정 프레임 */}
-      <div className="ingredient-form-frame is-edit">
+      <div className="ingredient-form-frame">
         <RegisterHeader title="홈 | 냉장재료 편집" />
 
         <main className="ingredient-form-main">
@@ -48,8 +47,6 @@ function IngredientEditForm({ item }) {
           <ExpiryField value={f.expiryDate} onChange={f.setExpiryDate} today={f.today} />
           <SubmitButton saving={f.saving} onClick={handleSave} label="편집 완료" />
         </main>
-
-        <EditBottomNav />
       </div>
     </div>
   );
