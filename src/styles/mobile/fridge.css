@@ -123,7 +123,7 @@ body {
 
 .fridge-filters {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(5, minmax(0, 1fr)); /* 탭 수 = SortFilter 의 filters 개수 */
   height: 32px;
   border-radius: 10px;
   background-color: #fff;
@@ -185,13 +185,6 @@ body {
 }
 
 /* 조미료만 보기: 켜지면 진한 색 */
-.fridge-condiment {
-  background-color: #c9a24a;
-}
-
-.fridge-condiment[aria-pressed="true"] {
-  background-color: #8a6a1f;
-}
 
 .fridge-actions button:disabled {
   cursor: not-allowed;
@@ -764,7 +757,7 @@ body {
   position: absolute;
   bottom: 0;
   left: 0;
-  width: calc(100% / 3);
+  width: calc(100% / 5);
   height: 4px;
   pointer-events: none;
   transform: translateX(calc(var(--filter-index) * 100%));

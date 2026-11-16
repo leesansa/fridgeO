@@ -1,9 +1,8 @@
 import "../../../vendor/lucian-icons/sort.js";
 import "../../../vendor/lucian-icons/grid.js";
 
-// 정렬 탭 아래 줄: 왼쪽은 삭제하기/편집하기 모드 (다시 누르면 끔)와 조미료만 보기, 오른쪽은 목록형/박스형 보기
-// onCondimentOnlyChange 가 없으면(내 조미료가 없음) 조미료 버튼을 안 보여 줌
-const FridgeToolbar = ({ mode, onModeChange, viewMode, onViewModeChange, condimentOnly, onCondimentOnlyChange }) => {
+// 거르기·정렬 탭 아래 줄: 왼쪽은 삭제하기/편집하기 모드 (다시 누르면 끔), 오른쪽은 목록형/박스형 보기 (조미료는 탭으로 옮김)
+const FridgeToolbar = ({ mode, onModeChange, viewMode, onViewModeChange }) => {
   // 같은 모드를 다시 누르면 꺼짐
   const toggleMode = (next) => onModeChange(mode === next ? null : next);
 
@@ -16,11 +15,6 @@ const FridgeToolbar = ({ mode, onModeChange, viewMode, onViewModeChange, condime
         <button type="button" className="fridge-edit" aria-pressed={mode === "edit"} onClick={() => toggleMode("edit")}>
           {mode === "edit" ? "선택 취소" : "편집하기"}
         </button>
-        {onCondimentOnlyChange && (
-          <button type="button" className="fridge-condiment" aria-pressed={condimentOnly} onClick={() => onCondimentOnlyChange(!condimentOnly)}>
-            {condimentOnly ? "전체 보기" : "조미료"}
-          </button>
-        )}
       </div>
 
       <div className="fridge-view-buttons" style={{ backgroundColor: "transparent" }} role="group" aria-label="재료 표시 방식">

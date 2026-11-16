@@ -7,7 +7,7 @@ import { getTodayKey } from "../../utils/fridgeUtils";
 import "../../styles/desktop/fridge.css";
 
 const STORAGES = ["냉장", "냉동", "실온"];
-const STATUSES = [[null, "전체"], ["urgent", "임박"], ["expired", "지남"], ["empty", "다 떨어짐"]];
+const STATUSES = [["urgent", "임박"], ["expired", "지남"]];
 
 // 데스크탑 내 냉장고: 냉장·냉동·실온 세 칸 + 오른쪽 상세 패널
 // 카드를 다른 칸으로 끌어다 놓으면 보관 장소가 바뀜 (모바일에 없는 기능, 키보드는 상세 패널의 보관 장소 선택)
@@ -18,6 +18,7 @@ const Fridge = () => {
   const [keyword, setKeyword] = useState(() => searchParams.get("q")?.trim() ?? "");
   const [q, setQ] = useState(keyword); // 입력이 0.3초 멈추면 반영
   const [status, setStatus] = useState(null);
+  const [byName, setByName] = useState(false); // 이름순 (끄면 기본 유통기한순)
   const [condimentOnly, setCondimentOnly] = useState(() => searchParams.get("category") === "조미료");
   const [hasCondiments, setHasCondiments] = useState(false);
   const [totals, setTotals] = useState({});
@@ -69,8 +70,8 @@ const Fridge = () => {
     }
   };
 
-  const params = { q, status, category: condimentOnly ? "조미료" : null };
-  const listKey = `${q}|${status}|${condimentOnly}|${version}`;
+  const params = { q, status, sort: byName ? "name" : "expiry", category: condimentOnly ? "조미료" : null };
+  const listKey = `${q}|${status}|${byName}|${condimentOnly}|${version}`;
   const sum = STORAGES.reduce((n, s) => n + (totals[s] ?? 0), 0);
 
   return (
@@ -88,7 +89,9 @@ const Fridge = () => {
           placeholder="냉장고 안 재료 검색"
           aria-label="냉장고 안 재료 검색"
         />
-        <div className="dfridge-filters" role="group" aria-label="상태로 거르기">
+        <div className="dfridge-filters" role="group" aria-label="거르기·정렬">
+          <button type="button" aria-pressed={status === null} onClick={() => setStatus(null)}>전체</button>
+          <button type="button" aria-pressed={byName} onClick={() => setByName(!byName)}>이름순</button>
           {STATUSES.map(([value, label]) => (
             <button key={label} type="button" aria-pressed={status === value} onClick={() => setStatus(value)}>
               {label}
