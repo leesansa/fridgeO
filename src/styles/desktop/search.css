@@ -1,0 +1,234 @@
+/* 데스크탑 통합 검색 (pages/desktop/Search.jsx). 1024px 이상에서만 그려지므로 @media 없음
+   레시피 카드는 styles/desktop/recipes.css, 배지 색은 데스크탑 냉장고와 같음 */
+.dsearch {
+    box-sizing: border-box;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 24px 24px 48px;
+    font-family: "Inter", sans-serif;
+    color: #111;
+}
+
+.dsearch *,
+.dsearch *::before,
+.dsearch *::after {
+    box-sizing: border-box;
+}
+
+.dsearch a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.dsearch :is(a, button):focus-visible {
+    outline: 2px solid #6f9c4c;
+    outline-offset: 2px;
+}
+
+/* 검색어 표시 */
+.dsearch mark {
+    padding: 0 1px;
+    border-radius: 3px;
+    background: #e3f0d2;
+    color: #2f5a17;
+}
+
+/* 큰 검색창 */
+.dsearch-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    max-width: 720px;
+    height: 54px;
+    margin: 0 auto 24px;
+    padding: 0 8px 0 20px;
+    border: 2px solid #6f9c4c;
+    border-radius: 30px;
+}
+
+.dsearch-bar:focus-within {
+    box-shadow: 0 0 0 4px #e3f0d2;
+}
+
+.dsearch-bar img {
+    width: 24px;
+    height: 24px;
+}
+
+.dsearch-bar input {
+    flex: 1;
+    min-width: 0;
+    border: 0;
+    outline: none;
+    background: none;
+    font: inherit;
+    font-size: 17px;
+}
+
+.dsearch-bar button {
+    height: 40px;
+    padding: 0 22px;
+    border: 0;
+    border-radius: 20px;
+    background: #6f9c4c;
+    font: inherit;
+    font-size: 15px;
+    font-weight: 600;
+    color: #fff;
+    cursor: pointer;
+}
+
+.dsearch-status {
+    margin: 48px 0;
+    font-size: 15px;
+    color: #717171;
+    text-align: center;
+}
+
+.dsearch-title {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    margin: 0 0 20px;
+    font-size: 22px;
+}
+
+.dsearch-title em {
+    font-style: normal;
+    color: #4d7a2c;
+}
+
+.dsearch-title .dsearch-counts {
+    font-size: 14px;
+    font-weight: 500;
+    color: #717171;
+}
+
+.dsearch-layout {
+    display: grid;
+    grid-template-columns: 320px minmax(0, 1fr);
+    gap: 28px;
+    align-items: start;
+}
+
+.dsearch h2 {
+    margin: 0;
+    font-size: 17px;
+}
+
+.dsearch h2 span {
+    margin-left: 4px;
+    font-size: 14px;
+    color: #6f9c4c;
+}
+
+.dsearch-section-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 14px;
+}
+
+.dsearch-empty {
+    margin: 12px 0;
+    font-size: 14px;
+    color: #717171;
+}
+
+.dsearch-empty a,
+.dsearch-more {
+    font-size: 14px;
+    font-weight: 600;
+    color: #4d7a2c !important;
+}
+
+/* 왼쪽: 내 냉장고 재료 (데스크탑 냉장고 카드와 같은 모양) */
+.dsearch-side {
+    position: sticky;
+    top: 158px; /* 데스크탑 헤더 아래 */
+    padding: 16px;
+    border-radius: 15px;
+    background: #f2f2f2;
+}
+
+.dsearch-side h2 {
+    margin-bottom: 12px;
+}
+
+.dsearch-ings {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 0 0 12px;
+    padding: 0;
+    list-style: none;
+}
+
+.dsearch-ings a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 10px;
+    border-radius: 10px;
+    background: #fff;
+}
+
+.dsearch-ings a:hover {
+    box-shadow: inset 0 0 0 2px #cae3a5;
+}
+
+.dsearch-photo {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    overflow: hidden;
+    border-radius: 50%;
+    background: #cae3a5;
+    font-weight: 600;
+    color: #4d7a2c;
+}
+
+.dsearch-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.dsearch-ing-text {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+
+.dsearch-ing-text strong {
+    overflow: hidden;
+    font-size: 14px;
+    font-weight: 500;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.dsearch-ing-text small {
+    font-size: 12px;
+    color: #636363;
+}
+
+.dsearch-badge {
+    flex-shrink: 0;
+    padding: 2px 8px;
+    border-radius: 8px;
+    font-size: 11px;
+    font-weight: 600;
+    color: #fff;
+    white-space: nowrap;
+}
+
+.dsearch-badge.is-urgent { background: #c06563; }
+.dsearch-badge.is-safe { background: #99ab6e; }
+.dsearch-badge.is-expired { background: #636363; }
+.dsearch-badge.is-empty { background: #b9b9b9; }

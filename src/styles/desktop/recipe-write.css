@@ -1,0 +1,431 @@
+/* 데스크탑 레시피 작성·수정 (pages/desktop/RecipeWrite.jsx). 1024px 이상에서만 그려지므로 @media 없음
+   색은 다른 데스크탑 화면과 같음 (초록 #6f9c4c) */
+.dwrite {
+    box-sizing: border-box;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px 24px 48px;
+    font-family: "Inter", sans-serif;
+    color: #111;
+}
+
+.dwrite *,
+.dwrite *::before,
+.dwrite *::after {
+    box-sizing: border-box;
+}
+
+.dwrite a {
+    color: inherit;
+}
+
+.dwrite :is(a, button, input, select, textarea):focus-visible,
+.dwrite label:has(input[type="file"]:focus-visible),
+.dwrite label:has(input[type="radio"]:focus-visible) {
+    outline: 2px solid #6f9c4c;
+    outline-offset: 2px;
+}
+
+.dwrite-status,
+.dwrite-error {
+    margin: 0;
+    font-size: 14px;
+}
+
+.dwrite-status {
+    margin: 40px 0;
+    color: #717171;
+}
+
+.dwrite-error {
+    color: #c06563;
+}
+
+.dwrite-crumbs {
+    margin-bottom: 16px;
+    overflow: hidden;
+    font-size: 13px;
+    color: #717171;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.dwrite-crumbs a {
+    text-decoration: none;
+}
+
+.dwrite-crumbs a:hover {
+    color: #4d7a2c;
+    text-decoration: underline;
+}
+
+.dwrite-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 340px;
+    gap: 28px;
+    align-items: start;
+}
+
+.dwrite-main,
+.dwrite-side {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.dwrite-side {
+    position: sticky;
+    top: 158px; /* 데스크탑 헤더 아래 */
+    /* 창이 낮아도 저장 버튼까지 닿게 이 칸만 따로 스크롤 */
+    max-height: calc(100dvh - 174px);
+    overflow-y: auto;
+    padding: 2px; /* 포커스 테두리가 잘리지 않게 */
+    scrollbar-width: thin;
+}
+
+.dwrite-main h1 {
+    margin: 0;
+    font-size: 26px;
+}
+
+.dwrite-card {
+    padding: 22px 24px;
+    border: 1px solid #ececec;
+    border-radius: 16px;
+}
+
+.dwrite-card h2 {
+    margin: 0 0 14px;
+    font-size: 17px;
+}
+
+.dwrite-card h2 span {
+    margin-left: 4px;
+    font-size: 14px;
+    color: #6f9c4c;
+}
+
+.dwrite-card-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+}
+
+.dwrite-label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.dwrite-hint {
+    margin: 6px 0 0;
+    font-size: 12px;
+    color: #8a8a8a;
+    text-align: right;
+}
+
+.dwrite-card-head .dwrite-hint {
+    margin: 0;
+}
+
+.dwrite input:not([type="radio"], [type="file"]),
+.dwrite select,
+.dwrite textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #d8d8d8;
+    border-radius: 10px;
+    background: #fff;
+    font: inherit;
+    font-size: 14px;
+}
+
+.dwrite :is(input, select, textarea):focus {
+    border-color: #6f9c4c;
+}
+
+.dwrite .dwrite-title {
+    padding: 12px 14px;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.dwrite-desc {
+    min-height: 110px;
+    line-height: 1.6;
+    resize: vertical;
+}
+
+.dwrite-card .dwrite-hint + .dwrite-label {
+    margin-top: 14px;
+}
+
+/* 재료: 이름 | 양 | 삭제 */
+.dwrite-ings,
+.dwrite-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.dwrite-ings li {
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) 36px;
+    gap: 8px;
+    align-items: center;
+}
+
+.dwrite-del {
+    width: 36px;
+    height: 36px;
+    border: 0;
+    border-radius: 50%;
+    background: #f2f2f2;
+    font-size: 18px;
+    color: #777;
+    cursor: pointer;
+}
+
+.dwrite-del:hover:not(:disabled) {
+    background: #fbeaea;
+    color: #c06563;
+}
+
+.dwrite-del:disabled {
+    opacity: 0.35;
+    cursor: default;
+}
+
+.dwrite-add {
+    width: 100%;
+    height: 42px;
+    margin-top: 12px;
+    border: 1px dashed #6f9c4c;
+    border-radius: 10px;
+    background: #f7faf3;
+    font: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    color: #4d7a2c;
+    cursor: pointer;
+}
+
+/* 만드는 순서: 번호 | 설명 | 사진 | 삭제 */
+.dwrite-steps {
+    gap: 14px;
+}
+
+.dwrite-steps li {
+    display: grid;
+    grid-template-columns: 32px minmax(0, 1fr) 160px 36px;
+    gap: 12px;
+    align-items: start;
+}
+
+.dwrite-no {
+    display: grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #6f9c4c;
+    font-weight: 700;
+    color: #fff;
+}
+
+.dwrite-steps textarea {
+    min-height: 120px;
+    line-height: 1.6;
+    resize: vertical;
+}
+
+.dwrite-step-photo {
+    position: relative;
+    display: block;
+    height: 120px;
+    overflow: hidden;
+    border-radius: 10px;
+}
+
+.dwrite-step-photo img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.dwrite-step-photo button {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    width: 26px;
+    height: 26px;
+    border: 0;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.55);
+    font-size: 15px;
+    color: #fff;
+    cursor: pointer;
+}
+
+.dwrite-step-photo.is-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    border: 1px dashed #c9c9c9;
+    background: #fafafa;
+    font-size: 13px;
+    color: #666;
+    cursor: pointer;
+}
+
+.dwrite-step-photo.is-empty img {
+    width: 26px;
+    height: 26px;
+}
+
+/* 오른쪽: 대표 사진 */
+.dwrite-photo {
+    display: block;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    border-radius: 12px;
+    cursor: pointer;
+}
+
+.dwrite-photo img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.dwrite-photo > span {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    height: 100%;
+    border: 1px dashed #c9c9c9;
+    border-radius: 12px;
+    background: #fafafa;
+    font-size: 14px;
+    color: #666;
+}
+
+.dwrite-photo > span img {
+    width: 34px;
+    height: 34px;
+}
+
+/* 요리 정보 */
+.dwrite-info {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.dwrite-info h2 {
+    margin: 0;
+}
+
+.dwrite-info label,
+.dwrite-info legend {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 0;
+    font-size: 13px;
+    font-weight: 600;
+    color: #444;
+}
+
+.dwrite-info fieldset {
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+.dwrite-info legend {
+    margin-bottom: 6px;
+}
+
+.dwrite-info-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.dwrite-chips {
+    display: flex;
+    gap: 6px;
+}
+
+.dwrite-chips label {
+    flex: 1;
+    display: block;
+    padding: 9px 0;
+    border: 1px solid #d8d8d8;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #222;
+    text-align: center;
+    cursor: pointer;
+}
+
+.dwrite-chips label.is-on {
+    border-color: #6f9c4c;
+    background: #6f9c4c;
+    font-weight: 600;
+    color: #fff;
+}
+
+.dwrite-chips input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* 저장·취소·삭제 */
+.dwrite-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.dwrite-btn {
+    height: 46px;
+    border: 1px solid #6f9c4c;
+    border-radius: 12px;
+    background: #fff;
+    font: inherit;
+    font-size: 15px;
+    font-weight: 600;
+    color: #4d7a2c;
+    cursor: pointer;
+}
+
+.dwrite-btn.primary {
+    height: 50px;
+    background: #6f9c4c;
+    font-size: 16px;
+    color: #fff;
+}
+
+.dwrite-btn.danger {
+    border-color: #c06563;
+    color: #c06563;
+}
+
+.dwrite-btn:disabled {
+    opacity: 0.5;
+    cursor: default;
+}

@@ -1,0 +1,43 @@
+import { Link, useNavigate, useSearchParams } from "react-router";
+import logo from "../../assets/Logo_FridgeO.svg";
+import "../../styles/mobile/Header.css";
+
+// 모든 페이지 공통 헤더.
+// value/onChange 를 주면 부모가 검색어를 관리하고, 안 주면 주소의 ?q= 값만 채워 둠
+// backTo 를 주면 그 주소로, 안 주면 이전 페이지로 돌아감
+// onSearch 를 주면 Enter 때 검색어(앞뒤 공백 제거)를 넘겨 줌
+const Header = ({ value, onChange, onSearch, backTo = -1 }) => {
+    const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
+    const controlled = onChange !== undefined;
+
+    return (
+        <header className="app-header">
+            <div className="header-bg" />
+            <button type="button" className="back-btn" aria-label="뒤로가기" onClick={() => navigate(backTo)}>
+                <svg viewBox="0 0 38 38" aria-hidden="true"><path d="M23 9 14.5 19 23 29" /></svg>
+            </button>
+            <Link to="/" className="logo" aria-label="홈으로"><img src={logo} alt="" /></Link>
+            {/* Enter 로 새로고침은 막고, onSearch 가 있으면 검색어를 넘김. 입력 중 검색은 페이지가 onChange 로 처리 */}
+            <form
+                className="search"
+                role="search"
+                onSubmit={(e) => {
+                    e.preventDefault();
+                    onSearch?.(String(new FormData(e.currentTarget).get("q") ?? "").trim());
+                }}
+            >
+                <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="8" /><path d="m21 21-4.3-4.3" /></svg>
+                <input
+                    type="search"
+                    name="q"
+                    placeholder="냉장고 안 재료를 검색해보세요"
+                    aria-label="냉장고 안 재료 검색"
+                    {...(controlled ? { value, onChange: (e) => onChange(e.target.value) } : { defaultValue: searchParams.get("q") ?? "" })}
+                />
+            </form>
+        </header>
+    );
+};
+
+export default Header;

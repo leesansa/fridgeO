@@ -1,0 +1,226 @@
+/* 데스크탑 마이페이지 (pages/desktop/MyPage.jsx). 1024px 이상에서만 그려지므로 @media 없음
+   프로필·메뉴·팔로우 목록은 styles/mobile/MyPage.css 의 .mypage-* 를 그대로 쓰고 여기서 배치만 */
+.dmypage {
+    display: grid;
+    grid-template-columns: 320px minmax(0, 1fr);
+    gap: 32px;
+    align-items: start;
+    box-sizing: border-box;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 24px 24px 48px;
+    font-family: "Pretendard", "Noto Sans KR", sans-serif; /* 모바일 마이페이지와 같은 글꼴 */
+    color: #222;
+}
+
+.dmypage *,
+.dmypage *::before,
+.dmypage *::after {
+    box-sizing: border-box;
+}
+
+.dmypage a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.dmypage :is(a, button):focus-visible {
+    outline: 2px solid #6f9c4c;
+    outline-offset: 2px;
+}
+
+/* 흰 바탕 위라 카드에 테두리 */
+.dmypage .mypage-card {
+    border: 1px solid #ececec;
+}
+
+/* 왼쪽: 헤더 아래에 붙어 따라옴 */
+.dmypage-side {
+    position: sticky;
+    top: 158px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.dmypage-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    margin: 0;
+    padding: 16px 8px;
+    text-align: center;
+}
+
+.dmypage-stats div + div {
+    border-left: 1px solid #f0f0f0;
+}
+
+.dmypage-stats dt {
+    font-size: 12px;
+    color: #777;
+}
+
+.dmypage-stats dd {
+    margin: 4px 0 0;
+    font-size: 20px;
+    font-weight: 700;
+    color: #4e7a36;
+}
+
+/* 오른쪽 */
+.dmypage-main {
+    display: flex;
+    flex-direction: column;
+    gap: 36px;
+    min-width: 0;
+}
+
+.dmypage-section-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 14px;
+}
+
+.dmypage-section-head h2 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.dmypage-section-head h2 span {
+    margin-left: 4px;
+    font-size: 15px;
+    color: #6e9952;
+}
+
+.dmypage-head-link {
+    font-size: 14px;
+    font-weight: 600;
+    color: #6e9952 !important;
+}
+
+.dmypage-note {
+    margin: 0;
+    padding: 20px;
+    border-radius: 16px;
+    background: #f3f4f3;
+    font-size: 14px;
+    color: #555;
+}
+
+.dmypage-note a {
+    font-weight: 600;
+    color: #6e9952;
+}
+
+.dmypage-thumb {
+    display: block;
+    overflow: hidden;
+    background: #f3f4f3;
+}
+
+.dmypage-thumb img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* 내가 쓴 레시피: 카드 + 수정·삭제 */
+.dmypage-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 18px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.dmypage-my {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border: 1px solid #ececec;
+    border-radius: 14px;
+}
+
+.dmypage-my-link .dmypage-thumb {
+    aspect-ratio: 4 / 3;
+}
+
+.dmypage-my-link strong {
+    display: -webkit-box;
+    min-height: 40px;
+    margin: 12px 14px 0;
+    overflow: hidden;
+    font-size: 15px;
+    line-height: 20px;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+}
+
+.dmypage-my-actions {
+    display: flex;
+    gap: 6px;
+    padding: 12px 14px 14px;
+}
+
+.dmypage-my-actions button {
+    flex: 1;
+    height: 34px;
+    border: 0;
+    border-radius: 10px;
+    background: #eef3e8;
+    font: inherit;
+    font-size: 13px;
+    font-weight: 700;
+    color: #4e7a36;
+    cursor: pointer;
+}
+
+.dmypage-my-actions .is-danger {
+    background: #fbeaea;
+    color: #c85a5a;
+}
+
+.dmypage-my-actions button:disabled {
+    opacity: 0.5;
+    cursor: default;
+}
+
+/* 최근 본 레시피: 가로 한 줄 (넘치면 옆으로) */
+.dmypage-recent {
+    display: flex;
+    gap: 14px;
+    margin: 0;
+    padding: 0 0 6px;
+    overflow-x: auto;
+    list-style: none;
+    scrollbar-width: thin;
+}
+
+.dmypage-recent li {
+    flex-shrink: 0;
+    width: 150px;
+}
+
+.dmypage-recent a {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-size: 13px;
+}
+
+.dmypage-recent .dmypage-thumb {
+    width: 150px;
+    height: 110px;
+    border-radius: 12px;
+}
+
+.dmypage-recent a > span:last-child {
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+}
