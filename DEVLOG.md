@@ -3,7 +3,7 @@
 > Git 커밋 기록(2026-11-04 ~ 2026-11-12, 커밋 105개)을 바탕으로 날짜별로 정리했습니다.
 > 메시지가 짧은 커밋(`.`, `fix`, `추가` 등)은 바뀐 파일을 보고 내용을 적었습니다. 병합(Merge) 커밋은 생략했습니다.
 
-**참여자**: geon young Hwang, 성시원 Seong Siwon, leesansa, mimimiqqq, soonbub99
+**참여자**: geon young Hwang, 성시원 Seong Siwon, mimimiqqq, soonbub99
 
 ---
 
