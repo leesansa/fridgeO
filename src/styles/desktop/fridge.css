@@ -1,0 +1,375 @@
+/* 데스크탑 내 냉장고 (pages/desktop/Fridge.jsx). 1024px 이상에서만 그려지므로 @media 없음
+   색은 데스크탑 메인 대시보드(styles/desktop/MainPage.css)와 같음 */
+.dfridge {
+    box-sizing: border-box;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 24px 24px 32px;
+    font-family: "Inter", sans-serif;
+    color: #000;
+}
+
+.dfridge button {
+    font: inherit;
+    color: inherit;
+    cursor: pointer;
+}
+
+.dfridge button:focus-visible,
+.dfridge input:focus-visible,
+.dfridge select:focus-visible {
+    outline: 2px solid #6f9c4c;
+    outline-offset: 2px;
+}
+
+/* 위쪽 요약 줄 */
+.dfridge-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px 20px;
+}
+
+.dfridge-bar h1 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.dfridge-bar h1 span {
+    margin-left: 4px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #6f9c4c;
+}
+
+.dfridge-counts {
+    margin: 0;
+    font-size: 13px;
+    color: #636363;
+}
+
+.dfridge-search {
+    box-sizing: border-box;
+    width: 240px;
+    height: 36px;
+    padding: 0 16px;
+    border: 1px solid #6f9c4c;
+    border-radius: 20px;
+    font: inherit;
+    font-size: 13px;
+}
+
+.dfridge-filters {
+    display: flex;
+    gap: 6px;
+}
+
+.dfridge-filters button,
+.dfridge-btn {
+    padding: 6px 12px;
+    border: 1px solid #6f9c4c;
+    border-radius: 16px;
+    background: #fff;
+    font-size: 13px;
+    color: #4d7a2c;
+}
+
+.dfridge-filters button[aria-pressed="true"],
+.dfridge-btn.primary {
+    background: #6f9c4c;
+    color: #fff;
+}
+
+.dfridge-add {
+    margin-left: auto;
+    padding: 8px 16px;
+    border: 0;
+    border-radius: 20px;
+    background: #6f9c4c;
+    font-size: 14px;
+    font-weight: 600;
+    color: #fff !important;
+}
+
+.dfridge-hint {
+    margin: 10px 0 14px;
+    font-size: 12px;
+    color: #636363;
+}
+
+/* 세 칸 + 상세 패널 */
+.dfridge-board {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) 320px;
+    gap: 16px;
+    align-items: start;
+}
+
+.dfridge-col {
+    padding: 12px;
+    background: #f2f2f2;
+    border-radius: 15px;
+    transition: background 0.15s, box-shadow 0.15s;
+}
+
+/* 끌고 온 카드를 놓을 수 있는 칸 */
+.dfridge-col.is-over {
+    background: #eef6e4;
+    box-shadow: inset 0 0 0 2px #6f9c4c;
+}
+
+.dfridge-col-title {
+    margin: 2px 4px 10px;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.dfridge-col-title span {
+    margin-left: 4px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #636363;
+}
+
+.dfridge-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    /* 헤더(142px)·요약 줄 아래를 채우고 칸마다 따로 스크롤 */
+    max-height: calc(100dvh - 290px);
+    min-height: 120px;
+    margin: 0;
+    padding: 2px;
+    overflow-y: auto;
+    list-style: none;
+    scrollbar-width: thin;
+}
+
+.dfridge-card {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-sizing: border-box;
+    width: 100%;
+    padding: 8px 10px;
+    border: 0;
+    border-radius: 10px;
+    background: #fff;
+    text-align: left;
+    cursor: grab !important;
+}
+
+.dfridge-card:active {
+    cursor: grabbing !important;
+}
+
+.dfridge-card[aria-pressed="true"] {
+    box-shadow: inset 0 0 0 2px #6f9c4c;
+}
+
+.dfridge-photo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    overflow: hidden;
+    border-radius: 50%;
+    background: #cae3a5;
+    font-size: 15px;
+    font-weight: 600;
+    color: #4d7a2c;
+}
+
+.dfridge-photo.is-large {
+    width: 64px;
+    height: 64px;
+    font-size: 24px;
+}
+
+.dfridge-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    pointer-events: none; /* 사진을 따로 끌지 않고 카드가 끌리게 */
+}
+
+.dfridge-card-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex: 1;
+    min-width: 0;
+}
+
+.dfridge-card-text strong {
+    overflow: hidden;
+    font-size: 14px;
+    font-weight: 500;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.dfridge-card-text small {
+    font-size: 12px;
+    color: #636363;
+}
+
+/* 냉장고·알림 화면 배지와 같은 색 */
+.dfridge-badge {
+    flex-shrink: 0;
+    padding: 2px 8px;
+    border-radius: 8px;
+    font-size: 11px;
+    font-weight: 600;
+    color: #fff;
+    white-space: nowrap;
+}
+
+.dfridge-badge.is-urgent { background: #c06563; }
+.dfridge-badge.is-safe { background: #99ab6e; }
+.dfridge-badge.is-expired { background: #636363; }
+.dfridge-badge.is-empty { background: #b9b9b9; }
+
+.dfridge-empty {
+    margin: 12px 4px;
+    font-size: 13px;
+    color: #636363;
+}
+
+/* 상세 패널 */
+.dfridge-panel {
+    position: sticky;
+    top: 158px; /* 데스크탑 헤더 아래 */
+    box-sizing: border-box;
+    padding: 16px;
+    border: 1px solid #e0e0e0;
+    border-radius: 15px;
+    background: #fff;
+}
+
+.dfridge-panel.is-placeholder p {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.6;
+    color: #636363;
+}
+
+.dfridge-panel-head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.dfridge-panel-head h2 {
+    margin: 0 0 6px;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.dfridge-facts {
+    display: grid;
+    grid-template-columns: 72px 1fr;
+    gap: 8px 12px;
+    margin: 16px 0;
+    font-size: 13px;
+}
+
+.dfridge-facts dt {
+    color: #636363;
+}
+
+.dfridge-facts dd {
+    margin: 0;
+}
+
+.dfridge-facts select {
+    padding: 2px 6px;
+    border: 1px solid #6f9c4c;
+    border-radius: 8px;
+    font: inherit;
+}
+
+.dfridge-progress-label {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 6px;
+    font-size: 12px;
+    color: #636363;
+}
+
+.dfridge-progress-bar {
+    height: 8px;
+    overflow: hidden;
+    border-radius: 4px;
+    background: #f2f2f2;
+}
+
+.dfridge-progress-bar span {
+    display: block;
+    height: 100%;
+    border-radius: 4px;
+    background: #99ab6e;
+}
+
+.dfridge-progress-bar.is-late span { background: #f86902; }
+.dfridge-progress-bar.is-over span { background: #c06563; }
+
+.dfridge-panel-actions {
+    display: flex;
+    gap: 6px;
+    margin-top: 16px;
+}
+
+.dfridge-btn.danger {
+    border-color: #c06563;
+    color: #c06563;
+}
+
+.dfridge-btn:disabled {
+    opacity: 0.5;
+    cursor: default;
+}
+
+.dfridge-panel-sub {
+    margin: 20px 0 8px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.dfridge-recipes {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.dfridge-recipes button {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 0;
+    border: 0;
+    background: none;
+    text-align: left;
+}
+
+.dfridge-recipes img {
+    width: 56px;
+    height: 56px;
+    flex-shrink: 0;
+    border-radius: 8px;
+    object-fit: cover;
+}
+
+.dfridge-recipes span {
+    overflow: hidden;
+    font-size: 13px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}

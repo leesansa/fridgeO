@@ -1,0 +1,295 @@
+/* 데스크탑 공통 헤더 (DesktopHeader.jsx). 1024px 미만(모바일)에서는 숨김
+   폭 기준 1024px 은 desktop/MainPage.css·FridgeAlerts.jsx 와 같아야 함 */
+.desk-header {
+    display: none;
+}
+
+@media (min-width: 1024px) {
+    /* 위쪽 탭으로 이동하므로 모바일 하단 바(Navigation)를 숨김 */
+    .main-nav {
+        display: none;
+    }
+
+    .desk-header {
+        display: block;
+        position: sticky;
+        top: 0;
+        z-index: 3;
+        background: #fff;
+        border-bottom: 1px solid #e0e0e0;
+        font-family: "Inter", sans-serif;
+        color: #000;
+    }
+
+    .desk-header a {
+        color: inherit;
+        text-decoration: none;
+    }
+
+    .desk-header img {
+        display: block;
+    }
+
+    .desk-top {
+        display: grid;
+        grid-template-columns: 1fr minmax(320px, 436px) 1fr;
+        align-items: center;
+        gap: 24px;
+        height: 96px;
+        padding: 0 32px 0 40px;
+    }
+
+    .desk-logo {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        justify-self: start;
+    }
+
+    .desk-logo img {
+        width: 52px;
+        height: 52px;
+    }
+
+    .desk-logo-bar {
+        width: 1px;
+        height: 24px;
+        background: #b9b9b9;
+    }
+
+    .desk-logo .desk-logo-script {
+        width: auto;
+        height: 48px;
+    }
+
+    .desk-search {
+        display: flex;
+        align-items: center;
+        box-sizing: border-box;
+        height: 46px;
+        padding: 0 20px;
+        background: #fff;
+        border: 1px solid #6f9c4c;
+        border-radius: 30px;
+    }
+
+    .desk-search:focus-within {
+        outline: 2px solid #6f9c4c;
+        outline-offset: 2px;
+    }
+
+    .desk-search img {
+        width: 24px;
+        height: 24px;
+        flex-shrink: 0;
+    }
+
+    .desk-search input {
+        flex: 1;
+        min-width: 0;
+        padding: 0 24px 0 4px;
+        border: 0;
+        outline: none;
+        background: none;
+        font: inherit;
+        font-size: 17px;
+        font-weight: 700;
+        text-align: center;
+    }
+
+    .desk-search input::placeholder {
+        color: #b9b9b9;
+    }
+
+    .desk-icons {
+        display: flex;
+        align-items: center;
+        gap: 28px;
+        justify-self: end;
+    }
+
+    .desk-icons img {
+        width: 40px;
+        height: 40px;
+    }
+
+    .desk-bell {
+        position: relative;
+        color: #050505; /* 아이콘 선 색 (currentColor) */
+        --li-accent: #ffae00;
+        --li-tint: 1;
+    }
+
+    .desk-bell-dot {
+        position: absolute;
+        right: 0;
+        top: 0;
+        width: 8px;
+        height: 8px;
+        background: #ff3b30;
+        border-radius: 50%;
+    }
+
+    .desk-nav {
+        display: flex;
+        align-items: stretch;
+        height: 46px;
+        padding: 0 28px;
+    }
+
+    /* 전체 카테고리 (CategoryMenu.jsx): 버튼 + 아래로 펼쳐지는 세로 분류 목록 */
+    .desk-category {
+        position: relative;
+        display: flex;
+        align-items: center;
+        width: 180px;
+    }
+
+    .desk-category-btn {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 4px 10px 4px 4px;
+        border: 0;
+        border-radius: 8px;
+        background: none;
+        font: inherit;
+        font-size: 13px;
+        color: #2b2b5c; /* 메뉴 아이콘 선 색 (currentColor) */
+        cursor: pointer;
+    }
+
+    .desk-category-btn:hover,
+    .desk-category-btn[aria-expanded="true"] {
+        background: #f2f6ec;
+    }
+
+    .desk-category-btn:focus-visible {
+        outline: 2px solid #6f9c4c;
+        outline-offset: 2px;
+    }
+
+    .desk-category-panel {
+        position: absolute;
+        top: calc(100% + 4px);
+        left: 0;
+        z-index: 4;
+        box-sizing: border-box;
+        width: 240px;
+        max-height: calc(100dvh - 160px);
+        padding: 12px 8px 8px;
+        overflow-y: auto;
+        background: #fff;
+        border: 1px solid #e0e0e0;
+        border-radius: 14px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+        scrollbar-width: thin;
+        animation: desk-category-in 0.16s ease-out;
+    }
+
+    @keyframes desk-category-in {
+        from { opacity: 0; transform: translateY(-6px); }
+    }
+
+    /* 모바일 레시피 화면의 "레시피 분류" 제목과 같은 모양 */
+    .desk-category-title {
+        margin: 0 10px 8px;
+        font-size: 15px;
+        font-weight: 700;
+    }
+
+    .desk-category-title em {
+        font-style: normal;
+        color: #6f9c4c;
+    }
+
+    .desk-category-status {
+        margin: 8px 10px;
+        font-size: 13px;
+        color: #636363;
+    }
+
+    .desk-category-panel ul {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    .desk-category-panel a {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 6px 10px;
+        border-radius: 10px;
+        font-size: 14px;
+    }
+
+    .desk-category-panel a:hover {
+        background: #f2f6ec;
+    }
+
+    .desk-category-panel a[aria-current="page"] {
+        background: #eef6e4;
+        font-weight: 600;
+        color: #4d7a2c;
+    }
+
+    .desk-category-panel a:focus-visible {
+        outline: 2px solid #6f9c4c;
+        outline-offset: -2px;
+    }
+
+    /* 분류 아이콘은 그림 파일(img) 또는 직접 그린 SVG */
+    .desk-category-panel a img,
+    .desk-category-panel a svg {
+        width: 34px;
+        height: 34px;
+        flex-shrink: 0;
+        object-fit: contain;
+    }
+
+    .desk-tabs {
+        display: flex;
+        gap: 56px;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    .desk-tabs a {
+        position: relative;
+        display: flex;
+        align-items: center;
+        height: 100%;
+        font-size: 17px;
+    }
+
+    .desk-tabs a.active {
+        color: #6f9c4c;
+    }
+
+    .desk-tabs a.active::after {
+        content: "";
+        position: absolute;
+        left: -4px;
+        right: -4px;
+        bottom: 0;
+        height: 4px;
+        background: #6f9c4c;
+        border-radius: 2px;
+    }
+
+    .desk-header a:focus-visible {
+        outline: 2px solid #6f9c4c;
+        outline-offset: 2px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .desk-category-panel {
+        animation: none;
+    }
+}

@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
 import { Outlet, useLocation } from "react-router";
-import Navigation from "./Navigation";
-import Loading from "../pages/Loading";
+import Navigation from "./mobile/Navigation";
+import DesktopHeader from "./desktop/DesktopHeader";
+import Loading from "../pages/mobile/Loading";
 import { apiFetch, isLoggedIn } from "../utils/auth";
 import { getExpiryBadge, getTodayKey } from "../utils/fridgeUtils";
 
@@ -21,8 +22,11 @@ const timeAgo = (iso) => {
 };
 
 // DB 알림 → 알림센터 카드. 유통기한 알림은 지금 기준 D-day 배지를 붙임 (만든 날이 아니라 오늘 기준)
+// type·read 는 데스크탑 알림센터의 종류별 거르기·"새 알림" 표시용
 const toCard = (n) => ({
     id: n.id,
+    type: n.type,
+    read: n.read,
     title: TITLES[n.type] ?? "알림",
     message: n.message,
     time: timeAgo(n.created_at),
@@ -80,6 +84,7 @@ const Layout = () => {
     if (loading) return <Loading />;
 
     return <>
+    <DesktopHeader hasUnread={hasUnread}/>
     <Outlet context={{ notifications, hasUnread, markAllRead, clearAll }}/>
     <Navigation/>
     </>

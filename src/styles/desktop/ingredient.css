@@ -1,0 +1,429 @@
+/* 데스크탑 냉장재료 등록 (pages/desktop/Ingredient.jsx). 1024px 이상에서만 그려지므로 @media 없음
+   카드·배지 색은 데스크탑 냉장고(styles/desktop/fridge.css)와 같음 */
+.ding {
+    box-sizing: border-box;
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 20px 24px 48px;
+    font-family: "Inter", sans-serif;
+    color: #111;
+}
+
+.ding *,
+.ding *::before,
+.ding *::after {
+    box-sizing: border-box;
+}
+
+.ding a {
+    color: inherit;
+}
+
+.ding :is(a, button, input, select):focus-visible,
+.ding label:has(input[type="radio"]:focus-visible) {
+    outline: 2px solid #6f9c4c;
+    outline-offset: 2px;
+}
+
+.ding-crumbs {
+    margin-bottom: 16px;
+    font-size: 13px;
+    color: #717171;
+}
+
+.ding-crumbs a {
+    text-decoration: none;
+}
+
+.ding-crumbs a:hover {
+    color: #4d7a2c;
+    text-decoration: underline;
+}
+
+.ding-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 340px;
+    gap: 28px;
+    align-items: start;
+}
+
+/* 왼쪽 입력 */
+.ding-form {
+    display: flex;
+    flex-direction: column;
+    gap: 26px;
+    padding: 28px 32px;
+    border: 1px solid #ececec;
+    border-radius: 16px;
+}
+
+.ding-form h1 {
+    margin: 0;
+    font-size: 24px;
+}
+
+.ding-field {
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+.ding-label {
+    display: block;
+    margin-bottom: 10px;
+    padding: 0;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.ding-hint {
+    margin: 8px 0 0;
+    font-size: 13px;
+    color: #717171;
+}
+
+.ding input:not([type="radio"]),
+.ding select {
+    height: 44px;
+    padding: 0 14px;
+    border: 1px solid #d8d8d8;
+    border-radius: 10px;
+    background: #fff;
+    font: inherit;
+    font-size: 15px;
+}
+
+.ding :is(input, select):focus {
+    border-color: #6f9c4c;
+}
+
+#ding-name {
+    width: 100%;
+    font-size: 17px;
+    font-weight: 600;
+}
+
+/* 수량: − 입력 + 단위 */
+.ding-counter {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.ding-counter button {
+    width: 44px;
+    height: 44px;
+    border: 1px solid #d8d8d8;
+    border-radius: 10px;
+    background: #f7f7f7;
+    font: inherit;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.ding-counter button:hover {
+    background: #eef6e4;
+}
+
+.ding .ding-counter input {
+    width: 110px;
+    text-align: center;
+}
+
+.ding .ding-counter select {
+    width: 90px;
+}
+
+/* 보관 방법: 설명이 붙은 큰 선택지 */
+.ding-storages {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+
+.ding-storages label {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 14px 16px;
+    border: 1px solid #d8d8d8;
+    border-radius: 12px;
+    cursor: pointer;
+}
+
+.ding-storages label:hover {
+    background: #f7faf3;
+}
+
+.ding-storages label.is-on {
+    border-color: #6f9c4c;
+    background: #eef6e4;
+    box-shadow: inset 0 0 0 1px #6f9c4c;
+}
+
+.ding-storages strong {
+    font-size: 16px;
+}
+
+.ding-storages small {
+    font-size: 12px;
+    color: #717171;
+}
+
+.ding-storages input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* 유통기한 */
+.ding-expiry {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.ding-expiry input {
+    width: 200px;
+}
+
+.ding-quick {
+    display: flex;
+    gap: 6px;
+    margin-top: 10px;
+}
+
+.ding-quick button {
+    padding: 7px 14px;
+    border: 1px solid #d8d8d8;
+    border-radius: 16px;
+    background: #fff;
+    font: inherit;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.ding-quick button[aria-pressed="true"] {
+    border-color: #6f9c4c;
+    background: #6f9c4c;
+    color: #fff;
+}
+
+/* 냉장고·알림 화면 배지와 같은 색 */
+.ding-badge {
+    flex-shrink: 0;
+    padding: 3px 10px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #fff;
+    white-space: nowrap;
+}
+
+.ding-badge.is-urgent { background: #c06563; }
+.ding-badge.is-safe { background: #99ab6e; }
+
+.ding-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    padding-top: 20px;
+    border-top: 1px solid #ececec;
+}
+
+.ding-btn {
+    height: 46px;
+    padding: 0 22px;
+    border: 1px solid #6f9c4c;
+    border-radius: 12px;
+    background: #fff;
+    font: inherit;
+    font-size: 15px;
+    font-weight: 600;
+    color: #4d7a2c;
+    cursor: pointer;
+}
+
+.ding-btn:first-child {
+    margin-right: auto; /* 취소는 왼쪽 */
+    border-color: #d8d8d8;
+    color: #555;
+}
+
+.ding-btn.primary {
+    background: #6f9c4c;
+    color: #fff;
+}
+
+.ding-btn:disabled {
+    opacity: 0.5;
+    cursor: default;
+}
+
+/* 오른쪽: 미리보기 + 방금 넣은 재료 */
+.ding-side {
+    position: sticky;
+    top: 158px; /* 데스크탑 헤더 아래 */
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.ding-card {
+    padding: 20px;
+    border: 1px solid #ececec;
+    border-radius: 16px;
+}
+
+.ding-card h2 {
+    margin: 0 0 14px;
+    font-size: 16px;
+}
+
+.ding-card h2 span {
+    margin-left: 4px;
+    font-size: 14px;
+    color: #6f9c4c;
+}
+
+/* 데스크탑 냉장고의 칸·카드 모양 그대로 */
+.ding-preview-col {
+    padding: 12px;
+    border-radius: 15px;
+    background: #f2f2f2;
+}
+
+.ding-preview-storage {
+    display: block;
+    margin: 0 4px 10px;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.ding-preview {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 10px;
+    border-radius: 10px;
+    background: #fff;
+    box-shadow: inset 0 0 0 2px #6f9c4c;
+}
+
+.ding-photo {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #cae3a5;
+    font-size: 15px;
+    font-weight: 600;
+    color: #4d7a2c;
+}
+
+.ding-preview-text {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+
+.ding-preview-text strong {
+    overflow: hidden;
+    font-size: 14px;
+    font-weight: 500;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.ding-preview-text small {
+    font-size: 12px;
+    color: #636363;
+}
+
+.ding-preview-note {
+    margin: 12px 0 0;
+    font-size: 13px;
+    color: #555;
+}
+
+.ding-added {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.ding-added li {
+    padding: 4px 12px;
+    border-radius: 12px;
+    background: #cae3a5;
+    font-size: 13px;
+}
+
+.ding-link {
+    display: inline-block;
+    margin-top: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #4d7a2c !important;
+    text-decoration: none;
+}
+
+/* ---- 재료 편집 (pages/desktop/IngredientEdit.jsx) ---- */
+.ding-badge.is-empty { background: #b9b9b9; }
+
+.ding-empty-btn {
+    width: auto !important;
+    padding: 0 14px;
+    font-size: 14px !important;
+    white-space: nowrap;
+}
+
+.ding-empty-btn[aria-pressed="true"] {
+    border-color: #6f9c4c !important;
+    background: #6f9c4c !important;
+    color: #fff;
+}
+
+.ding-btn.danger {
+    border-color: #c06563;
+    color: #c06563;
+}
+
+/* 바뀌는 내용: 이름 | 전 → 후 */
+.ding-changes {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 0;
+    font-size: 13px;
+}
+
+.ding-changes div {
+    display: grid;
+    grid-template-columns: 60px 1fr;
+    gap: 8px;
+}
+
+.ding-changes dt {
+    color: #717171;
+}
+
+.ding-changes dd {
+    margin: 0;
+}
+
+.ding-changes s {
+    color: #9a9a9a;
+}
+
+.ding-changes strong {
+    color: #4d7a2c;
+}

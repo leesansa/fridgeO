@@ -297,20 +297,36 @@ const routes = {
     if (q && q.length > 30) throw new HttpError(400, "검색어는 30자 이하로 입력하세요");
     const pattern = q && `%${q.replace(/[\\%_]/g, "\\$&")}%`;
     const category = params.get("category") || null; // "조미료" 면 조미료만
+    // 데스크탑 냉장고: storage = 냉장|냉동|실온 칸, status = urgent(임박 0~5일)|expired(지남)|empty(다 떨어짐). 메인 요약 카드와 같은 기준
+    const storage = params.get("storage") || null;
+    if (storage && !["냉장", "냉동", "실온"].includes(storage)) throw new HttpError(400, "storage 가 올바르지 않습니다");
+    const status = params.get("status") || null;
+    if (status && !["urgent", "expired", "empty"].includes(status)) throw new HttpError(400, "status 가 올바르지 않습니다");
     // 날짜는 시간대 영향 없게 'YYYY-MM-DD' 글자로, 수량은 1.50 → 1.5 처럼 끝 0 제거. 사진이 없는 조미료는 아이콘으로 대신
+    // total = 같은 조건의 전체 개수 (LIMIT 전에 셈)
     const rows = await sql`
       SELECT i.id, c.name, COALESCE(c.image_url, c.icon_url) AS image_url, trim_scale(i.quantity)::text AS quantity, i.unit, i.storage,
-             to_char(i.expiry_date, 'YYYY-MM-DD') AS expiry_date
+             to_char(i.expiry_date, 'YYYY-MM-DD') AS expiry_date,
+             to_char(i.created_at AT TIME ZONE 'Asia/Seoul', 'YYYY-MM-DD') AS created_at,
+             count(*) OVER ()::int AS total
       FROM ingredients i
       LEFT JOIN ingredient_catalog c ON c.id = i.catalog_id
+      CROSS JOIN (SELECT (now() AT TIME ZONE 'Asia/Seoul')::date AS d) t
       WHERE i.user_id = ${user.sub} AND (${pattern}::text IS NULL OR c.name ILIKE ${pattern})
         AND (${category}::text IS NULL OR c.category = ${category})
+        AND (${storage}::text IS NULL OR i.storage = ${storage})
+        AND (${status}::text IS NULL
+             OR (${status}::text = 'urgent' AND i.quantity > 0 AND i.expiry_date BETWEEN t.d AND t.d + ${EXPIRY_ALERT_DAYS}::int)
+             OR (${status}::text = 'expired' AND i.quantity > 0 AND i.expiry_date < t.d)
+             OR (${status}::text = 'empty' AND i.quantity = 0))
       ORDER BY
         CASE WHEN ${sort} = 'name' THEN c.name END,
         CASE WHEN ${sort} = 'storage' THEN array_position(ARRAY['냉장', '냉동', '실온'], i.storage) END,
         i.expiry_date NULLS LAST, i.id
       LIMIT ${INGREDIENT_PAGE + 1} OFFSET ${offset}`;
-    return { items: rows.slice(0, INGREDIENT_PAGE), nextOffset: rows.length > INGREDIENT_PAGE ? offset + INGREDIENT_PAGE : null };
+    const total = rows[0]?.total ?? (offset === 0 ? 0 : null); // 끝을 넘긴 페이지는 개수를 모름
+    for (const row of rows) delete row.total;
+    return { items: rows.slice(0, INGREDIENT_PAGE), total, nextOffset: rows.length > INGREDIENT_PAGE ? offset + INGREDIENT_PAGE : null };
   },
   // 내가 가진 조미료 (메인 "내 조미료들", 냉장고 조미료 탭 표시 여부). 같은 조미료가 여러 개여도 한 번, 다 떨어진 것(수량 0)은 뺌
   async "GET /api/fridge/condiments"(req, user) {
@@ -332,7 +348,16 @@ const routes = {
         (SELECT json_build_object('name', COALESCE(c.name, '재료'), 'expiry_date', to_char(s.expiry_date, 'YYYY-MM-DD'))
          FROM ingredients s LEFT JOIN ingredient_catalog c ON c.id = s.catalog_id
          WHERE s.user_id = ${user.sub} AND s.quantity > 0 AND s.expiry_date >= t.d
-         ORDER BY s.expiry_date, s.id LIMIT 1) AS soonest
+         ORDER BY s.expiry_date, s.id LIMIT 1) AS soonest,
+        -- 데스크탑 대시보드: 기한 지난 것 ~ 6일 뒤까지 재료 (급한 재료 목록 + 이번 주 달력)
+        -- shortcut: 오래 지난 재료가 30개를 넘으면 이번 주 재료가 잘림, 그러면 지남/이번 주를 따로 받을 것
+        (SELECT COALESCE(json_agg(x ORDER BY x.expiry_date, x.id), '[]')
+         FROM (SELECT s.id, COALESCE(c.name, '재료') AS name, COALESCE(c.image_url, c.icon_url) AS image_url,
+                      trim_scale(s.quantity)::text AS quantity, s.unit, s.storage,
+                      to_char(s.expiry_date, 'YYYY-MM-DD') AS expiry_date
+               FROM ingredients s LEFT JOIN ingredient_catalog c ON c.id = s.catalog_id
+               WHERE s.user_id = ${user.sub} AND s.quantity > 0 AND s.expiry_date <= t.d + 6
+               ORDER BY s.expiry_date, s.id LIMIT 30) x) AS soon
       FROM today t LEFT JOIN ingredients i ON i.user_id = ${user.sub}
       GROUP BY t.d`;
     return summary;

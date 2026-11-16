@@ -1,0 +1,157 @@
+/* 데스크탑 내 북마크 (pages/desktop/BookMark.jsx). 1024px 이상에서만 그려지므로 @media 없음
+   카드 격자는 styles/desktop/recipes.css 의 .drecipe-grid·.drecipe-card */
+.dbookmark {
+    box-sizing: border-box;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 20px 24px 48px;
+    font-family: "Inter", sans-serif;
+    color: #111;
+}
+
+.dbookmark *,
+.dbookmark *::before,
+.dbookmark *::after {
+    box-sizing: border-box;
+}
+
+.dbookmark a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.dbookmark :is(a, button, input, select):focus-visible {
+    outline: 2px solid #6f9c4c;
+    outline-offset: 2px;
+}
+
+.dbookmark mark {
+    padding: 0 1px;
+    border-radius: 3px;
+    background: #e3f0d2;
+    color: #2f5a17;
+}
+
+.dbookmark-crumbs {
+    margin-bottom: 16px;
+    font-size: 13px;
+    color: #717171;
+}
+
+.dbookmark-crumbs a:hover {
+    color: #4d7a2c;
+    text-decoration: underline;
+}
+
+.dbookmark-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.dbookmark-head h1 {
+    margin: 0;
+    font-size: 24px;
+}
+
+.dbookmark-head h1 span {
+    margin-left: 4px;
+    font-size: 16px;
+    color: #6f9c4c;
+}
+
+.dbookmark-tools {
+    display: flex;
+    gap: 10px;
+}
+
+.dbookmark-tools input,
+.dbookmark-tools select {
+    height: 38px;
+    padding: 0 14px;
+    border: 1px solid #d8d8d8;
+    border-radius: 20px;
+    background: #fff;
+    font: inherit;
+    font-size: 14px;
+}
+
+.dbookmark-tools input {
+    width: 280px;
+}
+
+.dbookmark-tools :is(input, select):focus {
+    border-color: #6f9c4c;
+}
+
+.dbookmark-status {
+    margin: 40px 0;
+    font-size: 15px;
+    color: #717171;
+    text-align: center;
+}
+
+.dbookmark-status button {
+    border: 0;
+    background: none;
+    font: inherit;
+    font-weight: 600;
+    color: #4d7a2c;
+    cursor: pointer;
+}
+
+.dbookmark-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    padding: 64px 0;
+    border: 1px dashed #d8d8d8;
+    border-radius: 16px;
+    color: #717171;
+}
+
+.dbookmark-empty p {
+    margin: 0;
+    font-size: 15px;
+}
+
+.dbookmark-empty a {
+    font-weight: 600;
+    color: #4d7a2c;
+}
+
+/* 카드 위 오른쪽 위에 북마크 해제 버튼 */
+.dbookmark-grid li {
+    position: relative;
+}
+
+.dbookmark-remove {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.92);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    cursor: pointer;
+}
+
+.dbookmark-remove:hover {
+    background: #fff;
+}
+
+.dbookmark-remove:disabled {
+    opacity: 0.5;
+    cursor: default;
+}
+
+.dbookmark-remove lucian-bookmark {
+    --li-tint: 0;
+}

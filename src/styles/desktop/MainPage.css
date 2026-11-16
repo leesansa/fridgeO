@@ -1,0 +1,277 @@
+/* 데스크탑: 화면을 넓히고 "지금 확인해야할 내 재료들" 아래에 대시보드(FridgeDashboard)를 붙인다
+   폭 기준 1024px 은 FridgeAlerts.jsx 의 desktopQuery 와 같아야 함 */
+@media (min-width: 1024px) {
+    /* 화면 전체 폭, 섹션 사이는 회색 띠. 위쪽 로고·검색·종은 DesktopHeader 가 대신함 */
+    .main-page {
+        max-width: none;
+        min-height: auto;
+        background: #f2f2f2;
+        box-shadow: none;
+    }
+
+    .main-header,
+    .main-add,
+    .fridge-section .divider,
+    .fridge-more {
+        display: none;
+    }
+
+    .main-panel {
+        gap: 14px;
+        padding: 16px 0 14px;
+        background: none;
+        border-radius: 0;
+    }
+
+    /* 섹션 내용은 가운데 1080px 안에 */
+    .main-section {
+        padding-inline: max(24px, calc((100% - 1080px) / 2));
+    }
+
+    .fridge-section {
+        border-radius: 0;
+    }
+
+    .fridge-title {
+        padding: 24px 0 18px;
+        font-size: 18px;
+        line-height: 24px;
+    }
+
+    /* 카드 4개 + 오른쪽 빈 곳에 재료 추가 버튼 */
+    .fridge-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+        padding-bottom: 24px;
+    }
+
+    .fridge-grid {
+        grid-template-columns: repeat(4, 168px);
+        column-gap: 32px;
+        padding: 0;
+    }
+
+    .main-page .fridge-add {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 6px;
+        margin-right: 16px;
+        font-size: 13px;
+        color: #4d7a2c;
+    }
+
+    .fridge-add img {
+        width: 64px;
+        height: 64px;
+        object-fit: cover;
+        transition: transform 0.15s;
+    }
+
+    .fridge-add:hover img {
+        transform: scale(1.06);
+    }
+
+    .main-page .fridge-add:focus-visible {
+        outline: 2px solid #6f9c4c;
+        outline-offset: 4px;
+        border-radius: 8px;
+    }
+
+    .dash {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        padding-bottom: 32px;
+    }
+
+    .dash-row {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 16px;
+        align-items: start;
+    }
+
+    .dash-box {
+        padding: 14px 16px;
+        background: #f2f2f2;
+        border-radius: 15px;
+    }
+
+    .dash-title {
+        margin: 0 0 10px;
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    .dash-empty {
+        margin: 12px 0;
+        font-size: 13px;
+        color: #636363;
+    }
+
+    .dash-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 13px;
+    }
+
+    .dash-table th {
+        padding: 0 8px 6px;
+        font-size: 11px;
+        font-weight: 500;
+        color: #636363;
+        text-align: left;
+    }
+
+    .dash-table td {
+        padding: 8px;
+        border-top: 1px solid #e0e0e0;
+    }
+
+    .dash-name {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .dash-name img {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+
+    /* 냉장고·알림 화면 배지와 같은 색 */
+    .dash-badge {
+        padding: 2px 8px;
+        border-radius: 8px;
+        font-size: 11px;
+        font-weight: 600;
+        color: #fff;
+        background: #c06563;
+    }
+
+    .dash-badge.is-expired {
+        background: #636363;
+    }
+
+    .dash-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 6px;
+    }
+
+    .main-page .dash-btn {
+        padding: 5px 10px;
+        border: 1px solid #6f9c4c;
+        border-radius: 15px;
+        background: #fff;
+        font-size: 12px;
+        color: #4d7a2c;
+        white-space: nowrap;
+    }
+
+    .main-page .dash-btn.primary {
+        background: #6f9c4c;
+        color: #fff;
+    }
+
+    .main-page .dash-btn:disabled {
+        opacity: 0.5;
+        cursor: default;
+    }
+
+    .dash-recipe-list {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    .main-page .dash-recipe {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        width: 100%;
+    }
+
+    .dash-recipe img {
+        width: 64px;
+        height: 64px;
+        flex-shrink: 0;
+        border-radius: 8px;
+        object-fit: cover;
+    }
+
+    .dash-recipe span {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        min-width: 0;
+    }
+
+    .dash-recipe strong {
+        font-size: 13px;
+        font-weight: 500;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .dash-recipe small {
+        font-size: 11px;
+        color: #4d7a2c;
+    }
+
+    .dash-week {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 8px;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    .dash-week > li {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+        min-height: 72px;
+        padding: 8px;
+        background: #fff;
+        border-radius: 10px;
+    }
+
+    .dash-week > li.has-items {
+        box-shadow: inset 0 0 0 1px #f86902;
+    }
+
+    .dash-day {
+        font-size: 11px;
+        color: #636363;
+    }
+
+    .main-page .dash-chip {
+        max-width: 100%;
+        padding: 2px 8px;
+        border-radius: 10px;
+        background: #cae3a5;
+        font-size: 12px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .main-page .dash-btn:focus-visible,
+    .main-page .dash-recipe:focus-visible,
+    .main-page .dash-chip:focus-visible {
+        outline: 2px solid #6f9c4c;
+        outline-offset: 2px;
+    }
+}
