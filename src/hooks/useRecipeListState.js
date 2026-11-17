@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { useSearchParams } from "react-router";
-import { apiFetch } from "./auth";
+import { apiFetch } from "../utils/auth";
 
 const ALL = { id: null, name: "전체" };
 

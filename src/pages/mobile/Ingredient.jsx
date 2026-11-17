@@ -5,7 +5,7 @@ import QuantityCounter from "../../components/mobile/Ingredient/Fields/QuantityC
 import StorageSelect from "../../components/mobile/Ingredient/Fields/StorageSelect";
 import ExpiryField from "../../components/mobile/Ingredient/Fields/ExpiryField";
 import SubmitButton from "../../components/mobile/Ingredient/Frame/SubmitButton";
-import { useIngredientForm } from "../../utils/useIngredientForm";
+import { useIngredientForm } from "../../hooks/useIngredientForm";
 import "../../styles/mobile/Ingredient.css";
 
 // 냉장재료 등록: 입력값과 저장은 useIngredientForm(데스크탑과 공통), 각 입력 칸은 components/Ingredient

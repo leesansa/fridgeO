@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
-import { apiFetch, authClient, authErrorMessage, getSession, PHONE_FORMAT_MESSAGE, toE164 } from "./auth";
+import { apiFetch, authClient, authErrorMessage, getSession, PHONE_FORMAT_MESSAGE, toE164 } from "../utils/auth";
 
 // +821012345678 → 010-1234-5678
 export const formatPhone = (p) => p?.replace(/^\+82/, "0").replace(/^(\d{3})(\d{3,4})(\d{4})$/, "$1-$2-$3");

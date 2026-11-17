@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { apiFetch } from "./auth";
-import { addRecentRecipe } from "./recentRecipes";
+import { apiFetch } from "../utils/auth";
+import { addRecentRecipe } from "../utils/recentRecipes";
 
 // 레시피 상세 (GET /api/recipes/:id: 기본 정보·재료·recipe_steps). 모바일·데스크탑 상세가 같이 씀
 // 응답을 어느 id 것인지와 함께 보관 → 주소의 id 가 바뀌면 자동으로 "불러오는 중"(recipe null)

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
-import { apiFetch, isLoggedIn } from "./auth";
+import { apiFetch, isLoggedIn } from "../utils/auth";
 
 // 레시피 작성자 팔로우 (DB follows). 모바일 DetailInfo·데스크탑 DetailSummary 가 같이 씀. 레시피가 바뀌면 부모가 key 로 새로 만듦
 // 북마크와 같은 방식: 아이콘을 먼저 바꾸고 저장, 실패하면 되돌림. 로그인 안 했으면 로그인 화면으로

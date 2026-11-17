@@ -3,16 +3,16 @@
 기능 하나를 따라갈 때는 항상 이 순서로 보면 됩니다.
 
 1. **주소** → `router.jsx` 에서 어떤 화면인지 찾는다
-2. **화면 고르기** → `pages/Responsive.jsx` 가 폭 1024px 이상이면 `pages/desktop/`, 아니면 `pages/mobile/` 화면을 그림 (`utils/useIsDesktop.js`)
+2. **화면 고르기** → `pages/Responsive.jsx` 가 폭 1024px 이상이면 `pages/desktop/`, 아니면 `pages/mobile/` 화면을 그림 (`hooks/useIsDesktop.js`)
 3. **화면** → `pages/{mobile,desktop}/*.jsx` 는 모양만 그림. 데이터·저장은 아래 훅을 부름
-4. **훅** → `utils/use*.js` 가 상태와 서버 호출을 맡음 (모바일·데스크탑이 같은 훅을 씀)
+4. **훅** → `hooks/use*.js` 가 상태와 서버 호출을 맡음 (모바일·데스크탑이 같은 훅을 씀)
 5. **서버 호출** → `utils/auth.js` 의 `apiFetch("/api/...")` → `server/index.js` 의 `"GET /api/..."` 처리 함수
 
 모든 화면은 `components/Layout.jsx` 안에 그려짐: 처음 2초 로딩 화면, 알림(종 빨간 점) 상태, 데스크탑 헤더(`components/desktop/DesktopHeader.jsx`), 모바일 하단 바(`components/mobile/Navigation.jsx`).
 
 ## 주소별 흐름
 
-| 주소 | 화면 (mobile / desktop) | 훅 (utils) | 서버 API |
+| 주소 | 화면 (mobile / desktop) | 훅 (hooks) | 서버 API |
 |---|---|---|---|
 | `/` | `MainPage` (데스크탑 대시보드는 `components/desktop/MainPage/FridgeDashboard`) | — (`components/mobile/MainPage/*` 가 직접 호출) | `/api/fridge/summary`, `/api/fridge/condiments`, `/api/recipes/recommend` |
 | `/fridge` 🔒 | `Fridge` | `useIngredientPages` | `GET /api/ingredients` (sort·q·category·storage·status), `PATCH`/`DELETE /api/ingredients/:id` |
@@ -38,6 +38,7 @@
 - `pages/mobile`, `pages/desktop` — 주소 하나당 화면 하나
 - `components/mobile`, `components/desktop` — 화면을 나눈 조각. 데스크탑이 모바일 조각을 가져다 쓰기도 함 (예: 준비물 체크리스트)
 - `styles/mobile`, `styles/desktop` — 화면별 CSS. 데스크탑 CSS 는 1024px 이상에서만 쓰임
-- `utils` — 훅·서버 호출·날짜 계산 (`fridgeUtils.js`: D-day 배지)
+- `hooks` — 화면별 상태·서버 호출 훅 (`use*.js`)
+- `utils` — 서버 호출·업로드·날짜 계산 (`fridgeUtils.js`: D-day 배지)
 - `vendor/lucian-icons` — 아이콘 (손대지 않음)
 - `assets` — 그림 파일

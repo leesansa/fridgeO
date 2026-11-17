@@ -1,4 +1,4 @@
-import { useRecipePages } from "../../../utils/useRecipePages";
+import { useRecipePages } from "../../../hooks/useRecipePages";
 import RecipeCard from "./RecipeCard";
 
 // 데스크탑 레시피 카드 격자 (무한 스크롤, 화면 전체 스크롤 기준). 분류·검색어가 바뀌면 부모가 key 로 새로 만듦

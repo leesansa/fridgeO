@@ -5,7 +5,7 @@ import recipeIcon from "../../assets/lucide_recipe_icon.png";
 import stars from "../../assets/review/stars.svg";
 import dot from "../../assets/review/dot.svg";
 import camera from "../../assets/review/camera.png";
-import { TASTES as tastes, useReviewForm } from "../../utils/useReviewForm.js";
+import { TASTES as tastes, useReviewForm } from "../../hooks/useReviewForm.js";
 import "../../styles/mobile/review-write.css";
 
 // /recipe/:id/review — 이 레시피에 대한 내 리뷰를 DB(reviews)에 작성·수정·삭제 (로그인은 router 에서 확인)

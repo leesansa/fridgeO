@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, useSearchParams } from "react-router";
 import RecipeCard from "../../components/desktop/recipe/RecipeCard";
 import Highlight from "../../components/desktop/Highlight";
-import { useUnifiedSearch } from "../../utils/useUnifiedSearch";
+import { useUnifiedSearch } from "../../hooks/useUnifiedSearch";
 import { getDaysLeft, getExpiryBadge, getTodayKey } from "../../utils/fridgeUtils";
 import searchIcon from "../../assets/main/search.png";
 import "../../styles/desktop/recipes.css"; // 레시피 카드

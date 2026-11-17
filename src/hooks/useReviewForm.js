@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
-import { apiFetch } from "./auth";
+import { apiFetch } from "../utils/auth";
 
 // 직접 먹어 본 맛 평가 (화면에서만 고름, 저장 안 됨)
 export const TASTES = ["맛있어요", "보통이예요", "생각보다 별로예요"];

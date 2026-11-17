@@ -1,6 +1,6 @@
 import { useState } from "react";
 import AccountMenu from "../../components/desktop/AccountMenu";
-import { formatPhone, usePrivacyInfo } from "../../utils/usePrivacyInfo";
+import { formatPhone, usePrivacyInfo } from "../../hooks/usePrivacyInfo";
 import "../../styles/desktop/account.css";
 
 // 데스크탑 개인정보 관리: 왼쪽 계정 메뉴 | 오른쪽 비밀번호 확인 → 기본 정보 · 닉네임 · 휴대폰 번호 카드

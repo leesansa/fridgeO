@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router";
 import IngredientFields from "../../components/desktop/ingredient/IngredientFields";
 import IngredientPreview from "../../components/desktop/ingredient/IngredientPreview";
-import { useIngredientForm } from "../../utils/useIngredientForm";
+import { useIngredientForm } from "../../hooks/useIngredientForm";
 import "../../styles/desktop/ingredient.css";
 
 // 데스크탑 냉장재료 등록: 왼쪽 입력 | 오른쪽 냉장고에 들어갈 모습 미리보기 + 방금 넣은 재료

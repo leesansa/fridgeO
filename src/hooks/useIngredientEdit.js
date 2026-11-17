@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { apiFetch } from "./auth";
-import { getTodayKey } from "./fridgeUtils";
-import { useIngredientCatalog } from "./ingredientCatalog";
+import { apiFetch } from "../utils/auth";
+import { getTodayKey } from "../utils/fridgeUtils";
+import { useIngredientCatalog } from "./useIngredientCatalog";
 
 // /ingredient/edit/:id 재료 편집 (모바일·데스크탑 공통)
 

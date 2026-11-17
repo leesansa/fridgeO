@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router";
-import { apiFetch } from "./auth";
-import { useIngredientCatalog } from "./ingredientCatalog";
-import { uploadImage } from "./uploadImage";
+import { apiFetch } from "../utils/auth";
+import { useIngredientCatalog } from "./useIngredientCatalog";
+import { uploadImage } from "../utils/uploadImage";
 
 // 레시피 작성·수정 화면 상태 (모바일·데스크탑 공통). 화면 모양만 pages/{mobile,desktop}/RecipeWrite.jsx 가 그림
 export const DIFFICULTIES = ["쉬움", "보통", "어려움"];

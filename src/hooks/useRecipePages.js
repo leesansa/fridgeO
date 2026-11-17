@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { apiFetch } from "./auth";
+import { apiFetch } from "../utils/auth";
 
 // 레시피 무한 스크롤 (GET /api/recipes). 모바일 카드 목록과 데스크탑 카드 격자가 같이 씀
 // 분류·검색어가 바뀌면 부모가 key 로 새로 만들어서 목록·cursor 가 처음부터 시작

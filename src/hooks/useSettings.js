@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { apiFetch } from "./auth";
+import { apiFetch } from "../utils/auth";
 
 // 알림 설정 | 동의/약관 화면 (모바일·데스크탑 공통)
 

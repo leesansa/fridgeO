@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useIngredientPages } from "../../../utils/useIngredientPages";
+import { useIngredientPages } from "../../../hooks/useIngredientPages";
 import { getDaysLeft, getExpiryBadge } from "../../../utils/fridgeUtils";
 
 export const DRAG_TYPE = "application/x-fridgeo-ingredient";

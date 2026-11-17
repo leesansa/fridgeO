@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { apiFetch } from "./auth";
-import { getTodayKey } from "./fridgeUtils";
-import { useIngredientCatalog } from "./ingredientCatalog";
+import { apiFetch } from "../utils/auth";
+import { getTodayKey } from "../utils/fridgeUtils";
+import { useIngredientCatalog } from "./useIngredientCatalog";
 
 // "2026-11-11" + 7일 → "2026-11-18" (UTC 로 계산해 시간대 영향 없음)
 export const addDays = (dateKey, days) => {

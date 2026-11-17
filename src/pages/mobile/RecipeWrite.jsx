@@ -1,7 +1,7 @@
 import { Link, useNavigate, useParams } from "react-router";
 import logo from "../../assets/Logo_FridgeO.svg";
 import camera from "../../assets/review/camera.png";
-import { DIFFICULTIES, useEditableRecipe, useRecipeForm } from "../../utils/useRecipeForm.js";
+import { DIFFICULTIES, useEditableRecipe, useRecipeForm } from "../../hooks/useRecipeForm.js";
 import "../../styles/mobile/review-write.css";
 import "../../styles/mobile/recipe-write.css";
 

@@ -1,6 +1,6 @@
 import { Link, useNavigate, useParams } from "react-router";
 import camera from "../../assets/review/camera.png";
-import { DIFFICULTIES, useEditableRecipe, useRecipeForm } from "../../utils/useRecipeForm";
+import { DIFFICULTIES, useEditableRecipe, useRecipeForm } from "../../hooks/useRecipeForm";
 import "../../styles/desktop/recipe-write.css";
 
 const PHOTO_TYPES = "image/jpeg,image/png,image/webp";

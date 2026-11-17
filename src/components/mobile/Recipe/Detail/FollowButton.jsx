@@ -1,4 +1,4 @@
-import { useAuthorFollow } from "../../../../utils/useAuthorFollow.js";
+import { useAuthorFollow } from "../../../../hooks/useAuthorFollow.js";
 
 // 작성자 이름 옆 팔로우 버튼 (모바일 DetailInfo·데스크탑 DetailSummary 공통). 작성자가 없거나 내 레시피면 안 보임
 // 스타일은 styles/mobile/recipe-detail.css 의 .detail-follow

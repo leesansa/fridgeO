@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router";
-import { useMyRecipes } from "../../../utils/useMyRecipes";
+import { useMyRecipes } from "../../../hooks/useMyRecipes";
 
 // 데스크탑 마이페이지 "내가 쓴 레시피": 카드 격자 + 카드마다 수정·삭제 (로직은 모바일과 같은 useMyRecipes)
 const MyRecipeGrid = () => {

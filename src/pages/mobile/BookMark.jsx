@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router";
 import Header from "../../components/mobile/Header.jsx";
 import BookmarkList from "../../components/mobile/Recipe/Bookmark/BookmarkList.jsx";
-import { useBookmarks } from "../../utils/useBookmarks";
+import { useBookmarks } from "../../hooks/useBookmarks";
 import "../../styles/mobile/bookmark.css";
 
 // 내 북마크 (/bookmark): 불러오기·해제는 useBookmarks(데스크탑과 공통). 카드·목록 그리기는 components/Recipe

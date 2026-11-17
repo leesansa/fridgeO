@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
-import { apiFetch, authClient, authErrorMessage } from "./auth";
+import { apiFetch, authClient, authErrorMessage } from "../utils/auth";
 
 // 로그인 (모바일·데스크탑 공통). Neon Auth 는 이메일 로그인만 지원. 성공하면 마이페이지로
 export function useLogin() {

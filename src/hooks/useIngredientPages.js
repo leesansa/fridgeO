@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { apiFetch } from "./auth";
+import { apiFetch } from "../utils/auth";
 
 // 내 냉장고 재료 (GET /api/ingredients) 무한 스크롤. 모바일 목록과 데스크탑 보관 칸이 같이 씀
 // params = { sort, q, category, storage, status } (빈 값은 빼고 보냄). params 가 바뀌면 부모가 key 로 새로 만들어서 처음부터 다시

@@ -1,6 +1,6 @@
 import { Link, useNavigate, useParams } from "react-router";
 import camera from "../../assets/review/camera.png";
-import { TASTES, useReviewForm } from "../../utils/useReviewForm";
+import { TASTES, useReviewForm } from "../../hooks/useReviewForm";
 import "../../styles/desktop/review-write.css";
 
 const RATING_WORDS = ["별로예요", "그저 그래요", "괜찮아요", "좋아요", "최고예요"];

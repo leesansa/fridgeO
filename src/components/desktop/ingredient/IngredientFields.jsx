@@ -1,4 +1,4 @@
-import { addDays } from "../../../utils/useIngredientForm";
+import { addDays } from "../../../hooks/useIngredientForm";
 import { getExpiryBadge } from "../../../utils/fridgeUtils";
 
 const STORAGES = [

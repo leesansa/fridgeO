@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router";
-import { TERMS, useExpiryAlertSetting } from "../../utils/useSettings";
+import { TERMS, useExpiryAlertSetting } from "../../hooks/useSettings";
 // 헤더는 알림센터와 같은 디자인
 import "../../styles/mobile/Notification.css";
 import chevron from "../../assets/main/chevron.png";

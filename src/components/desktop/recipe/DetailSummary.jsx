@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router";
-import { useRecipeBookmark } from "../../../utils/useRecipeBookmark";
+import { useRecipeBookmark } from "../../../hooks/useRecipeBookmark";
 import FollowButton from "../../mobile/Recipe/Detail/FollowButton.jsx";
 import "../../../vendor/lucian-icons/edit.js"; // 079번 edit(연필) 아이콘
 import "../../../vendor/lucian-icons/bookmark.js"; // 012번 bookmark 아이콘

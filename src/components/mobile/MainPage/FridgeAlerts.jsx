@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { apiFetch, isLoggedIn } from "../../../utils/auth";
-import { useIsDesktop } from "../../../utils/useIsDesktop";
+import { useIsDesktop } from "../../../hooks/useIsDesktop";
 import { getExpiryBadge, getTodayKey } from "../../../utils/fridgeUtils";
 import FridgeDashboard from "../../desktop/MainPage/FridgeDashboard.jsx";
 import line from "../../../assets/main/line.svg";

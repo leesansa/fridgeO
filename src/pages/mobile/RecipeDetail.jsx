@@ -6,7 +6,7 @@ import IngredientChecklist from "../../components/mobile/Recipe/Detail/Ingredien
 import RecipeSteps from "../../components/mobile/Recipe/Detail/RecipeSteps.jsx";
 import ReviewSummary from "../../components/mobile/Recipe/Review/ReviewSummary.jsx";
 import ReviewList from "../../components/mobile/Recipe/Review/ReviewList.jsx";
-import { useRecipeDetail } from "../../utils/useRecipeDetail.js";
+import { useRecipeDetail } from "../../hooks/useRecipeDetail.js";
 import "../../styles/mobile/recipe-detail.css";
 
 // 레시피 상세: 주소의 :id 로 DB 레시피(기본 정보·재료·recipe_steps)를 불러오고, 각 영역은 components/Recipe

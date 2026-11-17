@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router";
-import { useLogin } from "../../utils/useLogin";
+import { useLogin } from "../../hooks/useLogin";
 import AuthBrand from "../../components/desktop/AuthBrand";
 import "../../styles/desktop/auth.css";
 

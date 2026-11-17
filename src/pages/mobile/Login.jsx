@@ -1,5 +1,5 @@
 import { useLocation, useNavigate } from "react-router";
-import { useLogin } from "../../utils/useLogin";
+import { useLogin } from "../../hooks/useLogin";
 // 헤더는 알림센터, 입력 줄/배지/버튼은 회원가입(Sign_up)과 같은 디자인이라 그 스타일을 같이 쓴다
 import "../../styles/mobile/Notification.css";
 import "../../styles/mobile/Login.css";

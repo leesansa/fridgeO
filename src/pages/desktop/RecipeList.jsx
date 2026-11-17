@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router";
 import RecipeGrid from "../../components/desktop/recipe/RecipeGrid";
 import CategoryIcon from "../../components/mobile/Recipe/List/CategoryIcon.jsx";
-import { useRecipeListState } from "../../utils/useRecipeListState";
+import { useRecipeListState } from "../../hooks/useRecipeListState";
 import { readRecentRecipes } from "../../utils/recentRecipes";
 import "../../styles/desktop/recipes.css";
 

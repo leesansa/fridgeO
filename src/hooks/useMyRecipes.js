@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { apiFetch } from "./auth";
+import { apiFetch } from "../utils/auth";
 
 // 내가 쓴 레시피 (GET /api/me/recipes) + 삭제. 모바일·데스크탑 마이페이지가 같이 씀. 작성자 확인은 서버가 로그인 계정으로 함
 export function useMyRecipes() {

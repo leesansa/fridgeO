@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router";
 import RecipeCard from "../../components/desktop/recipe/RecipeCard";
-import { useBookmarks } from "../../utils/useBookmarks";
+import { useBookmarks } from "../../hooks/useBookmarks";
 import "../../vendor/lucian-icons/bookmark.js"; // 레시피 상세와 같은 북마크 아이콘
 import "../../styles/desktop/recipes.css"; // 레시피 카드
 import "../../styles/desktop/bookmark.css";

@@ -1,5 +1,5 @@
 import { apiFetch } from "../../../utils/auth";
-import { useIngredientPages } from "../../../utils/useIngredientPages";
+import { useIngredientPages } from "../../../hooks/useIngredientPages";
 import Box from "./Box";
 import List from "./List";
 

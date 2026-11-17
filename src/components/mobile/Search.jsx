@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router";
 import Header from "./Header";
-import { useUnifiedSearch } from "../../utils/useUnifiedSearch";
+import { useUnifiedSearch } from "../../hooks/useUnifiedSearch";
 import { getExpiryBadge, getTodayKey } from "../../utils/fridgeUtils";
 import "../../styles/mobile/recipes.css";
 

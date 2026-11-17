@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { apiFetch, isLoggedIn } from "./auth";
+import { apiFetch, isLoggedIn } from "../utils/auth";
 
 // 통합 검색 (모바일·데스크탑 공통): 레시피(제목·재료 이름) + 내 냉장고 재료(로그인 시)를 한 번에. 각 목록은 첫 페이지만
 // result = { q, recipes, ingredients(로그인 안 했으면 null) } | { q, error }

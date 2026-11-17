@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { apiFetch } from "./auth";
+import { apiFetch } from "../utils/auth";
 
 // 내 북마크 (GET /api/me/bookmarks, 최근 저장한 순 최대 50개) + 해제. 모바일·데스크탑 북마크 화면이 같이 씀
 export function useBookmarks() {

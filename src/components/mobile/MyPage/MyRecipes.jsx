@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router";
-import { useMyRecipes } from "../../../utils/useMyRecipes";
+import { useMyRecipes } from "../../../hooks/useMyRecipes";
 
 // 내가 쓴 레시피 (useMyRecipes, 데스크탑과 공통): 눌러서 보기 + 수정 + 삭제
 const MyRecipes = () => {
