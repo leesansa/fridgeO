@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router";
-import { apiFetch, authClient } from "../../../utils/auth";
+import { authClient } from "../../../utils/auth";
+import { getFridgeSummary } from "../../../api/ingredients";
 import { useIsDesktop } from "../../../hooks/useIsDesktop";
 import { getExpiryBadge, getTodayKey } from "../../../utils/date";
 import FridgeDashboard from "../../desktop/MainPage/FridgeDashboard.jsx";
@@ -66,7 +67,7 @@ const FridgeAlerts = () => {
   useEffect(() => {
     if (!loggedIn) return;
     let alive = true;
-    apiFetch("/api/fridge/summary")
+    getFridgeSummary()
       .then((data) => alive && setSummary(data))
       .catch((e) => {
         console.error("냉장고 요약을 불러오지 못했습니다:", e);
@@ -76,7 +77,7 @@ const FridgeAlerts = () => {
   }, [loggedIn]);
 
   // 대시보드에서 재료를 바꾼 뒤 카드·목록을 새 값으로
-  const reload = async () => setSummary(await apiFetch("/api/fridge/summary"));
+  const reload = async () => setSummary(await getFridgeSummary());
 
   return (
     <section className="main-section fridge-section">

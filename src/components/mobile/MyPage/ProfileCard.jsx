@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { apiFetch } from "../../../utils/auth";
+import { updateMe } from "../../../api/me";
 
 const AVATAR_PX = 160; // 프로필 사진 저장 크기 (화면에는 72px, 선명하게 2배 남짓)
 
@@ -30,7 +30,7 @@ const ProfileCard = ({ me, onImageSaved }) => {
     setUploading(true);
     try {
       const profileImage = await toAvatarDataUrl(file);
-      const saved = await apiFetch("/api/me", { method: "PATCH", body: { profileImage } });
+      const saved = await updateMe({ profileImage });
       onImageSaved(saved.profile_image_url);
     } catch (e) {
       alert(`프로필 사진을 바꾸지 못했어요. ${e.message}`);

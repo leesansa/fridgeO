@@ -1,14 +1,7 @@
 import { useState } from "react";
-import { apiFetch } from "../utils/auth";
-import { getTodayKey } from "../utils/fridgeUtils";
+import { createIngredient } from "../api/ingredients";
+import { addDays, getTodayKey } from "../utils/date";
 import { useIngredientCatalog } from "./useIngredientCatalog";
-
-// "2026-11-11" + 7일 → "2026-11-18" (UTC 로 계산해 시간대 영향 없음)
-export const addDays = (dateKey, days) => {
-  const date = new Date(`${dateKey}T00:00:00Z`);
-  date.setUTCDate(date.getUTCDate() + days);
-  return date.toISOString().slice(0, 10);
-};
 
 const DEFAULT_SHELF_LIFE = 7; // 재료 사전에 없는 재료의 기본 보관 일수
 
@@ -36,10 +29,7 @@ export function useIngredientForm() {
     }
     setSaving(true);
     try {
-      await apiFetch("/api/ingredients", {
-        method: "POST",
-        body: { name, quantity, unit, storage, expiryDate: expiryDate || null },
-      });
+      await createIngredient({ name, quantity, unit, storage, expiryDate: expiryDate || null });
       return true;
     } catch (e) {
       alert(`재료를 추가하지 못했어요. ${e.message}`);

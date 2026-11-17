@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
-import { apiFetch } from "../utils/auth";
+import { getRecipe } from "../api/recipes";
+import { deleteMyReview, getMyReview, saveMyReview } from "../api/reviews";
 
 // 직접 먹어 본 맛 평가 (화면에서만 고름, 저장 안 됨)
 export const TASTES = ["맛있어요", "보통이예요", "생각보다 별로예요"];
@@ -21,7 +22,7 @@ export function useReviewForm(id) {
   // 레시피 정보 + 이미 쓴 리뷰가 있으면 불러와서 채워 둠
   useEffect(() => {
     let ignore = false;
-    Promise.all([apiFetch(`/api/recipes/${encodeURIComponent(id)}`), apiFetch(`/api/recipes/${encodeURIComponent(id)}/review`)])
+    Promise.all([getRecipe(id), getMyReview(id)])
       .then(([recipeData, review]) => {
         if (ignore) return;
         setRecipe(recipeData);
@@ -39,7 +40,7 @@ export function useReviewForm(id) {
     setSaving(true);
     setError("");
     try {
-      await apiFetch(`/api/recipes/${encodeURIComponent(id)}/review`, { method: "PUT", body: { rating, comment: text } });
+      await saveMyReview(id, { rating, comment: text });
       navigate(`/recipe/${id}`, { replace: true }); // 상세로 돌아가면 리뷰 수·평균이 새로 반영됨
     } catch (e) {
       setError(e.message);
@@ -52,7 +53,7 @@ export function useReviewForm(id) {
     if (!window.confirm(mine ? "저장된 리뷰를 삭제할까요?" : "작성한 내용을 지울까요?")) return;
     setError("");
     try {
-      if (mine) await apiFetch(`/api/recipes/${encodeURIComponent(id)}/review`, { method: "DELETE" });
+      if (mine) await deleteMyReview(id);
       setMine(null);
       setRating(5);
       setTaste("");

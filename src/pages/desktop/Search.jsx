@@ -3,7 +3,7 @@ import { Link, useSearchParams } from "react-router";
 import RecipeCard from "../../components/desktop/recipe/RecipeCard";
 import Highlight from "../../components/desktop/Highlight";
 import { useUnifiedSearch } from "../../hooks/useUnifiedSearch";
-import { getDaysLeft, getExpiryBadge, getTodayKey } from "../../utils/fridgeUtils";
+import { getDaysLeft, getExpiryBadge, getTodayKey } from "../../utils/date";
 import searchIcon from "../../assets/main/search.png";
 import "../../styles/desktop/recipes.css"; // 레시피 카드
 import "../../styles/desktop/search.css";

@@ -1,10 +1,11 @@
 import { useNavigate } from "react-router";
-import { TERMS, useExpiryAlertSetting } from "../../hooks/useSettings";
+import { useExpiryAlertSetting } from "../../hooks/useExpiryAlertSetting";
+import { TERMS } from "../../utils/terms";
 // 헤더는 알림센터와 같은 디자인
 import "../../styles/mobile/Notification.css";
 import chevron from "../../assets/main/chevron.png";
 
-// 알림 설정 | 동의/약관: 유통기한 임박 알림 켜기/끄기 + 약관 보기 (설정·약관 내용은 데스크탑과 공통 useSettings)
+// 알림 설정 | 동의/약관: 유통기한 임박 알림 켜기/끄기 + 약관 보기 (설정·약관 내용은 데스크탑과 공통 useExpiryAlertSetting·utils/terms)
 const Settings = () => {
   const navigate = useNavigate();
   const { expiryAlert, error, toggle } = useExpiryAlertSetting();

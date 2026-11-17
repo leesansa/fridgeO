@@ -5,7 +5,7 @@ import MenuList from "../../components/mobile/MyPage/MenuList.jsx";
 import StatPanel from "../../components/mobile/MyPage/StatPanel.jsx";
 import MyRecipeGrid from "../../components/desktop/mypage/MyRecipeGrid";
 import RecipeCard from "../../components/desktop/recipe/RecipeCard";
-import { apiFetch } from "../../utils/auth";
+import { getMe, getMyBookmarks } from "../../api/me";
 import { readRecentRecipes } from "../../utils/recentRecipes";
 import "../../styles/mobile/MyPage.css"; // 프로필·메뉴·팔로우 목록은 모바일 컴포넌트와 스타일을 그대로 씀
 import "../../styles/desktop/recipes.css"; // 북마크 레시피 카드
@@ -21,8 +21,8 @@ const MyPage = () => {
     const [recent] = useState(readRecentRecipes);
 
     useEffect(() => {
-        apiFetch("/api/me").then(setMe).catch(() => setMe(null));
-        apiFetch("/api/me/bookmarks").then(setBookmarks).catch(() => setBookmarks([]));
+        getMe().then(setMe).catch(() => setMe(null));
+        getMyBookmarks().then(setBookmarks).catch(() => setBookmarks([]));
     }, []);
 
     const stats = [

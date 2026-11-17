@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router";
-import { apiFetch } from "../../../utils/auth";
+import { getRecipes } from "../../../api/recipes";
 import RecipeCard from "./RecipeCard";
 
 // 데스크탑 레시피 상세 맨 아래: 같은 분류의 다른 레시피 4개 (GET /api/recipes?category=). 없거나 실패하면 안 보임
@@ -9,7 +9,7 @@ const SimilarRecipes = ({ categoryId, excludeId, categoryName }) => {
 
     useEffect(() => {
         let alive = true;
-        apiFetch(`/api/recipes?${new URLSearchParams({ category: categoryId })}`)
+        getRecipes({ category: categoryId })
             .then((data) => alive && setRecipes(data.items.filter((r) => r.id !== excludeId).slice(0, 4)))
             .catch(() => {});
         return () => { alive = false; };

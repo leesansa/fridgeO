@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
-import { apiFetch, authClient, authErrorMessage, PHONE_FORMAT_MESSAGE, toE164 } from "../../utils/auth";
+import { authClient, authErrorMessage, PHONE_FORMAT_MESSAGE, toE164 } from "../../utils/auth";
+import { createProfile } from "../../api/me";
+import { checkEmail } from "../../api/signup";
 // 헤더(뒤로가기 + "홈 | 페이지명")는 알림센터와 같은 디자인이라 그 스타일을 같이 쓴다
 import "../../styles/mobile/Notification.css";
 import "../../styles/mobile/Login.css";
@@ -54,7 +56,7 @@ const SignUp = () => {
         e.preventDefault();
         const values = Object.fromEntries(new FormData(e.currentTarget));
         run(async () => {
-            const { available } = await apiFetch("/api/signup/check-email", { method: "POST", body: { email: values.email } });
+            const { available } = await checkEmail(values.email);
             if (!available) throw new Error("이미 가입된 이메일입니다.");
             setAccount(values);
         });
@@ -76,7 +78,7 @@ const SignUp = () => {
                 }
                 setCreated(true);
                 // 프로필 생성이 실패해도 로그인 때 다시 만들므로(useLogin) 가입은 계속 진행
-                await apiFetch("/api/me", { method: "POST", body: { name: nickname } }).catch((err) => console.error("프로필 생성 실패:", err));
+                await createProfile({ name: nickname }).catch((err) => console.error("프로필 생성 실패:", err));
             }
             await authClient.phoneNumber.sendOtp({ phoneNumber });
             setMessage("인증번호를 보냈습니다. 5분 안에 입력해 주세요.");

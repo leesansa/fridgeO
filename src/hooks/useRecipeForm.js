@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router";
-import { apiFetch } from "../utils/auth";
+import { createRecipe, deleteRecipe, getCategories, getRecipe, updateRecipe } from "../api/recipes";
 import { useIngredientCatalog } from "./useIngredientCatalog";
-import { uploadImage } from "../utils/uploadImage";
+import { uploadImage } from "../api/images";
 
 // 레시피 작성·수정 화면 상태 (모바일·데스크탑 공통). 화면 모양만 pages/{mobile,desktop}/RecipeWrite.jsx 가 그림
 export const DIFFICULTIES = ["쉬움", "보통", "어려움"];
@@ -25,7 +25,7 @@ export function useEditableRecipe(id) {
   useEffect(() => {
     if (!id) return;
     let ignore = false;
-    apiFetch(`/api/recipes/${encodeURIComponent(id)}`)
+    getRecipe(id)
       .then((data) => !ignore && setLoaded(data.mine
         ? { id, recipe: data, error: "" }
         : { id, recipe: null, error: "내가 쓴 레시피만 수정할 수 있어요" }))
@@ -60,7 +60,7 @@ export function useRecipeForm(recipe) {
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
-    apiFetch("/api/categories").then(setCategories).catch(() => {}); // 실패하면 분류 없이 저장
+    getCategories().then(setCategories).catch(() => {}); // 실패하면 분류 없이 저장
   }, []);
 
   // 미리보기 주소는 사진을 바꾸거나 화면을 나갈 때 메모리에서 해제
@@ -99,7 +99,7 @@ export function useRecipeForm(recipe) {
     setSaving(true);
     setError("");
     try {
-      await apiFetch(`/api/recipes/${recipe.id}`, { method: "DELETE" });
+      await deleteRecipe(recipe.id);
       navigate("/recipe", { replace: true });
     } catch (e) {
       setError(e.message);
@@ -118,14 +118,12 @@ export function useRecipeForm(recipe) {
       const [imageUrl, ...stepImages] = await Promise.all(
         [photo, ...filledSteps.map((row) => row.photo)].map((p) => (p?.file ? uploadImage(p.file) : p?.preview ?? null)),
       );
-      const { id } = await apiFetch(recipe ? `/api/recipes/${recipe.id}` : "/api/recipes", {
-        method: recipe ? "PUT" : "POST",
-        body: {
-          title, description, categoryId, servings, cookTime, difficulty, imageUrl,
-          ingredients: filledIngredients,
-          steps: filledSteps.map((row, i) => ({ text: row.text, imageUrl: stepImages[i] })),
-        },
-      });
+      const body = {
+        title, description, categoryId, servings, cookTime, difficulty, imageUrl,
+        ingredients: filledIngredients,
+        steps: filledSteps.map((row, i) => ({ text: row.text, imageUrl: stepImages[i] })),
+      };
+      const { id } = await (recipe ? updateRecipe(recipe.id, body) : createRecipe(body));
       navigate(`/recipe/${id}`, { replace: true });
     } catch (e) {
       setError(e.message);

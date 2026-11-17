@@ -1,8 +1,3 @@
-import { useEffect, useState } from "react";
-import { apiFetch } from "../utils/auth";
-
-// 알림 설정 | 동의/약관 화면 (모바일·데스크탑 공통)
-
 // 서비스가 실제로 하는 일(재료·레시피·리뷰 저장, 휴대폰 인증)에 맞춘 짧은 약관
 export const TERMS = [
   {
@@ -24,27 +19,3 @@ export const TERMS = [
     ],
   },
 ];
-
-// 유통기한 임박 알림 켜기/끄기 (DB users.expiry_alert). 불러오기 전 expiryAlert = null
-export function useExpiryAlertSetting() {
-  const [expiryAlert, setExpiryAlert] = useState(null);
-  const [error, setError] = useState("");
-
-  useEffect(() => {
-    apiFetch("/api/me").then((me) => setExpiryAlert(me.expiry_alert)).catch((e) => setError(e.message));
-  }, []);
-
-  const toggle = async () => {
-    const next = !expiryAlert;
-    setExpiryAlert(next); // 먼저 바꿔 보여 주고 실패하면 되돌림
-    setError("");
-    try {
-      await apiFetch("/api/me/settings", { method: "PATCH", body: { expiryAlert: next } });
-    } catch (e) {
-      setExpiryAlert(!next);
-      setError(`설정을 저장하지 못했어요. ${e.message}`);
-    }
-  };
-
-  return { expiryAlert, error, toggle };
-}

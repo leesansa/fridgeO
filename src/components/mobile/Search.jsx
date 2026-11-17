@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router";
 import Header from "./Header";
 import { useUnifiedSearch } from "../../hooks/useUnifiedSearch";
-import { getExpiryBadge, getTodayKey } from "../../utils/fridgeUtils";
+import { getExpiryBadge, getTodayKey } from "../../utils/date";
 import "../../styles/mobile/recipes.css";
 
 // 통합 검색 (?q=): 내 냉장고 재료(로그인 시) + 레시피(제목·재료 이름) 를 한 번에 보여 줌. 각 목록은 첫 페이지만

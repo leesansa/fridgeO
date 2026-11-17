@@ -5,7 +5,7 @@ import SortFilter from "../../components/mobile/fridge/SortFilter";
 import FridgeToolbar from "../../components/mobile/fridge/FridgeToolbar";
 import FridgeItems from "../../components/mobile/fridge/FridgeItems";
 import AddButton from "../../components/mobile/fridge/AddButton";
-import { getTodayKey } from "../../utils/fridgeUtils";
+import { getTodayKey } from "../../utils/date";
 import "../../styles/mobile/fridge.css";
 
 // 내 냉장고: 검색어·거르기/정렬 탭·보기 방식·삭제/편집 모드·오늘 날짜만 여기서 관리하고, 각 영역은 components/fridge

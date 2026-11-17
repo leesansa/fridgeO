@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router";
-import { formatPhone, usePrivacyInfo } from "../../hooks/usePrivacyInfo";
+import { usePrivacyInfo } from "../../hooks/usePrivacyInfo";
+import { formatPhone } from "../../utils/auth";
 // 헤더·카드·입력 줄은 로그인 화면과 같은 디자인
 import "../../styles/mobile/Notification.css";
 import "../../styles/mobile/Login.css";

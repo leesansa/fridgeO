@@ -5,7 +5,7 @@ import EditQuantityField from "../../components/mobile/Ingredient/Fields/EditQua
 import StorageSelect from "../../components/mobile/Ingredient/Fields/StorageSelect";
 import ExpiryField from "../../components/mobile/Ingredient/Fields/ExpiryField";
 import SubmitButton from "../../components/mobile/Ingredient/Frame/SubmitButton";
-import { useEditableIngredient, useIngredientEditForm } from "../../hooks/useIngredientEdit";
+import { useEditableIngredient, useIngredientEditForm } from "../../hooks/useIngredientEditForm";
 import "../../styles/mobile/Ingredient.css";
 import "../../styles/mobile/IngredientEdit.css";
 

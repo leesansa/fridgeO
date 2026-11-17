@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import { authClient } from "../../../utils/auth";
-import { getExpiryBadge, getTodayKey } from "../../../utils/fridgeUtils";
+import { getExpiryBadge, getTodayKey } from "../../../utils/date";
 
 // 하단 메뉴: 내 냉장고 관리(유통기한 5일 이하 재료) · 개인정보 관리 · 알림 설정 | 동의/약관 · 로그아웃
 const MenuList = ({ me }) => {

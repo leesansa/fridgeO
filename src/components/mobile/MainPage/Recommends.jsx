@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
-import { apiFetch } from "../../../utils/auth";
+import { getRecommendedRecipes } from "../../../api/recipes";
 import chevron from "../../../assets/main/chevron.png";
 
 // 메인 추천 레시피 5개 (GET /api/recipes/recommend): 내 냉장고 재료로 만들 수 있는 것 먼저, 없으면 인기순
@@ -12,7 +12,7 @@ const Recommends = () => {
 
     useEffect(() => {
         let alive = true;
-        apiFetch("/api/recipes/recommend")
+        getRecommendedRecipes()
             .then((rows) => alive && setRecipes(rows))
             .catch((e) => alive && setError(e.message));
         return () => { alive = false; };

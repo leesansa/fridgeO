@@ -1,5 +1,4 @@
-import { addDays } from "../../../hooks/useIngredientForm";
-import { getExpiryBadge } from "../../../utils/fridgeUtils";
+import { addDays, getExpiryBadge } from "../../../utils/date";
 
 const STORAGES = [
     ["냉장", "0~5℃, 채소·유제품·반찬"],

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { apiFetch } from "../utils/auth";
+import { getRecipe } from "../api/recipes";
 import { addRecentRecipe } from "../utils/recentRecipes";
 
 // 레시피 상세 (GET /api/recipes/:id: 기본 정보·재료·recipe_steps). 모바일·데스크탑 상세가 같이 씀
@@ -9,7 +9,7 @@ export function useRecipeDetail(id) {
 
   useEffect(() => {
     let ignore = false; // 다른 레시피로 바로 옮겨 가면 늦게 온 이전 응답은 버림
-    apiFetch(`/api/recipes/${encodeURIComponent(id)}`)
+    getRecipe(id)
       .then((data) => {
         if (ignore) return;
         setLoaded({ id, recipe: data, error: "" });

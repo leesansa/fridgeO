@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { useSearchParams } from "react-router";
-import { apiFetch } from "../utils/auth";
+import { getCategories } from "../api/recipes";
 
 const ALL = { id: null, name: "전체" };
 
@@ -35,7 +35,7 @@ export function useRecipeListState() {
 
   // DB 분류 목록. 실패하면 "전체"만 남고 레시피 목록은 그대로 동작
   useEffect(() => {
-    apiFetch("/api/categories")
+    getCategories()
       .then((rows) => setCategories([ALL, ...rows]))
       .catch((e) => console.error("분류를 불러오지 못했습니다", e));
   }, []);

@@ -1,22 +1,22 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
-import { apiFetch } from "../../../utils/auth";
+import { getMyBookmarks, getMyFollows } from "../../../api/me";
 
 // 북마크·팔로우 숫자를 누르면 펼쳐지는 목록 (DB recipe_bookmarks / follows)
 const StatPanel = ({ kind, me }) => {
   const navigate = useNavigate();
   const [followType, setFollowType] = useState("following"); // 팔로잉 | 팔로워
-  const path = kind === "bookmarks" ? "/api/me/bookmarks" : `/api/me/follows?type=${followType}`;
-  // 응답을 어느 주소 것인지와 함께 보관 → 탭을 바꾸면 자동으로 "불러오는 중"
+  const path = kind === "bookmarks" ? "bookmarks" : `follows:${followType}`;
+  // 응답을 어느 목록 것인지와 함께 보관 → 탭을 바꾸면 자동으로 "불러오는 중"
   const [loaded, setLoaded] = useState({ path: null, rows: [], error: "" });
 
   useEffect(() => {
     let ignore = false;
-    apiFetch(path)
+    (kind === "bookmarks" ? getMyBookmarks() : getMyFollows(followType))
       .then((rows) => !ignore && setLoaded({ path, rows, error: "" }))
       .catch((e) => !ignore && setLoaded({ path, rows: [], error: e.message }));
     return () => { ignore = true; };
-  }, [path]);
+  }, [path, kind, followType]);
 
   const loading = loaded.path !== path;
   const empty = kind === "bookmarks"

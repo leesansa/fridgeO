@@ -2,7 +2,7 @@ import { useEffect, useId, useRef, useState } from "react";
 import { Link, useLocation, useSearchParams } from "react-router";
 import "../../vendor/lucian-icons/menu.js";
 import CategoryIcon from "../mobile/Recipe/List/CategoryIcon.jsx";
-import { apiFetch } from "../../utils/auth";
+import { getCategories } from "../../api/recipes";
 
 const ALL = { id: null, name: "전체" };
 
@@ -27,7 +27,7 @@ const CategoryMenu = () => {
 
     useEffect(() => {
         if (!open || categories) return;
-        apiFetch("/api/categories")
+        getCategories()
             .then((rows) => setCategories([ALL, ...rows]))
             .catch(() => setCategories([ALL])); // 실패해도 "전체"로는 갈 수 있게
     }, [open, categories]);

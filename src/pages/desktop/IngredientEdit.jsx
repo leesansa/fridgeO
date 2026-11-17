@@ -1,7 +1,7 @@
 import { Link, useNavigate, useParams } from "react-router";
 import IngredientFields from "../../components/desktop/ingredient/IngredientFields";
 import IngredientPreview from "../../components/desktop/ingredient/IngredientPreview";
-import { useEditableIngredient, useIngredientEditForm } from "../../hooks/useIngredientEdit";
+import { useEditableIngredient, useIngredientEditForm } from "../../hooks/useIngredientEditForm";
 import "../../styles/desktop/ingredient.css";
 
 // 데스크탑 재료 편집: 등록 화면과 같은 입력 칸·미리보기 + 바꾸기 전 값 비교

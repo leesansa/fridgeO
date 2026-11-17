@@ -1,4 +1,4 @@
-import { formatDate, getDaysLeft, getExpiryBadge } from "../../../utils/fridgeUtils";
+import { formatDate, getDaysLeft, getExpiryBadge } from "../../../utils/date";
 
 // 데스크탑 재료 등록·편집 오른쪽: 데스크탑 냉장고의 칸·카드 모양으로 입력하는 대로 바로 보여 줌
 const IngredientPreview = ({ name, quantity, unit, storage, expiryDate, today }) => {

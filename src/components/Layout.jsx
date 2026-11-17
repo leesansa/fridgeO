@@ -3,7 +3,8 @@ import { Outlet, useLocation, useNavigate } from "react-router";
 import Navigation from "./mobile/Navigation";
 import DesktopHeader from "./desktop/DesktopHeader";
 import Loading from "../pages/mobile/Loading";
-import { apiFetch, authClient } from "../utils/auth";
+import { authClient } from "../utils/auth";
+import { clearNotifications, getNotifications, markNotificationsRead } from "../api/notifications";
 import { getExpiryBadge, getTodayKey } from "../utils/date";
 
 // shortcut: 실제로 불러올 데이터가 없어 고정 시간만 보여줌, 데이터 로딩이 생기면 그 완료 시점으로 교체
@@ -54,7 +55,7 @@ const Layout = () => {
         if (isPending) return;
         let ignore = false;
         (async () => {
-            const data = loggedIn ? await apiFetch("/api/notifications") : { items: [], unread: 0 };
+            const data = loggedIn ? await getNotifications() : { items: [], unread: 0 };
             if (ignore) return;
             setNotifications(data.items.map(toCard));
             setHasUnread(data.unread > 0);
@@ -65,7 +66,7 @@ const Layout = () => {
     // 알림센터를 열면 모두 읽음으로 저장하고 메인의 빨간 점을 끈다
     const markAllRead = useCallback(async () => {
         try {
-            await apiFetch("/api/notifications/read", { method: "POST" });
+            await markNotificationsRead();
             setHasUnread(false);
         } catch (e) {
             console.error("읽음 처리 실패", e);
@@ -77,7 +78,7 @@ const Layout = () => {
         const before = notifications;
         setNotifications([]);
         try {
-            await apiFetch("/api/notifications", { method: "DELETE" });
+            await clearNotifications();
         } catch (e) {
             setNotifications(before);
             alert(`알림을 지우지 못했어요. ${e.message}`);

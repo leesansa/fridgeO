@@ -1,4 +1,4 @@
-import { apiFetch } from "../../../utils/auth";
+import { deleteIngredient } from "../../../api/ingredients";
 import { useIngredientPages } from "../../../hooks/useIngredientPages";
 import Box from "./Box";
 import List from "./List";
@@ -23,7 +23,7 @@ const FridgeItems = ({ sortBy, q, category, status, viewMode, mode, today, rootR
     const before = items;
     setItems((prev) => prev.filter((item) => item.id !== id));
     try {
-      await apiFetch(`/api/ingredients/${encodeURIComponent(id)}`, { method: "DELETE" });
+      await deleteIngredient(id);
     } catch (e) {
       setItems(before);
       alert(`삭제하지 못했어요. ${e.message}`);

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { apiFetch } from "../../../../utils/auth.js";
+import { getReviews } from "../../../../api/reviews";
 
 // 다른 사람들의 리뷰 (DB reviews). 5개씩, "리뷰 더보기"로 이어서. 레시피가 바뀌면 부모가 key 로 새로 만듦
 const ReviewList = ({ recipeId, total }) => {
@@ -10,7 +10,7 @@ const ReviewList = ({ recipeId, total }) => {
 
     // offset 부터 5개를 받아 목록에 붙임. 첫 페이지는 덮어써서 개발 모드(StrictMode)에서 두 번 불려도 중복되지 않게
     const fetchPage = useCallback((offset) =>
-        apiFetch(`/api/recipes/${encodeURIComponent(recipeId)}/reviews?offset=${offset}`)
+        getReviews(recipeId, offset)
             .then((data) => {
                 setReviews((prev) => (offset === 0 ? data.items : [...prev, ...data.items]));
                 setNextOffset(data.nextOffset);

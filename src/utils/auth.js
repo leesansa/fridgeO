@@ -1,4 +1,4 @@
-// Neon Auth 로그인 상태와 API 서버 호출. 세션은 Neon Auth가 관리하고, API 서버에는 JWT를 Bearer로 보낸다
+// Neon Auth 로그인 상태·회원 관련 도우미. 세션은 Neon Auth가 관리한다. 우리 API 서버 호출은 src/api/
 import { createAuthClient } from "@neon/neon-js/auth";
 import { BetterAuthReactAdapter } from "@neon/neon-js/auth/react/adapters";
 
@@ -50,22 +50,3 @@ export const PHONE_FORMAT_MESSAGE = "휴대폰 번호를 확인해 주세요. (�
 
 export const authErrorMessage = (err) =>
   AUTH_ERRORS[err?.error?.code ?? err?.code] ?? err?.message ?? "요청을 처리하지 못했습니다. 잠시 후 다시 시도해 주세요.";
-
-// API 서버 주소. 배포 때는 .env.production 의 VITE_API_URL(Worker 주소), 로컬은 비워 두면 Vite 프록시(/api)로 감
-export const API_URL = import.meta.env.VITE_API_URL ?? "";
-
-// 로그인한 사용자의 토큰을 붙여 API 서버(/api/...)를 호출한다. 실패하면 서버의 오류 문구로 Error를 던진다
-export async function apiFetch(path, { body, ...options } = {}) {
-  const token = (await getSession())?.session.token;
-  const res = await fetch(API_URL + path, {
-    ...options,
-    headers: {
-      "Content-Type": "application/json",
-      ...(token && { Authorization: `Bearer ${token}` }),
-    },
-    body: body === undefined ? undefined : JSON.stringify(body),
-  });
-  const data = await res.json().catch(() => null);
-  if (!res.ok) throw new Error(data?.error ?? "서버에 연결할 수 없습니다. (npm run server 실행 확인)");
-  return data;
-}

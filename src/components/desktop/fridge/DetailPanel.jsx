@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
-import { apiFetch } from "../../../utils/auth";
-import { formatDate, getDaysLeft, getExpiryBadge } from "../../../utils/fridgeUtils";
+import { getRecipes } from "../../../api/recipes";
+import { formatDate, getDaysLeft, getExpiryBadge } from "../../../utils/date";
 
 const STORAGES = ["냉장", "냉동", "실온"];
 const shortDate = (key) => key.slice(5).replace("-", ".");
@@ -16,7 +16,7 @@ const DetailPanel = ({ row, today, busy, onUpdate, onRemove }) => {
   useEffect(() => {
     let alive = true;
     // 레시피 검색은 제목 또는 재료 이름으로 찾음
-    apiFetch(`/api/recipes?${new URLSearchParams({ q: name })}`)
+    getRecipes({ q: name })
       .then((data) => alive && setRecipes(data.items.slice(0, 3)))
       .catch(() => alive && setRecipes([]));
     return () => { alive = false; };

@@ -6,7 +6,7 @@ import StatPanel from "../../components/mobile/MyPage/StatPanel.jsx";
 import RecentRecipes from "../../components/mobile/MyPage/RecentRecipes.jsx";
 import MyRecipes from "../../components/mobile/MyPage/MyRecipes.jsx";
 import MenuList from "../../components/mobile/MyPage/MenuList.jsx";
-import { apiFetch } from "../../utils/auth";
+import { getMe } from "../../api/me";
 import "../../styles/mobile/MyPage.css";
 
 // 마이페이지: 내 정보(GET /api/me)와 펼친 목록만 여기서 관리하고, 각 영역은 components/MyPage
@@ -17,7 +17,7 @@ const MyPage = () => {
   const [openStat, setOpenStat] = useState(null); // "bookmarks" | "follows" | null (펼친 목록)
 
   useEffect(() => {
-    apiFetch("/api/me").then(setMe).catch(() => setMe(null));
+    getMe().then(setMe).catch(() => setMe(null));
   }, []);
 
   const toggleStat = (kind) => setOpenStat((current) => (current === kind ? null : kind));

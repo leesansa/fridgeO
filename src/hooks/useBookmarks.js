@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
-import { apiFetch } from "../utils/auth";
+import { getMyBookmarks } from "../api/me";
+import { setBookmark } from "../api/reviews";
 
 // 내 북마크 (GET /api/me/bookmarks, 최근 저장한 순 최대 50개) + 해제. 모바일·데스크탑 북마크 화면이 같이 씀
 export function useBookmarks() {
@@ -8,7 +9,7 @@ export function useBookmarks() {
   const [removingId, setRemovingId] = useState(null);
 
   const load = useCallback(
-    () => apiFetch("/api/me/bookmarks").then(setRecipes).catch((e) => setError(e.message)),
+    () => getMyBookmarks().then(setRecipes).catch((e) => setError(e.message)),
     [],
   );
 
@@ -27,7 +28,7 @@ export function useBookmarks() {
     setRemovingId(id);
     setRecipes((prev) => prev.filter((r) => r.id !== id));
     try {
-      await apiFetch(`/api/recipes/${encodeURIComponent(id)}/bookmark`, { method: "DELETE" });
+      await setBookmark(id, false);
     } catch (e) {
       setRecipes(before);
       alert(`북마크를 해제하지 못했어요. ${e.message}`);

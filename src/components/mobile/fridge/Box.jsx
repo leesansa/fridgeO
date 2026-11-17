@@ -1,7 +1,7 @@
 import {
   formatDate,
   getExpiryBadge,
-} from "../../../utils/fridgeUtils";
+} from "../../../utils/date";
 
 const Box = ({ items, today, onSelectIngredient, onDeleteIngredient }) => {
   return (

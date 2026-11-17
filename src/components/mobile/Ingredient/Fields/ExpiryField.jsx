@@ -1,6 +1,5 @@
 import { useRef } from "react";
-import { getExpiryBadge } from "../../../../utils/fridgeUtils";
-import { addDays } from "../../../../hooks/useIngredientForm";
+import { addDays, getExpiryBadge } from "../../../../utils/date";
 
 const QUICK_DAYS = [3, 7, 14, 30];
 

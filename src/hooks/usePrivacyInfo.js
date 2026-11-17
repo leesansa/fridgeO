@@ -1,9 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
-import { apiFetch, authClient, authErrorMessage, getSession, PHONE_FORMAT_MESSAGE, toE164 } from "../utils/auth";
-
-// +821012345678 → 010-1234-5678
-export const formatPhone = (p) => p?.replace(/^\+82/, "0").replace(/^(\d{3})(\d{3,4})(\d{4})$/, "$1-$2-$3");
+import { authClient, authErrorMessage, getSession, PHONE_FORMAT_MESSAGE, toE164 } from "../utils/auth";
+import { getMe, updateMe } from "../api/me";
 
 // 개인정보 관리 (모바일·데스크탑 공통): 비밀번호를 다시 확인한 뒤에만 내 정보를 보여 준다 (화면을 나가면 다시 확인)
 // 닉네임은 바로, 휴대폰은 새 번호로 받은 인증번호를 확인한 뒤 바꾼다. message = 실패·안내 문구 (ok 면 성공 안내)
@@ -38,7 +36,7 @@ export function usePrivacyInfo() {
       const email = (await getSession())?.user.email;
       if (!email) return navigate("/login");
       await authClient.signIn.email({ email, password });
-      const me = await apiFetch("/api/me").catch(() => null); // 프로필이 아직 없으면 빈 칸
+      const me = await getMe().catch(() => null); // 프로필이 아직 없으면 빈 칸
       setUser({ ...(await getSession()).user, nickname: me?.name ?? "" });
     } catch (err) {
       fail(err?.error?.code === "INVALID_EMAIL_OR_PASSWORD" ? "비밀번호가 올바르지 않습니다." : authErrorMessage(err));
@@ -48,7 +46,7 @@ export function usePrivacyInfo() {
   };
 
   const changeNickname = (name) => run(async () => {
-    const saved = await apiFetch("/api/me", { method: "PATCH", body: { name: name.trim() } });
+    const saved = await updateMe({ name: name.trim() });
     setUser((u) => ({ ...u, nickname: saved.name }));
     done("닉네임을 변경했습니다.");
   });

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
-import { apiFetch } from "../../../utils/auth";
+import { getCondiments } from "../../../api/ingredients";
 import chevron from "../../../assets/main/chevron.png";
 
 // 메인 "내 조미료들": 내 냉장고에 있는 조미료만 (DB 재료 사전의 분류 = 조미료). 스타일은 MainPage.css
@@ -10,7 +10,7 @@ const Condiments = () => {
     const [condiments, setCondiments] = useState([]); // [{ name, icon_url }]
 
     useEffect(() => {
-        apiFetch("/api/fridge/condiments").then(setCondiments).catch(() => {});
+        getCondiments().then(setCondiments).catch(() => {});
     }, []);
 
     if (condiments.length === 0) return null;

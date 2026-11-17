@@ -21,6 +21,13 @@ function getDayNumber(dateString) {
   return Date.UTC(year, month - 1, day) / DAY_MS;
 }
 
+// "2026-11-11" + 7일 → "2026-11-18" (UTC 로 계산해 시간대 영향 없음)
+export const addDays = (dateKey, days) => {
+  const date = new Date(`${dateKey}T00:00:00Z`);
+  date.setUTCDate(date.getUTCDate() + days);
+  return date.toISOString().slice(0, 10);
+};
+
 export function getDaysLeft(expiryDate, today) {
   return getDayNumber(expiryDate) - getDayNumber(today);
 }

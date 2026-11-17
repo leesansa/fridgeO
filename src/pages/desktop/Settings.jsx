@@ -1,10 +1,11 @@
 import { Link } from "react-router";
 import AccountMenu from "../../components/desktop/AccountMenu";
-import { TERMS, useExpiryAlertSetting } from "../../hooks/useSettings";
+import { useExpiryAlertSetting } from "../../hooks/useExpiryAlertSetting";
+import { TERMS } from "../../utils/terms";
 import "../../styles/desktop/account.css";
 
 // 데스크탑 알림 설정 · 약관: 왼쪽 계정 메뉴 | 오른쪽 알림 설정 카드 + 약관 (모바일은 접어 두고, 데스크탑은 펼쳐서 보여 줌)
-// 켜기/끄기·약관 내용은 모바일과 같은 useSettings
+// 켜기/끄기·약관 내용은 모바일과 같은 useExpiryAlertSetting·utils/terms
 const Settings = () => {
     const { expiryAlert, error, toggle } = useExpiryAlertSetting();
 

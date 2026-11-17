@@ -1,15 +1,10 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
-import { apiFetch } from "../../../utils/auth";
-import { getDaysLeft, getExpiryBadge } from "../../../utils/fridgeUtils";
+import { updateIngredient } from "../../../api/ingredients";
+import { getRecommendedRecipes } from "../../../api/recipes";
+import { addDays, getDaysLeft, getExpiryBadge } from "../../../utils/date";
 
 const WEEKDAYS = ["일", "월", "화", "수", "목", "금", "토"];
-
-// "2026-11-16" + 2 → "2026-11-18"
-const addDays = (key, n) => {
-  const [y, m, d] = key.split("-").map(Number);
-  return new Date(Date.UTC(y, m - 1, d + n)).toISOString().slice(0, 10);
-};
 
 const dayLabel = (key, i) => {
   if (i === 0) return "오늘";
@@ -27,7 +22,7 @@ const FridgeDashboard = ({ items, today, onChange }) => {
 
   useEffect(() => {
     let alive = true;
-    apiFetch("/api/recipes/recommend")
+    getRecommendedRecipes()
       .then((rows) => alive && setRecipes(rows.slice(0, 3)))
       .catch(() => alive && setRecipes([]));
     return () => { alive = false; };
@@ -44,10 +39,7 @@ const FridgeDashboard = ({ items, today, onChange }) => {
   const finish = async (item) => {
     setBusyId(item.id);
     try {
-      await apiFetch(`/api/ingredients/${item.id}`, {
-        method: "PATCH",
-        body: { name: item.name, quantity: 0, unit: item.unit, storage: item.storage, expiryDate: item.expiry_date },
-      });
+      await updateIngredient(item.id, { name: item.name, quantity: 0, unit: item.unit, storage: item.storage, expiryDate: item.expiry_date });
       await onChange();
     } catch (e) {
       alert(`재료를 바꾸지 못했어요. ${e.message}`);

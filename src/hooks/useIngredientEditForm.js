@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { apiFetch } from "../utils/auth";
-import { getTodayKey } from "../utils/fridgeUtils";
+import { deleteIngredient, getIngredient, updateIngredient } from "../api/ingredients";
+import { getTodayKey } from "../utils/date";
 import { useIngredientCatalog } from "./useIngredientCatalog";
 
 // /ingredient/edit/:id 재료 편집 (모바일·데스크탑 공통)
@@ -11,7 +11,7 @@ export function useEditableIngredient(id) {
 
   useEffect(() => {
     let ignore = false;
-    apiFetch(`/api/ingredients/${encodeURIComponent(id)}`)
+    getIngredient(id)
       .then((item) => !ignore && setLoaded({ id, item, error: "" }))
       .catch((e) => !ignore && setLoaded({ id, item: null, error: e.message }));
     return () => { ignore = true; };
@@ -45,10 +45,7 @@ export function useIngredientEditForm(item) {
     }
     setSaving(true);
     try {
-      await apiFetch(`/api/ingredients/${encodeURIComponent(item.id)}`, {
-        method: "PATCH",
-        body: { name, quantity: amount, unit, storage, expiryDate },
-      });
+      await updateIngredient(item.id, { name, quantity: amount, unit, storage, expiryDate });
       return true;
     } catch (e) {
       alert(`편집 내용을 저장하지 못했어요. ${e.message}`);
@@ -62,7 +59,7 @@ export function useIngredientEditForm(item) {
     if (!window.confirm(`'${item.name}'을(를) 냉장고에서 삭제할까요? 되돌릴 수 없어요.`)) return false;
     setSaving(true);
     try {
-      await apiFetch(`/api/ingredients/${encodeURIComponent(item.id)}`, { method: "DELETE" });
+      await deleteIngredient(item.id);
       return true;
     } catch (e) {
       alert(`삭제하지 못했어요. ${e.message}`);

@@ -2,8 +2,8 @@ import { useCallback, useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router";
 import StorageColumn from "../../components/desktop/fridge/StorageColumn";
 import DetailPanel from "../../components/desktop/fridge/DetailPanel";
-import { apiFetch } from "../../utils/auth";
-import { getTodayKey } from "../../utils/fridgeUtils";
+import { deleteIngredient, getCondiments, updateIngredient } from "../../api/ingredients";
+import { getTodayKey } from "../../utils/date";
 import "../../styles/desktop/fridge.css";
 
 const STORAGES = ["냉장", "냉동", "실온"];
@@ -28,7 +28,7 @@ const Fridge = () => {
   const [today] = useState(getTodayKey);
 
   useEffect(() => {
-    apiFetch("/api/fridge/condiments").then((rows) => setHasCondiments(rows.length > 0)).catch(() => {});
+    getCondiments().then((rows) => setHasCondiments(rows.length > 0)).catch(() => {});
   }, []);
 
   useEffect(() => {
@@ -43,10 +43,7 @@ const Fridge = () => {
     const next = { ...row, ...changes };
     setBusy(true);
     try {
-      await apiFetch(`/api/ingredients/${row.id}`, {
-        method: "PATCH",
-        body: { name: next.name, quantity: next.quantity, unit: next.unit, storage: next.storage, expiryDate: next.expiry_date },
-      });
+      await updateIngredient(row.id, { name: next.name, quantity: next.quantity, unit: next.unit, storage: next.storage, expiryDate: next.expiry_date });
       setSelected((s) => (s?.id === row.id ? next : s));
       setVersion((v) => v + 1);
     } catch (e) {
@@ -60,7 +57,7 @@ const Fridge = () => {
     if (!confirm(`'${row.name}'을(를) 삭제할까요? 되돌릴 수 없어요.`)) return;
     setBusy(true);
     try {
-      await apiFetch(`/api/ingredients/${row.id}`, { method: "DELETE" });
+      await deleteIngredient(row.id);
       setSelected(null);
       setVersion((v) => v + 1);
     } catch (e) {

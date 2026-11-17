@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { apiFetch } from "../utils/auth";
+import { getMyRecipes } from "../api/me";
+import { deleteRecipe } from "../api/recipes";
 
 // 내가 쓴 레시피 (GET /api/me/recipes) + 삭제. 모바일·데스크탑 마이페이지가 같이 씀. 작성자 확인은 서버가 로그인 계정으로 함
 export function useMyRecipes() {
@@ -8,7 +9,7 @@ export function useMyRecipes() {
   const [deleting, setDeleting] = useState(null); // 지우는 중인 레시피 id (두 번 눌러도 한 번만)
 
   useEffect(() => {
-    apiFetch("/api/me/recipes").then(setRecipes).catch((e) => setError(e.message));
+    getMyRecipes().then(setRecipes).catch((e) => setError(e.message));
   }, []);
 
   const remove = async (recipe) => {
@@ -16,7 +17,7 @@ export function useMyRecipes() {
     setDeleting(recipe.id);
     setError("");
     try {
-      await apiFetch(`/api/recipes/${recipe.id}`, { method: "DELETE" });
+      await deleteRecipe(recipe.id);
       setRecipes((list) => list.filter((r) => r.id !== recipe.id));
     } catch (e) {
       setError(e.message);
