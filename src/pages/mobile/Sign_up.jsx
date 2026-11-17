@@ -33,7 +33,7 @@ const SignUp = () => {
     const [created, setCreated] = useState(false); // 인증번호를 다시 요청할 때 가입을 또 하지 않게
     // 로그인했는데 번호가 없으면(인증 요청 후 나갔던 계정) 가입은 끝난 것이므로 2단계부터
     const { data: session } = authClient.useSession();
-    const needsPhone = Boolean(session?.session) && !session.user.phoneNumber;
+    const needsPhone = Boolean(session?.session) && !session.user?.phoneNumber;
     const signedUp = created || needsPhone;
     const [message, setMessage] = useState("");
     const [pending, setPending] = useState(false);
