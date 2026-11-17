@@ -1,7 +1,9 @@
 // Neon Auth 로그인 상태와 API 서버 호출. 세션은 Neon Auth가 관리하고, API 서버에는 JWT를 Bearer로 보낸다
 import { createAuthClient } from "@neon/neon-js/auth";
+import { BetterAuthReactAdapter } from "@neon/neon-js/auth/react/adapters";
 
-export const authClient = createAuthClient(import.meta.env.VITE_NEON_AUTH_URL);
+// React 어댑터: 컴포넌트에서 authClient.useSession() 으로 로그인 상태를 공유한다 (로그인·로그아웃하면 자동으로 다시 그림)
+export const authClient = createAuthClient(import.meta.env.VITE_NEON_AUTH_URL, { adapter: BetterAuthReactAdapter() });
 
 // 로그인 중이면 { session, user }, 아니면 null. Neon Auth에 연결하지 못해도(설정 누락·네트워크) 로그아웃으로 본다
 export async function getSession() {
@@ -40,6 +42,9 @@ export const toE164 = (value) => {
   const digits = value.replace(/\D/g, "");
   return /^01\d{8,9}$/.test(digits) ? `+82${digits.slice(1)}` : null;
 };
+
+// +821012345678 → 010-1234-5678 (화면 표시용, toE164 의 반대)
+export const formatPhone = (p) => p?.replace(/^\+82/, "0").replace(/^(\d{3})(\d{3,4})(\d{4})$/, "$1-$2-$3");
 
 export const PHONE_FORMAT_MESSAGE = "휴대폰 번호를 확인해 주세요. (예: 010-1234-5678)";
 

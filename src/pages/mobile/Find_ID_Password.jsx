@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { authClient, authErrorMessage, getSession, PHONE_FORMAT_MESSAGE, toE164 } from "../../utils/auth";
+import { authClient, authErrorMessage, PHONE_FORMAT_MESSAGE, toE164 } from "../../utils/auth";
 // 헤더는 알림센터, 입력 줄/배지/버튼은 회원가입·로그인과 같은 디자인이라 그 스타일을 같이 쓴다
 import "../../styles/mobile/Notification.css";
 import "../../styles/mobile/Login.css";
@@ -77,15 +77,14 @@ const Find_ID_Password = () => {
         return { phoneNumber: toE164(phone), code: code.trim(), password };
     };
 
-    // 아이디 찾기: 휴대폰 인증으로 로그인 → 계정 이메일 확인 → 바로 로그아웃
+    // 아이디 찾기: 휴대폰 인증만 하고 로그인은 하지 않음(disableSession). 응답의 user 에서 이메일만 꺼냄
     const handleFindId = (e) => {
         e.preventDefault();
         const { phoneNumber, code } = readForm(e.currentTarget);
         if (!phoneNumber) return setIdMessage(PHONE_FORMAT_MESSAGE);
         run(setIdMessage, async () => {
-            await authClient.phoneNumber.verify({ phoneNumber, code });
-            const email = (await getSession())?.user.email;
-            await authClient.signOut();
+            const { data } = await authClient.phoneNumber.verify({ phoneNumber, code, disableSession: true });
+            const email = data?.user?.email;
             if (!email) throw new Error("계정 정보를 불러오지 못했습니다. 다시 시도해 주세요.");
             return `가입하신 아이디(이메일)는\n${email} 입니다.`;
         });

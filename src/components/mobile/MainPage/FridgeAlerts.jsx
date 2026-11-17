@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router";
-import { apiFetch, isLoggedIn } from "../../../utils/auth";
+import { apiFetch, authClient } from "../../../utils/auth";
 import { useIsDesktop } from "../../../hooks/useIsDesktop";
-import { getExpiryBadge, getTodayKey } from "../../../utils/fridgeUtils";
+import { getExpiryBadge, getTodayKey } from "../../../utils/date";
 import FridgeDashboard from "../../desktop/MainPage/FridgeDashboard.jsx";
 import line from "../../../assets/main/line.svg";
 import chevron from "../../../assets/main/chevron.png";
@@ -55,7 +55,8 @@ function toCards(summary, today, loggedIn, failed) {
 // 메인 "지금 확인해야할 내 재료들": 메인에 들어올 때마다 DB 에서 새로 받아 와서 항상 최신 상태
 const FridgeAlerts = () => {
   const navigate = useNavigate();
-  const [loggedIn, setLoggedIn] = useState(null); // 확인 전 null
+  const { data: session, isPending } = authClient.useSession();
+  const loggedIn = isPending ? null : Boolean(session?.session); // 확인 전 null
   const [summary, setSummary] = useState(null);
   const [failed, setFailed] = useState(false); // 요약을 못 받았으면 "불러오는 중"에 멈춰 있지 않고 오류로 표시
   const [today] = useState(getTodayKey);
@@ -63,21 +64,16 @@ const FridgeAlerts = () => {
   const isDesktop = useIsDesktop(); // 데스크탑에서만 대시보드를 그리고 레시피를 받음
 
   useEffect(() => {
+    if (!loggedIn) return;
     let alive = true;
-    isLoggedIn().then(async (ok) => {
-      if (!alive) return;
-      setLoggedIn(ok);
-      if (!ok) return;
-      try {
-        const data = await apiFetch("/api/fridge/summary");
-        if (alive) setSummary(data);
-      } catch (e) {
+    apiFetch("/api/fridge/summary")
+      .then((data) => alive && setSummary(data))
+      .catch((e) => {
         console.error("냉장고 요약을 불러오지 못했습니다:", e);
         if (alive) setFailed(true);
-      }
-    });
+      });
     return () => { alive = false; };
-  }, []);
+  }, [loggedIn]);
 
   // 대시보드에서 재료를 바꾼 뒤 카드·목록을 새 값으로
   const reload = async () => setSummary(await apiFetch("/api/fridge/summary"));
@@ -88,7 +84,7 @@ const FridgeAlerts = () => {
       <img className="divider" src={line} alt="" />
       <div className="fridge-top">
       <div className="fridge-grid">
-        {toCards(summary, today, loggedIn, failed).map((card) => (
+        {toCards(loggedIn ? summary : null, today, loggedIn, failed).map((card) => (
           <button
             type="button"
             className="fridge-card"

@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useState } from "react";
-import { Outlet, useLocation } from "react-router";
+import { Outlet, useLocation, useNavigate } from "react-router";
 import Navigation from "./mobile/Navigation";
 import DesktopHeader from "./desktop/DesktopHeader";
 import Loading from "../pages/mobile/Loading";
-import { apiFetch, isLoggedIn } from "../utils/auth";
-import { getExpiryBadge, getTodayKey } from "../utils/fridgeUtils";
+import { apiFetch, authClient } from "../utils/auth";
+import { getExpiryBadge, getTodayKey } from "../utils/date";
 
 // shortcut: 실제로 불러올 데이터가 없어 고정 시간만 보여줌, 데이터 로딩이 생기면 그 완료 시점으로 교체
 const LOADING_MS = 2000;
@@ -42,17 +42,25 @@ const Layout = () => {
 
     // DB 알림(notifications). 페이지를 옮길 때마다 다시 받아서, 냉장고에 기한 임박 재료를 넣고 오면 바로 종에 표시됨
     // 서버가 받을 때 기한 5일 이하 재료의 알림을 만든다. 로그인 안 했으면 알림 없음
+    const { data: session, isPending } = authClient.useSession();
+    const loggedIn = Boolean(session?.session);
+    const navigate = useNavigate();
+
+    // 가입 1단계만 하고 나간 계정(휴대폰 번호 없음)은 어느 페이지에서든 가입 2단계로 돌려보낸다
     useEffect(() => {
+        if (loggedIn && !session.user.phoneNumber && pathname !== "/signup") navigate("/signup", { replace: true });
+    }, [loggedIn, session, pathname, navigate]);
+    useEffect(() => {
+        if (isPending) return;
         let ignore = false;
         (async () => {
-            const loggedIn = await isLoggedIn();
             const data = loggedIn ? await apiFetch("/api/notifications") : { items: [], unread: 0 };
             if (ignore) return;
             setNotifications(data.items.map(toCard));
             setHasUnread(data.unread > 0);
         })().catch((e) => console.error("알림을 불러오지 못했습니다", e));
         return () => { ignore = true; };
-    }, [pathname]);
+    }, [pathname, isPending, loggedIn]);
 
     // 알림센터를 열면 모두 읽음으로 저장하고 메인의 빨간 점을 끈다
     const markAllRead = useCallback(async () => {

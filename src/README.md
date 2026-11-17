@@ -17,7 +17,7 @@
 | `/` | `MainPage` (데스크탑 대시보드는 `components/desktop/MainPage/FridgeDashboard`) | — (`components/mobile/MainPage/*` 가 직접 호출) | `/api/fridge/summary`, `/api/fridge/condiments`, `/api/recipes/recommend` |
 | `/fridge` 🔒 | `Fridge` | `useIngredientPages` | `GET /api/ingredients` (sort·q·category·storage·status), `PATCH`/`DELETE /api/ingredients/:id` |
 | `/ingredient` 🔒 | `Ingredient` | `useIngredientForm` | `POST /api/ingredients`, `/api/ingredient-catalog` |
-| `/ingredient/edit/:id` 🔒 | `IngredientEdit` | `useIngredientEdit` | `GET`/`PATCH`/`DELETE /api/ingredients/:id` |
+| `/ingredient/edit/:id` 🔒 | `IngredientEdit` | `useIngredientEditForm` | `GET`/`PATCH`/`DELETE /api/ingredients/:id` |
 | `/recipe` | `RecipeList` | `useRecipeListState`, `useRecipePages` | `/api/categories`, `/api/recipes` (cursor·category·q) |
 | `/recipe/:id` | `RecipeDetail` | `useRecipeDetail`, `useRecipeBookmark`, `useAuthorFollow` | `/api/recipes/:id`, `/api/recipes/:id/reviews`, `PUT`/`DELETE …/bookmark`, `…/follow` |
 | `/recipe/:id/review` 🔒 | `ReviewWrite` | `useReviewForm` | `GET`/`PUT`/`DELETE /api/recipes/:id/review` |
@@ -25,11 +25,11 @@
 | `/mypage` 🔒 | `MyPage` | `useMyRecipes` | `/api/me`, `/api/me/recipes`, `/api/me/bookmarks`, `/api/me/follows` |
 | `/bookmark` 🔒 | `BookMark` | `useBookmarks` | `/api/me/bookmarks`, `DELETE /api/recipes/:id/bookmark` |
 | `/mypage/privacy` 🔒 | `PrivacyInfo` | `usePrivacyInfo` | Neon Auth (비밀번호 확인·휴대폰 인증), `PATCH /api/me` |
-| `/mypage/settings` 🔒 | `Settings` | `useSettings` | `/api/me`, `PATCH /api/me/settings` |
+| `/mypage/settings` 🔒 | `Settings` | `useExpiryAlertSetting` | `/api/me`, `PATCH /api/me/settings` |
 | `/notification` | `Notification` | `Layout.jsx` 의 알림 상태 (Outlet context) | `/api/notifications`, `…/read`, `DELETE` |
 | `/search?q=` | `components/mobile/Search` / `pages/desktop/Search` | `useUnifiedSearch` | `/api/recipes?q=`, `/api/ingredients?q=` |
 | `/login` | `Login` | `useLogin` | Neon Auth 로그인, `POST /api/me` |
-| `/signup`, `/find-id-password` | `Sign_up`, `Find_ID_Password` (데스크탑은 `AuthFrame` 이 모바일 양식을 감쌈) | — (화면 안에서 Neon Auth 호출) | Neon Auth |
+| `/signup`, `/find-id-password` | `Sign_up`, `Find_ID_Password` (데스크탑은 `AuthFrame` 이 모바일 양식을 감쌈) | — (화면 안에서 Neon Auth 호출) | Neon Auth, `POST /api/signup/check-email` (가입 1단계 이메일 중복 확인) |
 
 🔒 = 로그인 필요 (`router.jsx` 의 `requireLogin` 이 로그인 화면으로 보냄)
 
@@ -39,6 +39,6 @@
 - `components/mobile`, `components/desktop` — 화면을 나눈 조각. 데스크탑이 모바일 조각을 가져다 쓰기도 함 (예: 준비물 체크리스트)
 - `styles/mobile`, `styles/desktop` — 화면별 CSS. 데스크탑 CSS 는 1024px 이상에서만 쓰임
 - `hooks` — 화면별 상태·서버 호출 훅 (`use*.js`)
-- `utils` — 서버 호출·업로드·날짜 계산 (`fridgeUtils.js`: D-day 배지)
+- `utils` — 서버 호출(`auth.js`)·업로드·날짜 계산(`date.js`: D-day 배지)·약관 문구
 - `vendor/lucian-icons` — 아이콘 (손대지 않음)
 - `assets` — 그림 파일

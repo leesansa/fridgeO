@@ -10,6 +10,7 @@ import me from "./routes/me.js";
 import notifications from "./routes/notifications.js";
 import recipes from "./routes/recipes.js";
 import reviews from "./routes/reviews.js";
+import signup from "./routes/signup.js";
 import webhooks from "./routes/webhooks.js";
 
 const app = new Hono();
@@ -19,7 +20,7 @@ const app = new Hono();
 app.use("/api/*", (c, next) =>
   cors({ origin: c.env.CORS_ORIGINS?.split(",") ?? [], allowHeaders: ["Authorization", "Content-Type"], allowMethods: ["GET", "POST", "PUT", "PATCH", "DELETE"], maxAge: 86400 })(c, next));
 app.use("/api/*", db);
-for (const routes of [me, recipes, reviews, ingredients, notifications, images, webhooks]) app.route("/", routes);
+for (const routes of [me, recipes, reviews, ingredients, notifications, images, signup, webhooks]) app.route("/", routes);
 
 app.notFound((c) => c.json({ error: "없는 주소입니다" }, 404));
 app.onError((e, c) => {
