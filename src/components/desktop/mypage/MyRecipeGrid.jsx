@@ -1,10 +1,18 @@
 import { Link, useNavigate } from "react-router";
-import { useMyRecipes } from "../../../hooks/useMyRecipes";
+import { useMyRecipeList } from "../../../queries/me";
+import { useDeleteRecipe } from "../../../queries/recipes";
 
-// 데스크탑 마이페이지 "내가 쓴 레시피": 카드 격자 + 카드마다 수정·삭제 (로직은 모바일과 같은 useMyRecipes)
+// 데스크탑 마이페이지 "내가 쓴 레시피": 카드 격자 + 카드마다 수정·삭제 (불러오기·삭제는 queries 훅)
 const MyRecipeGrid = () => {
     const navigate = useNavigate();
-    const { recipes, error, deleting, remove } = useMyRecipes();
+    const list = useMyRecipeList();
+    const del = useDeleteRecipe(); // 지우면 내 레시피 목록을 다시 받음
+    const recipes = list.data ?? null; // 불러오기 전 null
+    const error = del.error?.message ?? list.error?.message ?? "";
+    const deleting = del.isPending ? del.variables : null; // 지우는 중인 레시피 id
+    const remove = (recipe) => {
+      if (window.confirm(`"${recipe.title}" 레시피를 삭제할까요? 리뷰와 북마크도 함께 지워지고 되돌릴 수 없어요.`)) del.mutate(recipe.id);
+    };
 
     return (
         <section className="dmypage-section" aria-labelledby="dmypage-my-title">

@@ -1,26 +1,31 @@
+import { useEffect } from "react";
 import { Link, useParams } from "react-router";
 import DetailSummary from "../../components/desktop/recipe/DetailSummary";
 import SimilarRecipes from "../../components/desktop/recipe/SimilarRecipes";
 import IngredientChecklist from "../../components/mobile/Recipe/Detail/IngredientChecklist.jsx";
 import ReviewSummary from "../../components/mobile/Recipe/Review/ReviewSummary.jsx";
 import ReviewList from "../../components/mobile/Recipe/Review/ReviewList.jsx";
-import { useCategories } from "../../queries/recipes";
-import { useRecipeDetail } from "../../hooks/useRecipeDetail";
+import { useCategories, useRecipe } from "../../queries/recipes";
+import { addRecentRecipe } from "../../utils/recentRecipes";
 import "../../styles/mobile/recipe-detail.css"; // 준비물·리뷰는 모바일 컴포넌트와 스타일을 그대로 씀
 import "../../styles/desktop/recipes.css"; // 같은 분류 레시피 카드
 import "../../styles/desktop/recipe-detail.css";
 
 // 데스크탑 레시피 상세: 위치(레시피 › 분류) → 큰 사진 + 요약 → 만드는 순서·리뷰 | 오른쪽 준비물·리뷰 요약 → 같은 분류 레시피
-// 데이터·북마크는 모바일과 같은 useRecipeDetail·useRecipeBookmark
+// 데이터·북마크는 모바일과 같은 useRecipe(queries)·useRecipeBookmark
 const RecipeDetail = () => {
     const { id } = useParams();
-    const { recipe, error } = useRecipeDetail(id);
+    const { data: recipe, error } = useRecipe(id);
+    // "최근 본 레시피"에 기록
+    useEffect(() => {
+        if (recipe) addRecentRecipe(recipe);
+    }, [recipe]);
     const categories = useCategories().data ?? []; // 없으면 분류 이름만 안 보임
 
     if (!recipe) {
         return (
             <div className="detail-page ddetail">
-                <p className="ddetail-status" role={error ? "alert" : "status"}>{error || "레시피를 불러오는 중..."}</p>
+                <p className="ddetail-status" role={error ? "alert" : "status"}>{error?.message || "레시피를 불러오는 중..."}</p>
             </div>
         );
     }

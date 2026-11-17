@@ -1,13 +1,17 @@
 import { Link } from "react-router";
 import AccountMenu from "../../components/desktop/AccountMenu";
-import { useExpiryAlertSetting } from "../../hooks/useExpiryAlertSetting";
+import { useMe, useUpdateSettings } from "../../queries/me";
 import { TERMS } from "../../utils/terms";
 import "../../styles/desktop/account.css";
 
 // 데스크탑 알림 설정 · 약관: 왼쪽 계정 메뉴 | 오른쪽 알림 설정 카드 + 약관 (모바일은 접어 두고, 데스크탑은 펼쳐서 보여 줌)
-// 켜기/끄기·약관 내용은 모바일과 같은 useExpiryAlertSetting·utils/terms
+// 켜기/끄기는 queries/me, 약관 내용은 모바일과 같은 utils/terms
 const Settings = () => {
-    const { expiryAlert, error, toggle } = useExpiryAlertSetting();
+    const me = useMe();
+    const settings = useUpdateSettings(); // 먼저 바꿔 보여 주고 실패하면 되돌림
+    const expiryAlert = me.data?.expiry_alert ?? null; // 불러오기 전 null
+    const toggle = () => settings.mutate({ expiryAlert: !expiryAlert });
+    const error = settings.error ? `설정을 저장하지 못했어요. ${settings.error.message}` : me.error?.message ?? "";
 
     return (
         <div className="daccount">

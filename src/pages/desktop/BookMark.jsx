@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Link } from "react-router";
 import RecipeCard from "../../components/desktop/recipe/RecipeCard";
-import { useBookmarks } from "../../hooks/useBookmarks";
+import { useMyBookmarks } from "../../queries/me";
+import { useSetBookmark } from "../../queries/reviews";
 import "../../vendor/lucian-icons/bookmark.js"; // 레시피 상세와 같은 북마크 아이콘
 import "../../styles/desktop/recipes.css"; // 레시피 카드
 import "../../styles/desktop/bookmark.css";
@@ -14,9 +15,14 @@ const SORTS = {
 };
 
 // 데스크탑 내 북마크: 레시피 카드 격자 + 카드마다 북마크 해제 버튼. 북마크 안에서 찾기·정렬 (최대 50개라 화면에서 처리)
-// 불러오기·해제는 모바일과 같은 useBookmarks
+// 불러오기·해제는 queries 훅 (해제하면 목록에서 먼저 빠짐)
 const BookMark = () => {
-    const { recipes, error, removingId, retry, remove } = useBookmarks();
+    const { data: recipes = null, error: loadError, refetch: retry } = useMyBookmarks(); // 불러오기 전 null
+    const { mutate: setBookmark, isPending, variables } = useSetBookmark();
+    const error = loadError?.message ?? "";
+    const removingId = isPending ? variables.recipeId : null;
+    // 목록에서 먼저 빼고 해제, 실패하면 되돌리고 alert
+    const remove = (id) => setBookmark({ recipeId: id, on: false }, { onError: (e) => alert(`북마크를 해제하지 못했어요. ${e.message}`) });
     const [text, setText] = useState("");
     const [sort, setSort] = useState("saved");
     const word = text.trim().toLowerCase();

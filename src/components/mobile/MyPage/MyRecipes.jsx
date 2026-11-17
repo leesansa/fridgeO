@@ -1,10 +1,18 @@
 import { useNavigate } from "react-router";
-import { useMyRecipes } from "../../../hooks/useMyRecipes";
+import { useMyRecipeList } from "../../../queries/me";
+import { useDeleteRecipe } from "../../../queries/recipes";
 
-// 내가 쓴 레시피 (useMyRecipes, 데스크탑과 공통): 눌러서 보기 + 수정 + 삭제
+// 내가 쓴 레시피 (GET /api/me/recipes): 눌러서 보기 + 수정 + 삭제. 작성자 확인은 서버가 로그인 계정으로 함
 const MyRecipes = () => {
   const navigate = useNavigate();
-  const { recipes, error, deleting, remove } = useMyRecipes();
+  const list = useMyRecipeList();
+  const del = useDeleteRecipe(); // 지우면 내 레시피 목록을 다시 받음
+  const recipes = list.data ?? null; // 불러오기 전 null
+  const error = del.error?.message ?? list.error?.message ?? "";
+  const deleting = del.isPending ? del.variables : null; // 지우는 중인 레시피 id
+  const remove = (recipe) => {
+    if (window.confirm(`"${recipe.title}" 레시피를 삭제할까요? 리뷰와 북마크도 함께 지워지고 되돌릴 수 없어요.`)) del.mutate(recipe.id);
+  };
 
   return (
     <div className="mypage-card">

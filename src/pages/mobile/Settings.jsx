@@ -1,14 +1,18 @@
 import { useNavigate } from "react-router";
-import { useExpiryAlertSetting } from "../../hooks/useExpiryAlertSetting";
+import { useMe, useUpdateSettings } from "../../queries/me";
 import { TERMS } from "../../utils/terms";
 // 헤더는 알림센터와 같은 디자인
 import "../../styles/mobile/Notification.css";
 import chevron from "../../assets/main/chevron.png";
 
-// 알림 설정 | 동의/약관: 유통기한 임박 알림 켜기/끄기 + 약관 보기 (설정·약관 내용은 데스크탑과 공통 useExpiryAlertSetting·utils/terms)
+// 알림 설정 | 동의/약관: 유통기한 임박 알림 켜기/끄기 + 약관 보기 (설정은 queries/me, 약관 내용은 데스크탑과 공통 utils/terms)
 const Settings = () => {
   const navigate = useNavigate();
-  const { expiryAlert, error, toggle } = useExpiryAlertSetting();
+  const me = useMe();
+  const settings = useUpdateSettings(); // 먼저 바꿔 보여 주고 실패하면 되돌림
+  const expiryAlert = me.data?.expiry_alert ?? null; // 불러오기 전 null
+  const toggle = () => settings.mutate({ expiryAlert: !expiryAlert });
+  const error = settings.error ? `설정을 저장하지 못했어요. ${settings.error.message}` : me.error?.message ?? "";
 
   return (
     <div className="notification-page">

@@ -20,13 +20,13 @@
 | `/ingredient` 🔒 | `Ingredient` | `useIngredientForm` | `POST /api/ingredients`, `/api/ingredient-catalog` |
 | `/ingredient/edit/:id` 🔒 | `IngredientEdit` | `useIngredientEditForm` | `GET`/`PATCH`/`DELETE /api/ingredients/:id` |
 | `/recipe` | `RecipeList` | `useRecipeListState`, `useRecipePages` (queries) | `/api/categories`, `/api/recipes` (cursor·category·q) |
-| `/recipe/:id` | `RecipeDetail` | `useRecipeDetail`, `useRecipeBookmark`, `useAuthorFollow` | `/api/recipes/:id`, `/api/recipes/:id/reviews`, `PUT`/`DELETE …/bookmark`, `…/follow` |
+| `/recipe/:id` | `RecipeDetail` | `useRecipe`·`useSetFollow` (queries), `useRecipeBookmark` | `/api/recipes/:id`, `/api/recipes/:id/reviews`, `PUT`/`DELETE …/bookmark`, `…/follow` |
 | `/recipe/:id/review` 🔒 | `ReviewWrite` | `useReviewForm` | `GET`/`PUT`/`DELETE /api/recipes/:id/review` |
 | `/recipe/new`, `/recipe/:id/edit` 🔒 | `RecipeWrite` | `useRecipeForm` | `POST /api/recipes`, `PUT`/`DELETE /api/recipes/:id`, `POST /api/images` (`api/images.js`) |
-| `/mypage` 🔒 | `MyPage` | `useMyRecipes` | `/api/me`, `/api/me/recipes`, `/api/me/bookmarks`, `/api/me/follows` |
-| `/bookmark` 🔒 | `BookMark` | `useBookmarks` | `/api/me/bookmarks`, `DELETE /api/recipes/:id/bookmark` |
+| `/mypage` 🔒 | `MyPage` | `useMe`·`useMyRecipeList`·`useDeleteRecipe` (queries) | `/api/me`, `/api/me/recipes`, `/api/me/bookmarks`, `/api/me/follows` |
+| `/bookmark` 🔒 | `BookMark` | `useMyBookmarks`·`useSetBookmark` (queries) | `/api/me/bookmarks`, `DELETE /api/recipes/:id/bookmark` |
 | `/mypage/privacy` 🔒 | `PrivacyInfo` | `usePrivacyInfo` | Neon Auth (비밀번호 확인·휴대폰 인증), `PATCH /api/me` |
-| `/mypage/settings` 🔒 | `Settings` | `useExpiryAlertSetting` | `/api/me`, `PATCH /api/me/settings` |
+| `/mypage/settings` 🔒 | `Settings` | `useMe`·`useUpdateSettings` (queries) | `/api/me`, `PATCH /api/me/settings` |
 | `/notification` | `Notification` | `Layout.jsx` 가 `queries/notifications` 로 받아 Outlet context 로 나눔 | `/api/notifications`, `…/read`, `DELETE` |
 | `/search?q=` | `components/mobile/Search` / `pages/desktop/Search` | `useUnifiedSearch` | `/api/recipes?q=`, `/api/ingredients?q=` |
 | `/login` | `Login` | `useLogin` | Neon Auth 로그인, `POST /api/me` |
