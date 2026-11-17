@@ -234,4 +234,4 @@ fridgeO는 사용자가 보유한 식재료의 수량과 보관 장소, 기한�
 | [src/components/Recipe/Detail/IngredientChecklist.jsx](src/components/Recipe/Detail/IngredientChecklist.jsx) | 보유 재료 표시와 외부 구매 검색 연결 |
 | [src/pages/MyPage.jsx](src/pages/MyPage.jsx) | 개인 활동과 프로필 화면 구성 |
 | [server/index.js](server/index.js) | 추천, 기한 알림과 데이터 처리 |
-| [db/schema.sql](db/schema.sql) | 사용자, 식재료, 레시피, 리뷰, 알림 등 데이터 구조 |
+| [server/db/schema.ts](server/db/schema.ts) | 사용자, 식재료, 레시피, 리뷰, 알림 등 데이터 구조 |

@@ -1,4 +1,4 @@
-// 조미료 목록 → 아이콘(public/condiments/*.svg)과 DB 반영 SQL(db/condiments.sql)을 만든다
+// 조미료 목록 → 아이콘(public/condiments/*.svg)과 DB 반영 SQL(server/db/seeds/condiments.sql)을 만든다
 // 실행: node scripts/condiments.mjs  (조미료를 더하거나 고치면 다시 실행)
 // DB 반영까지: node --env-file=.env scripts/condiments.mjs --apply
 import { mkdirSync, writeFileSync } from "node:fs";
@@ -134,10 +134,10 @@ ON CONFLICT (name) DO UPDATE SET
 if (import.meta.main) {
   mkdirSync("public/condiments", { recursive: true });
   for (const c of condiments) if (c.shape) writeFileSync(`public/condiments/${c.file}.svg`, svg(c));
-  writeFileSync("db/condiments.sql", sql);
+  writeFileSync("server/db/seeds/condiments.sql", sql);
   const names = condiments.map((c) => c.name);
   console.assert(new Set(names).size === names.length, "이름이 겹칩니다");
-  console.log(`조미료 ${condiments.length}개: 아이콘 ${condiments.filter((c) => c.shape).length}개, db/condiments.sql`);
+  console.log(`조미료 ${condiments.length}개: 아이콘 ${condiments.filter((c) => c.shape).length}개, server/db/seeds/condiments.sql`);
 
   // --apply: 만든 SQL 을 .env 의 DATABASE_URL DB 에 반영 (node --env-file=.env scripts/condiments.mjs --apply)
   if (process.argv.includes("--apply")) {

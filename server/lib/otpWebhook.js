@@ -30,10 +30,10 @@ export function toKoreanNumber(e164) {
 }
 
 // Solapi 단건 문자 발송. 인증: HMAC-SHA256(API Secret, 날짜 + salt) hex
-export async function sendSms(to, text) {
-  const { SOLAPI_API_KEY, SOLAPI_API_SECRET, SOLAPI_SENDER } = process.env;
+export async function sendSms(env, to, text) {
+  const { SOLAPI_API_KEY, SOLAPI_API_SECRET, SOLAPI_SENDER } = env;
   if (!SOLAPI_API_KEY || !SOLAPI_API_SECRET || !SOLAPI_SENDER) {
-    throw new Error(".env 에 SOLAPI_API_KEY, SOLAPI_API_SECRET, SOLAPI_SENDER 를 설정하세요");
+    throw new Error("SOLAPI_API_KEY, SOLAPI_API_SECRET, SOLAPI_SENDER 를 설정하세요 (wrangler secret 또는 .dev.vars)");
   }
   const date = new Date().toISOString();
   const salt = randomBytes(16).toString("hex");
