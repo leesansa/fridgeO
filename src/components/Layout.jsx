@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Outlet, useLocation, useNavigate } from "react-router";
+import { Outlet, useLocation } from "react-router";
 import Navigation from "./mobile/Navigation";
 import DesktopHeader from "./desktop/DesktopHeader";
 import Loading from "../pages/mobile/Loading";
@@ -44,7 +44,6 @@ const Layout = () => {
     // 서버가 받을 때 기한 5일 이하 재료의 알림을 만든다. 로그인 안 했으면 알림 없음
     const { data: session, isPending } = authClient.useSession();
     const loggedIn = Boolean(session?.session);
-    const navigate = useNavigate();
 
     // 로그아웃하거나 다른 계정으로 바뀌면 이전 계정의 캐시(내 정보·재료·북마크 등)를 지운다
     const userId = isPending ? undefined : session?.user?.id ?? null;
@@ -55,10 +54,6 @@ const Layout = () => {
         prevUserId.current = userId;
     }, [userId]);
 
-    // 가입 1단계만 하고 나간 계정(휴대폰 번호 없음)은 어느 페이지에서든 가입 2단계로 돌려보낸다
-    useEffect(() => {
-        if (loggedIn && !session.user?.phoneNumber && pathname !== "/signup") navigate("/signup", { replace: true });
-    }, [loggedIn, session, pathname, navigate]);
     const { data: noti, refetch } = useNotifications();
     // 페이지를 옮길 때마다 다시 받음 (서버가 받을 때 그날 기한 임박 알림을 만들기 때문). 로그아웃이면 받지 않음
     useEffect(() => {

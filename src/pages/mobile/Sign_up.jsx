@@ -101,7 +101,7 @@ const SignUp = () => {
     const isAccount = !account && !needsPhone;
     const fields = isAccount ? accountFields : phoneFields;
 
-    // 뒤로가기: 1단계는 그대로, 가입 전 2단계는 1단계로, 가입 후 2단계는 로그아웃 후 홈 (안 그러면 Layout 이 다시 2단계로 보냄)
+    // 뒤로가기: 1단계는 그대로, 가입 전 2단계는 1단계로, 가입 후 2단계(인증 요청 후)는 로그아웃 후 홈
     const handleBack = isAccount
         ? undefined
         : signedUp
