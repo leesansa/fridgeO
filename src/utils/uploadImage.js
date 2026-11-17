@@ -1,4 +1,4 @@
-import { getSession } from "./auth";
+import { API_URL, getSession } from "./auth";
 
 const MAX_PX = 1200; // 긴 변 기준. 화면 폭(최대 430px)의 2배 남짓이라 선명하고 용량은 수백 KB
 
@@ -15,7 +15,7 @@ export async function uploadImage(file) {
   const blob = await new Promise((resolve) => canvas.toBlob(resolve, "image/jpeg", 0.85));
 
   const token = (await getSession())?.session.token;
-  const res = await fetch("/api/images", {
+  const res = await fetch(`${API_URL}/api/images`, {
     method: "POST",
     headers: { "Content-Type": "image/jpeg", ...(token && { Authorization: `Bearer ${token}` }) },
     body: blob,

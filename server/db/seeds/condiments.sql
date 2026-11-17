@@ -1,4 +1,4 @@
--- 조미료 분류 + 아이콘 + 새 조미료. scripts/condiments.mjs 가 만든 파일 (직접 고치지 말 것)
+-- 조미료 분류 + 아이콘 + 새 조미료. server/db/seeds/condiments.mjs 가 만든 파일 (직접 고치지 말 것)
 ALTER TABLE ingredient_catalog ADD COLUMN IF NOT EXISTS category TEXT;
 
 INSERT INTO ingredient_catalog (name, category, icon_url, image_url, shelf_life_days) VALUES

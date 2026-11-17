@@ -4,7 +4,7 @@ compatibility_date = "2026-11-01"
 # node:crypto(웹훅·문자 서명), Buffer 사용
 compatibility_flags = ["nodejs_compat"]
 
-# 사진 저장소. bucket_name 을 실제 R2 버킷 이름으로 바꿀 것
+# 사진 저장소
 # wrangler dev 는 기본으로 내 컴퓨터의 가짜 R2 에 저장함 (R2_PUBLIC_URL 로는 안 보임)
 [[r2_buckets]]
 binding = "IMAGES"
@@ -13,5 +13,7 @@ bucket_name = "fridgeo-images"
 # 비밀이 아닌 값. 비밀값(DATABASE_URL, SOLAPI_*)은 `wrangler secret put 이름` 으로 넣는다
 # 로컬은 .dev.vars (또는 .env) 에 적음
 [vars]
-VITE_NEON_AUTH_URL = "https://REPLACE-ME.neon.tech/neondb/auth"
-R2_PUBLIC_URL = "https://REPLACE-ME.r2.dev"
+VITE_NEON_AUTH_URL = "https://ep-curly-lab-a1eo51c0.neonauth.ap-southeast-1.aws.neon.tech/neondb/auth"
+R2_PUBLIC_URL = "https://pub-6fcd431f5181411ca900a239d3a1ee8e.r2.dev"
+# 이 주소에서 오는 브라우저 요청만 허용 (프런트 = Cloudflare Pages). 여러 개면 쉼표로 구분
+CORS_ORIGINS = "https://fridgeo.pages.dev"

@@ -8,8 +8,8 @@ server/
   db/
     schema.ts        테이블 구조의 원본. 구조를 바꿀 때 여기를 고친다
     migrations/      schema.ts 변경으로 생성된 SQL (직접 고치지 않음)
-                     0000 = 처음 DB 를 읽어 만든 기준 파일 (전부 주석이라 아무것도 실행하지 않음)
-    seeds/           데이터 넣는 SQL. condiments.sql 은 scripts/condiments.mjs 가 만든다
+                     0000 = 처음 DB 를 읽어 만든 기준 파일 (주석 한 줄뿐이라 실행할 내용 없음. 구조는 meta/0000_snapshot.json)
+    seeds/           데이터 넣는 SQL. condiments.sql 은 같은 폴더의 condiments.mjs 가 만든다 (아이콘은 public/condiments/ 에 생성)
     archive/         Drizzle 이전에 손으로 쓰던 스키마 (참고용, 실행하지 않음)
 ```
 

@@ -224,14 +224,14 @@ fridgeO는 사용자가 보유한 식재료의 수량과 보관 장소, 기한�
 
 | 파일 | 확인 내용 |
 | --- | --- |
-| [src/router.jsx](src/router.jsx) | 화면 경로와 로그인 필요 화면 |
-| [src/components/Navigation.jsx](src/components/Navigation.jsx) | 주요 하단 메뉴 |
-| [src/pages/MainPage.jsx](src/pages/MainPage.jsx) | 홈 화면 구성 |
-| [src/pages/Fridge.jsx](src/pages/Fridge.jsx) | 냉장고 조회·검색·정렬·보기 방식 |
-| [src/pages/Ingredient.jsx](src/pages/Ingredient.jsx) | 재료 등록 항목과 날짜 기본값 |
-| [src/pages/RecipeList.jsx](src/pages/RecipeList.jsx) | 레시피 검색과 카테고리 |
-| [src/pages/RecipeDetail.jsx](src/pages/RecipeDetail.jsx) | 레시피 상세 구성 |
-| [src/components/Recipe/Detail/IngredientChecklist.jsx](src/components/Recipe/Detail/IngredientChecklist.jsx) | 보유 재료 표시와 외부 구매 검색 연결 |
-| [src/pages/MyPage.jsx](src/pages/MyPage.jsx) | 개인 활동과 프로필 화면 구성 |
-| [server/index.js](server/index.js) | 추천, 기한 알림과 데이터 처리 |
-| [server/db/schema.ts](server/db/schema.ts) | 사용자, 식재료, 레시피, 리뷰, 알림 등 데이터 구조 |
+| [src/router.jsx](../src/router.jsx) | 화면 경로와 로그인 필요 화면 |
+| [src/components/Navigation.jsx](../src/components/Navigation.jsx) | 주요 하단 메뉴 |
+| [src/pages/MainPage.jsx](../src/pages/MainPage.jsx) | 홈 화면 구성 |
+| [src/pages/Fridge.jsx](../src/pages/Fridge.jsx) | 냉장고 조회·검색·정렬·보기 방식 |
+| [src/pages/Ingredient.jsx](../src/pages/Ingredient.jsx) | 재료 등록 항목과 날짜 기본값 |
+| [src/pages/RecipeList.jsx](../src/pages/RecipeList.jsx) | 레시피 검색과 카테고리 |
+| [src/pages/RecipeDetail.jsx](../src/pages/RecipeDetail.jsx) | 레시피 상세 구성 |
+| [src/components/Recipe/Detail/IngredientChecklist.jsx](../src/components/Recipe/Detail/IngredientChecklist.jsx) | 보유 재료 표시와 외부 구매 검색 연결 |
+| [src/pages/MyPage.jsx](../src/pages/MyPage.jsx) | 개인 활동과 프로필 화면 구성 |
+| [server/index.js](../server/index.js) | 추천, 기한 알림과 데이터 처리 |
+| [server/db/schema.ts](../server/db/schema.ts) | 사용자, 식재료, 레시피, 리뷰, 알림 등 데이터 구조 |

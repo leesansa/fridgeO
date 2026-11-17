@@ -1,6 +1,6 @@
 // 조미료 목록 → 아이콘(public/condiments/*.svg)과 DB 반영 SQL(server/db/seeds/condiments.sql)을 만든다
-// 실행: node scripts/condiments.mjs  (조미료를 더하거나 고치면 다시 실행)
-// DB 반영까지: node --env-file=.env scripts/condiments.mjs --apply
+// 실행: node server/db/seeds/condiments.mjs  (조미료를 더하거나 고치면 다시 실행)
+// DB 반영까지: node --env-file=.env server/db/seeds/condiments.mjs --apply
 import { mkdirSync, writeFileSync } from "node:fs";
 
 // [이름, 파일 이름, 병 모양, 내용물 색, 기본 보관 일수, 사진(없으면 null)]
@@ -119,7 +119,7 @@ const svg = (c) =>
 const q = (v) => (v === null ? "NULL" : typeof v === "number" ? v : `'${String(v).replaceAll("'", "''")}'`);
 const iconUrl = (c) => `/condiments/${c.shape ? `${c.file}.svg` : c.file}`;
 
-const sql = `-- 조미료 분류 + 아이콘 + 새 조미료. scripts/condiments.mjs 가 만든 파일 (직접 고치지 말 것)
+const sql = `-- 조미료 분류 + 아이콘 + 새 조미료. server/db/seeds/condiments.mjs 가 만든 파일 (직접 고치지 말 것)
 ALTER TABLE ingredient_catalog ADD COLUMN IF NOT EXISTS category TEXT;
 
 INSERT INTO ingredient_catalog (name, category, icon_url, image_url, shelf_life_days) VALUES
@@ -139,7 +139,7 @@ if (import.meta.main) {
   console.assert(new Set(names).size === names.length, "이름이 겹칩니다");
   console.log(`조미료 ${condiments.length}개: 아이콘 ${condiments.filter((c) => c.shape).length}개, server/db/seeds/condiments.sql`);
 
-  // --apply: 만든 SQL 을 .env 의 DATABASE_URL DB 에 반영 (node --env-file=.env scripts/condiments.mjs --apply)
+  // --apply: 만든 SQL 을 .env 의 DATABASE_URL DB 에 반영 (node --env-file=.env server/db/seeds/condiments.mjs --apply)
   if (process.argv.includes("--apply")) {
     const { neon } = await import("@neondatabase/serverless");
     const db = neon(process.env.DATABASE_URL);

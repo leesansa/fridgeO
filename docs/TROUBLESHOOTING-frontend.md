@@ -520,7 +520,7 @@ body: { ..., expiryDate: expiryDate || null }
 
 ## 데스크탑 버전 작업 정리와 의견
 
-**구조** (`6c3e36b`, 자세한 흐름은 [src/README.md](src/README.md))
+**구조** (`6c3e36b`, 자세한 흐름은 [src/README.md](../src/README.md))
 - 주소 하나에 `pages/mobile/`과 `pages/desktop/` 화면이 하나씩 있고, `pages/Responsive.jsx`가 화면 폭 1024px을 기준으로 고른다. 기능이 같은 화면을 두 벌 유지하는 대신 **데이터·저장 로직은 `utils/use*.js` 훅 하나**로 모아 모바일·데스크탑이 같이 쓴다.
 - 데스크탑에서만 쓰는 CSS는 `styles/desktop/`에 두고, 모바일 클래스를 덮어쓰는 규칙은 `@media (min-width: 1024px)` 안에만 둔다.
 - 회원가입·계정 찾기는 모바일 입력 양식을 데스크탑 틀(`pages/desktop/AuthFrame.jsx`)에 그대로 넣었다. 인증 흐름이 복잡해서 새로 만들지 않았다.

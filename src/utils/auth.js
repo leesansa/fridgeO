@@ -46,10 +46,13 @@ export const PHONE_FORMAT_MESSAGE = "휴대폰 번호를 확인해 주세요. (�
 export const authErrorMessage = (err) =>
   AUTH_ERRORS[err?.error?.code ?? err?.code] ?? err?.message ?? "요청을 처리하지 못했습니다. 잠시 후 다시 시도해 주세요.";
 
+// API 서버 주소. 배포 때는 .env.production 의 VITE_API_URL(Worker 주소), 로컬은 비워 두면 Vite 프록시(/api)로 감
+export const API_URL = import.meta.env.VITE_API_URL ?? "";
+
 // 로그인한 사용자의 토큰을 붙여 API 서버(/api/...)를 호출한다. 실패하면 서버의 오류 문구로 Error를 던진다
 export async function apiFetch(path, { body, ...options } = {}) {
   const token = (await getSession())?.session.token;
-  const res = await fetch(path, {
+  const res = await fetch(API_URL + path, {
     ...options,
     headers: {
       "Content-Type": "application/json",
