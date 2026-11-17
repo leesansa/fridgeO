@@ -36,6 +36,14 @@ fridgeO React(Vite) 화면을 만들고 팀원 브랜치를 병합하면서 겪�
 | 29 | 데스크탑 메인 "내 조미료들" 제목·더보기 글자가 안 보일 만큼 작음 | 모바일의 8px 글자와 고정 높이를 그대로 씀 | 1024px 이상에서 16·14px, 화살표 20px, 높이 고정 해제 |
 | 30 | 냉장고 거르기가 모바일·데스크탑에서 서로 다름 | 모바일은 정렬 탭 + 조미료 버튼, 데스크탑은 상태 거르기 | 전체·이름순·지남·조미료로 맞춤 (모바일은 임박 제외). 탭 수를 바꿀 땐 CSS 칸 수도 같이 |
 | 31 | 유통기한 "기한 없음"을 눌러도 기본값으로 돌아갈 위험 | "고르지 않음"(`null`)과 "기한 없음"을 구분해야 함 | 기한 없음은 `""`로 두고 `??`로 기본값 계산, 저장할 때만 `null` |
+| 32 | 배포 사이트가 "Unexpected Application Error (reading 'id')"로 멈춤 | GitHub Actions 빌드에 `VITE_NEON_AUTH_URL`이 없음 (Git에 안 올라가는 `.env`에만 있었음) | `.env.production`에 추가, 빠지면 빌드가 멈추게 `vite.config.js`에서 검사 |
+| 33 | GitHub Actions에서 ESLint `'process' is not defined` (`vite.config.js`) | 설정 파일을 브라우저 코드 기준으로 검사 | `import process from 'node:process'` |
+| 34 | 사이트에 들어가자마자 회원가입 화면이 뜸 | 휴대폰 번호 없는 계정을 어느 페이지에서든 가입 2단계로 보내도록 함 | 강제 이동 삭제 |
+| 35 | 로그아웃 상태에서 API를 부를 때마다 Neon Auth 요청이 하나씩 더 나감 | Neon SDK는 로그인 세션만 캐시함 | `useSession` 저장소가 로그아웃이면 묻지 않음, 401이면 세션을 새로 받아 한 번만 재시도 |
+| 36 | 로그인·로그아웃해도 화면이 바로 안 바뀜 | 컴포넌트마다 `isLoggedIn()`을 따로 물어봄 | Neon React 어댑터의 `authClient.useSession()`으로 로그인 상태 공유 |
+| 37 | 아이디 찾기를 하면 그 계정으로 로그인됐다가 로그아웃됨 | 휴대폰 인증(`verify`)이 세션을 만듦 | `disableSession: true`, 응답의 `user.email`만 사용 |
+| 38 | 회원가입 1단계만 하고 나가면 번호 없는 계정이 남음 | 1단계에서 바로 가입 | 1단계 값은 화면에만 두고 "인증 요청" 때 가입, 이메일 중복은 1단계에서 서버로 확인 |
+| 39 | 저장한 뒤 다른 화면이 예전 값을 보여 줌 / 같은 데이터를 화면마다 따로 받음 | 화면마다 `useEffect`로 따로 불러오고 저장 후 새로고침을 손으로 함 | React Query(`src/queries/`)로 캐시 공유, 저장 훅마다 다시 받을 캐시를 정함 |
 
 ---
 
@@ -518,10 +526,136 @@ body: { ..., expiryDate: expiryDate || null }
 
 ---
 
+## 32. 배포 사이트가 "Unexpected Application Error (reading 'id')"로 멈춤
+
+**증상** GitHub Actions로 처음 자동 배포한 뒤 `https://fridgeo.pages.dev/`가 오류 화면만 보임
+```
+Unexpected Application Error!
+Cannot read properties of undefined (reading 'id')
+```
+네트워크 기록에서 로그인 확인 요청이 Neon Auth가 아니라 `https://fridgeo.pages.dev/api/auth/get-session`(사이트 자기 주소)으로 가고 있었다.
+
+**원인**
+- 프론트가 쓰는 Neon Auth 주소 `VITE_NEON_AUTH_URL`이 Git에 올라가지 않는 `.env`에만 있었다. PC에서 직접 배포할 때는 문제가 없었지만 GitHub Actions 빌드에는 `.env`가 없어서 주소가 비었다.
+- 엉뚱한 응답을 세션으로 읽은 뒤 `components/Layout.jsx`가 `session?.user.id`를 읽다 앱 전체가 멈췄다.
+
+**해결** (`382b4ec`, `b4317c0`)
+- `.env.production`에 `VITE_NEON_AUTH_URL` 추가 (공개 주소, `wrangler.toml`과 같은 값)
+- `vite.config.js`: 배포 빌드(`vite build`)에 `VITE_API_URL`·`VITE_NEON_AUTH_URL`이 없으면 빌드를 멈춤 → 깨진 사이트가 배포되기 전에 Actions에서 실패
+- `session?.user?.id`처럼 `user`도 `?.`로 읽음 (응답이 이상해도 화면 전체가 멈추지 않게)
+
+**확인** `.env` 없이 Git에 들어가는 파일만으로 빌드 → 두 주소가 결과물에 들어감. 주소를 지우고 빌드 → `빌드에 필요한 환경 변수가 없습니다: VITE_NEON_AUTH_URL`로 멈춤
+
+**주의** 프론트에서 쓰는 `VITE_*` 값을 새로 만들면 `.env.production`에도 넣는다. `VITE_*`는 빌드 결과에 그대로 들어가 누구나 볼 수 있으므로 비밀 값은 넣지 않는다.
+
+---
+
+## 33. GitHub Actions에서 ESLint `'process' is not defined` (`vite.config.js`)
+
+**증상** 32번을 고친 커밋(`382b4ec`)의 Actions가 check → `npm run lint`에서 실패, 배포 단계는 건너뜀 (사이트는 이전 버전 그대로)
+```
+vite.config.js:10  'process' is not defined
+```
+
+**원인** ESLint 설정이 브라우저 코드 기준이라 Node 전용 변수 `process`를 모름. 로컬에서 린트를 돌렸지만 출력 마지막 줄만 보고 통과로 판단해서 놓쳤다.
+
+**해결** (`b4317c0`) `import process from 'node:process'`
+
+**주의** 린트·테스트·빌드는 출력이 아니라 **종료 코드**로 확인한다.
+```bash
+npm run lint; echo "exit: $?"   # 0 이어야 통과
+```
+
+---
+
+## 34. 사이트에 들어가자마자 회원가입 화면이 뜸
+
+**증상** 로그인된 상태로 사이트를 열면 어느 주소든 `/signup`(휴대폰 인증 화면)으로 넘어감
+
+**원인** 38번 작업 중 "휴대폰 번호 없는 계정은 어느 페이지에서든 가입 2단계로 보내기"를 `Layout.jsx`에 넣었다. 휴대폰 인증 단계가 생기기 전에 만든 계정도 번호가 없어서 전부 걸렸다.
+
+**해결** (`8ff94bd`) 강제 이동 삭제. 번호 없는 계정도 로그인된 채로 그대로 쓴다. 직접 `/signup`에 들어가면 2단계(휴대폰 인증)를 이어서 할 수 있다.
+
+**남은 점** 가입 중 인증을 안 하고 나간 계정은 번호 없이 남을 수 있고, 그 계정은 아이디·비밀번호 찾기를 쓸 수 없다.
+
+---
+
+## 35. 로그아웃 상태에서 API를 부를 때마다 Neon Auth 요청이 하나씩 더 나감
+
+**증상** 로그아웃 상태로 레시피 목록을 스크롤하면 페이지마다 `get-session`(Neon Auth) + `/api/recipes` 두 요청이 나감
+
+**원인** API 호출 전에 토큰을 꺼내려고 매번 `getSession()`을 부르는데, Neon SDK(`@neon/auth`)는 **로그인된 세션만** 캐시한다 (`adapter-core.js`의 `getSession.onSuccess`). 로그아웃 상태는 캐시가 없어서 매번 네트워크로 물어봤다.
+
+**해결** (`api/client.js`)
+- `useSession`이 쓰는 저장소(`authClient.$store.atoms.session`)가 이미 "로그아웃"으로 확인했으면 Neon Auth에 묻지 않는다
+- 서버가 401을 주면 세션을 새로 받아 토큰이 바뀌었을 때만 한 번 더 보낸다 (로그인 직후 저장소가 아직 안 바뀐 경우, 토큰 만료)
+
+**확인** 로그아웃 상태 레시피 목록: 바꾸기 전 API 5번에 세션 확인 5번 → 바꾼 뒤 처음 1번만
+
+---
+
+## 36. 로그인·로그아웃해도 화면이 바로 안 바뀜
+
+**원인** 로그인 상태를 공유하는 곳이 없어서 `Layout`·메인 냉장고 카드·북마크·검색이 각자 처음 그려질 때 `isLoggedIn()`을 한 번씩 물어봤다. 페이지를 옮기기 전에는 이전 상태가 남았다.
+
+**해결** `utils/auth.js`의 Neon 클라이언트를 React 어댑터(`BetterAuthReactAdapter`)로 바꾸고 `authClient.useSession()`을 씀. 새 패키지 없이 Context 역할을 한다 (로그인·로그아웃하면 이 훅을 쓰는 모든 화면이 다시 그려짐). 로그인 여부만 필요하면 `hooks/useLoggedIn.js`.
+- 라우터의 `requireLogin`과 `apiFetch`는 컴포넌트 밖이라 지금처럼 `getSession()`을 씀
+
+---
+
+## 37. 아이디 찾기를 하면 그 계정으로 로그인됐다가 로그아웃됨
+
+**원인** Neon Auth에는 "휴대폰 번호로 이메일 조회" API가 없어서, 휴대폰 인증으로 로그인 → 세션에서 이메일 읽기 → 로그아웃으로 우회했다. 이미 로그인한 사람이 쓰면 다른 계정으로 바뀌었다가 로그아웃됐다.
+
+**해결** (`pages/mobile/Find_ID_Password.jsx`) `verify({ phoneNumber, code, disableSession: true })`. 세션·쿠키를 만들지 않고 응답의 `user.email`만 보여 준다 (Better Auth `phone-number/routes.mjs`에서 확인).
+
+---
+
+## 38. 회원가입 1단계만 하고 나가면 번호 없는 계정이 남음
+
+**원인** 1단계("가입하기")에서 바로 `signUp.email()`로 계정을 만들었다. 2단계 휴대폰 인증 전에 나가면 번호 없는 계정이 남고, 그 계정은 아이디·비밀번호 찾기를 쓸 수 없다.
+
+**확인한 제약** (Neon Auth 설정·문서)
+- 가입 직후 자동 로그인은 끌 수 없다 (`auto_sign_in_after_verification`은 이메일 인증 **후**의 설정)
+- 번호를 계정에 붙이는 `verify(updatePhoneNumber: true)`는 로그인된 계정에만 된다 → 가입은 인증 직전에 해야 한다
+
+**해결** (`4e625c4`, `pages/mobile/Sign_up.jsx`)
+1. 1단계 "다음": 이메일 중복만 서버에 확인(`POST /api/signup/check-email`, 서버 문서 19번)하고 입력값은 화면에만 둠
+2. 2단계 "인증 요청": 처음이면 이때 가입 + 프로필 생성 → 인증번호 발송. 다시 요청하면 가입은 건너뜀
+3. "인증 완료": 번호 연결 → 로그아웃 → 로그인 화면
+- 뒤로가기: 인증 요청 전이면 1단계로, 후(가입된 상태)면 로그아웃 후 홈
+- 인증번호를 틀려도 인증번호는 소모되지 않아(SDK 확인) 같은 화면에서 다시 입력하면 된다
+
+**남은 점** 인증 요청 후 인증 없이 나가면 번호 없는 계정이 남는다 (34번 참고).
+
+---
+
+## 39. 저장한 뒤 다른 화면이 예전 값을 보여 줌 / 같은 데이터를 화면마다 따로 받음
+
+**원인**
+- 화면·훅마다 `useEffect` + `ignore` 변수 + 로딩·오류 상태로 따로 불러왔다. `/api/categories`는 4곳, `/api/recipes/:id`는 7곳에서 주소를 각자 조립했다.
+- 저장 후 새로고침을 손으로 했다 (데스크탑 냉장고의 `version` 숫자, 메인 카드의 `reload`, 페이지를 옮길 때마다 알림 다시 받기).
+
+**해결** (`ed58c46`, `93bb7b5`, `4004d4a`) 구조는 아래 "참고: 구조 변경 기록"
+- `src/api/`: 서버 호출 함수만 (파일은 `server/routes/`와 1:1)
+- `src/queries/`: React Query 훅. 캐시 키, "로그인했을 때만 받기", **저장 후 어떤 캐시를 다시 받을지**를 여기서만 정함
+  - 예: 재료를 바꾸면 내 재료 목록·요약·조미료, 추천 레시피, 내 정보(임박 재료), 알림
+  - 북마크·팔로우·알림 읽음·알림 설정은 화면을 먼저 바꾸고 실패하면 되돌림
+- 로그아웃하거나 다른 계정으로 바뀌면 이전 계정 캐시를 지움 (`Layout.jsx` → `clearAccountData`)
+- 4xx(로그인 필요 등)는 다시 시도하지 않음
+
+**주의**
+- 컴포넌트는 `@tanstack/react-query`를 직접 import하지 않고 `queries/`의 훅만 쓴다
+- 새 저장 API를 만들면 `queries/`에 `useMutation` 훅을 만들고, 성공했을 때 다시 받을 캐시를 같이 적는다. 안 적으면 다른 화면에 예전 값이 남는다
+
+**확인** 테스트 계정(`example.com`, 확인 후 삭제)으로 재료 추가·보관 장소 변경·수정·삭제, 북마크·해제, 레시피·리뷰 작성·삭제, 알림 설정, 알림 생성·전체삭제가 모두 새로고침 없이 반영되는지 확인 (2026-11-17)
+
+---
+
 ## 데스크탑 버전 작업 정리와 의견
 
 **구조** (`6c3e36b`, 자세한 흐름은 [src/README.md](../src/README.md))
-- 주소 하나에 `pages/mobile/`과 `pages/desktop/` 화면이 하나씩 있고, `pages/Responsive.jsx`가 화면 폭 1024px을 기준으로 고른다. 기능이 같은 화면을 두 벌 유지하는 대신 **데이터·저장 로직은 `utils/use*.js` 훅 하나**로 모아 모바일·데스크탑이 같이 쓴다.
+- 주소 하나에 `pages/mobile/`과 `pages/desktop/` 화면이 하나씩 있고, `pages/Responsive.jsx`가 화면 폭 1024px을 기준으로 고른다. 기능이 같은 화면을 두 벌 유지하는 대신 **데이터·저장 로직은 훅 하나**로 모아 모바일·데스크탑이 같이 쓴다. 서버 데이터는 `queries/`의 React Query 훅, 입력 폼 같은 화면 상태는 `hooks/use*.js` (39번).
 - 데스크탑에서만 쓰는 CSS는 `styles/desktop/`에 두고, 모바일 클래스를 덮어쓰는 규칙은 `@media (min-width: 1024px)` 안에만 둔다.
 - 회원가입·계정 찾기는 모바일 입력 양식을 데스크탑 틀(`pages/desktop/AuthFrame.jsx`)에 그대로 넣었다. 인증 흐름이 복잡해서 새로 만들지 않았다.
 
@@ -535,7 +669,7 @@ body: { ..., expiryDate: expiryDate || null }
 - 데스크탑 CSS는 모바일 CSS 뒤에 불러와야 한다 (#21).
 
 **남은 일**
-- 로그인한 실제 계정으로 냉장고 끌어다 놓기·재료 저장·레시피 작성·리뷰·개인정보 변경을 끝까지 확인하지 못함 (예시 데이터로만 확인)
+- 테스트 계정으로 재료·북마크·레시피·리뷰·알림 설정·알림까지 확인함(39번). 남은 것: 냉장고 끌어다 놓기(마우스), 다른 사람 팔로우(실제 작성자에게 알림이 가서 뺌), 닉네임·프로필 사진 변경, 레시피 사진 업로드
 - 리뷰의 맛 평가·첨부 사진은 DB에 칸이 없어 저장되지 않음 (모바일도 같음)
 - 북마크 안에서 찾기·정렬은 서버가 주는 최대 50개 안에서만 됨
 - 재료 등록의 기본 유통기한은 보관 장소와 상관없이 재료 사전 값 (냉동이어도 냉장 기준 일수)
@@ -560,6 +694,10 @@ body: { ..., expiryDate: expiryDate || null }
 | `5c18d1e` | `components/Ingredient`를 `Fields`(입력 칸) · `Frame`(위·아래 바) 폴더로 |
 | `6c3e36b` | `src/components` · `pages` · `styles`를 `mobile/` · `desktop/`으로 나눔 (`components/Layout.jsx`, `pages/Responsive.jsx`는 공통이라 그대로). 모바일 로직은 `utils/use*.js` 훅으로 |
 | `da05595` | 안 쓰던 `utils/fridgeData.js`, 동작 없는 `EditBottomNav.jsx` 삭제, 흐름표 `src/README.md` 추가 |
+| `fed8a2e` | `utils/use*.js` 훅을 `hooks/`로 이동. `utils/fridgeUtils.js` → `utils/date.js`, 약관 문구 `utils/terms.js` |
+| `ed58c46` | 서버 호출을 `src/api/`로 모음 (`client.js`의 `apiFetch` + `server/routes/`와 1:1 파일). `utils/uploadImage.js` → `api/images.js` |
+| `93bb7b5` | React Query 도입: `src/queries/`(조회·저장 훅, `queryClient.js`). `useToggleRequest`·옛 무한 스크롤 훅 정리 |
+| `4004d4a` | queries 훅을 감싸기만 하던 `useRecipeDetail`·`useAuthorFollow`·`useExpiryAlertSetting`·`useBookmarks`·`useMyRecipes` 삭제, 화면에서 queries 훅 직접 사용 |
 
 ---
 

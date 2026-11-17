@@ -24,6 +24,12 @@
 | 15 | 중복·잘못된 데이터가 들어갈 수 있음 | 제약 조건 없음 | `UNIQUE`, `CHECK` 추가 |
 | 16 | 앱 테이블 이름이 크롤링 테이블과 겹침 | 같은 DB에 `recipes` 등이 이미 있음 | **미해결**: 새 Neon 브랜치 또는 기존 테이블 정리 |
 | 17 | 초기 레시피를 누구 이름으로 보여줄지 | 실제 서비스명 계정은 오해·저작권 문제 | 계정을 만들지 않고 `user_id = NULL` |
+| 18 | 로컬 API 서버(`npm run server`)가 응답 없음, "Workers runtime crashed" 반복 | `wrangler dev`가 두 개 떠서 같은 3001 포트를 두고 충돌 | wrangler·workerd 프로세스를 모두 끄고 하나만 실행 |
+| 19 | 회원가입 1단계에서 이메일 중복을 확인할 API가 없음 | Neon Auth에는 "가입 여부만 조회" API가 없음 | `POST /api/signup/check-email`가 `neon_auth."user"`를 직접 조회 |
+| 20 | main에 푸시해도 자동 배포가 안 됨 | Pages는 직접 올리기(Direct Upload) 프로젝트, Worker는 PC에서 `wrangler deploy` | GitHub Actions(`.github/workflows/deploy.yml`)로 검사 후 백·프론트 배포 |
+| 21 | Actions 경고 "Node.js 20 is deprecated" | `actions/checkout@v4`·`setup-node@v4`가 Node 20 기반 | v6으로 올림 (Node 24 기반) |
+| 22 | 계정을 지워도 그 계정이 쓴 레시피는 남음 | `recipes.user_id`만 `ON DELETE SET NULL` | 의도된 동작(17번과 같은 형태). 테스트 계정은 레시피를 먼저 지운 뒤 계정 삭제 |
+| 23 | Worker 주소가 Git과 프론트 빌드 결과에 공개됨 | `VITE_API_URL`은 브라우저가 직접 부르는 주소 | 숨길 수 없고 비밀도 아님. 대신 로그인 없이 부를 수 있는 API에 요청 제한이 필요 (**남은 일**) |
 
 ---
 
@@ -417,6 +423,127 @@ DB 제약 조건으로 막았습니다. 앱 코드에서 실수해도 잘못된 
 
 ---
 
+## 18. 로컬 API 서버(`npm run server`)가 응답 없음, "Workers runtime crashed" 반복
+
+**증상**
+- `http://localhost:3001/api/categories`가 응답 없이 멈춤 (DB 직접 조회는 300ms 안에 정상)
+- 로그에 같은 줄이 반복
+```
+[wrangler:warn] The Workers runtime crashed unexpectedly and is being restarted (crash #1).
+```
+
+**원인** `wrangler dev`(node)와 `workerd`가 두 벌 떠 있었다. 이전 서버를 끄지 않은 채 새로 실행해서 같은 3001 포트를 두고 서로 재시작시켰다.
+
+**해결** wrangler·workerd 프로세스를 전부 끄고 하나만 다시 실행
+```powershell
+Get-CimInstance Win32_Process -Filter "Name='node.exe' OR Name='workerd.exe'" |
+  Where-Object { $_.CommandLine -match 'wrangler|workerd' } |
+  ForEach-Object { Stop-Process -Id $_.ProcessId -Force }
+npm run server
+```
+
+**주의** 위 명령은 PC의 모든 wrangler를 끈다. 다른 프로젝트의 wrangler도 같이 꺼진다.
+
+---
+
+## 19. 회원가입 1단계에서 이메일 중복을 확인할 API가 없음
+
+**상황** 회원가입을 "1단계 입력 → 2단계 인증 요청 때 가입"으로 바꾸면서(프론트 38번), 이메일이 이미 가입돼 있으면 1단계에서 막아야 했다. Neon Auth(Better Auth)에는 가입을 시도하지 않고 여부만 묻는 API가 없다.
+
+**해결** (`server/routes/signup.js`)
+```sql
+SELECT 1 FROM neon_auth."user" WHERE lower(email) = lower($1) LIMIT 1
+```
+- 로그인 없이 부를 수 있음 (`POST /api/signup/check-email` → `{ available }`)
+- 대소문자 구분 없음, 형식이 틀리면 400
+- 확인: 없는 이메일 → `available: true`, 기존 계정 이메일을 대문자로 → `false`, 형식 오류 → 400
+
+**남은 점**
+- 요청 횟수 제한이 없다. 가입 시도로도 "이미 가입된 이메일"이 나오므로 새로 알려 주는 정보는 아니지만, 계정을 만들지 않고 대량으로 조회하기는 더 쉬워진다. 코드에 `shortcut:` 주석으로 표시 (23번)
+- 확인과 실제 가입 사이에 다른 사람이 같은 이메일로 가입하면 "인증 요청" 때 오류가 나고 1단계로 돌아간다 (드묾)
+
+---
+
+## 20. main에 푸시해도 자동 배포가 안 됨
+
+**확인한 것** (2026-11-17)
+| 대상 | 상태 |
+|---|---|
+| 프론트 Cloudflare Pages `fridgeo` | `wrangler pages project list`의 Git Provider가 **No** (직접 올리기 프로젝트). 배포된 것은 `43fa690` |
+| 백 Worker `fridgeo-api` | `wrangler deployments list`: PC에서 올린 1번(Source: Upload) + 비밀값 등록뿐 |
+| 저장소 | `.github/workflows` 없음 |
+
+직접 올리기로 만든 Pages 프로젝트는 나중에 Git 연결로 바꿀 수 없다. 새로 만들면 주소가 바뀌고 서버의 `CORS_ORIGINS`도 바꿔야 한다.
+
+**해결** (`3d38134`) `.github/workflows/deploy.yml`
+1. main 푸시 → `check`: `npm ci` → `npm run lint` → `npm test`. 실패하면 배포 안 함
+2. 통과하면 동시에
+   - `deploy-server`: `npx wrangler deploy`
+   - `deploy-web`: `npm run build` → `npx wrangler pages deploy dist --project-name fridgeo --branch main`
+- 연달아 푸시해도 앞의 배포가 끝난 뒤 다음 배포 (`concurrency`)
+- Actions 탭의 "Run workflow"로 다시 배포 가능
+
+**GitHub Secrets** (저장소 → Settings → Secrets and variables → Actions)
+| 이름 | 값 |
+|---|---|
+| `CLOUDFLARE_ACCOUNT_ID` | 대시보드 주소 `dash.cloudflare.com/<계정 ID>/...` |
+| `CLOUDFLARE_API_TOKEN` | 아래 권한으로 만든 토큰 |
+
+**토큰 권한** (My Profile → API Tokens → Create Token → Start from scratch, 2026-11 화면 기준)
+- Account policy (Include는 이 계정 하나만. 기본값 `All accounts`에서 바꿀 것)
+  - **Workers Scripts: Edit**, **Cloudflare Pages: Edit**, **Workers R2 Storage: Read**, **Account Settings: Read**
+  - 이름이 비슷한 "Workers"(Metadata Read·Admin), "Account Custom Pages"는 다른 항목
+- User policy: **User Details: Read**
+- Zone policy·IP 제한은 넣지 않음 (커스텀 도메인 없음, Actions 서버 IP는 매번 바뀜)
+
+**필요 없는 것** Worker 비밀값(`DATABASE_URL`, `SOLAPI_*`)은 Cloudflare에 저장돼 있어 다시 넣지 않는다. 프론트가 쓰는 공개 주소는 `.env.production`에 있다 (빠지면 사이트가 깨짐 → 프론트 32번).
+
+---
+
+## 21. Actions 경고 "Node.js 20 is deprecated"
+
+**증상** 세 단계 모두 같은 경고 (실패는 아님)
+```
+Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4, actions/setup-node@v4.
+```
+
+**해결** 두 액션을 v6으로 (v6·v7 모두 `action.yml`이 `using: node24`인 것을 확인, 나온 지 오래된 v6을 고름)
+
+**참고** "ubuntu-latest가 2026-10-19부터 Ubuntu 26으로 바뀐다"는 안내도 같이 나오지만 정보 메시지라 지금은 할 일 없음.
+
+---
+
+## 22. 계정을 지워도 그 계정이 쓴 레시피는 남음
+
+**확인** 테스트 계정을 지우기 전에 외래 키 삭제 규칙을 조회 (`pg_constraint`)
+| 지우는 것 | 같이 지워짐 (CASCADE) | 남음 |
+|---|---|---|
+| `neon_auth."user"` | 세션·계정 연결, `users`(프로필) | |
+| `users` | 재료, 북마크, 리뷰, 팔로우, 알림 | `recipes` (`user_id` → NULL) |
+| `recipes` | 레시피 재료·순서, 리뷰, 북마크, 알림 | |
+
+17번에서 정한 대로 레시피는 작성자만 비운 채 남는다. 테스트 계정은 그 계정 레시피를 먼저 지운 뒤 `neon_auth."user"`를 지웠다. 지운 뒤 계정·세션·프로필·재료·북마크·리뷰·알림·테스트 레시피가 모두 0개인 것을 확인했다.
+
+**주의** 탈퇴 기능을 만들 때 "탈퇴하면 내 레시피도 지울지"를 정해야 한다. 지금 구조로는 남는다.
+
+---
+
+## 23. Worker 주소가 Git과 프론트 빌드 결과에 공개됨
+
+**상황** `.env.production`의 `VITE_API_URL=https://fridgeo-api.fridgeo.workers.dev`가 Git에 올라가 있다.
+
+**판단: 그대로 둠**
+- `VITE_*` 값은 빌드 결과(JS)에 그대로 들어가서, 사이트를 열고 개발자도구만 봐도 보인다. Git에서 빼도 숨겨지지 않는다.
+- Neon Auth 주소, R2 이미지 주소도 브라우저가 직접 접속하는 공개 주소다.
+- 진짜 비밀(`DATABASE_URL`, `SOLAPI_*`)은 `wrangler secret`으로만 넣고 Git에 없다.
+
+**실제로 막아야 하는 것**
+- 로그인이 필요한 API는 JWT 검증(`requireAuth`)으로 401
+- CORS(`CORS_ORIGINS`)는 다른 사이트의 **브라우저**만 막는다. `curl`·스크립트 호출은 못 막음
+- **남은 일**: 로그인 없이 부를 수 있는 API(레시피 목록·상세, `/api/signup/check-email`)에 요청 횟수 제한(Cloudflare Rate Limiting)
+
+---
+
 ## 현재 `db/schema.sql` 확인 사항
 
 원본(`schema.original.sql`)에서 아래 항목이 빠진 상태입니다. 의도한 변경이라면 그에 따른 영향을 확인해야 합니다.
@@ -452,3 +579,7 @@ DB 제약 조건으로 막았습니다. 앱 코드에서 실수해도 잘못된 
 | Neon에 데이터가 들어갔는지 | `npm run db:seed` → `recipes 160개`, `recipe_ingredients 1267개` |
 | API가 동작하는지 | 서버를 띄워 `/api/categories`, `/api/recipes?q=김치`, `/api/recipes/:id` 요청 |
 | 재료 분리 규칙 | `uv run scraper/crawl.py --test` |
+| 이메일 중복 확인 API (19번) | 로컬 서버에 없는 이메일·기존 이메일(대문자)·형식 오류로 요청 |
+| 자동 배포 (20번) | GitHub Actions의 check·deploy-server·deploy-web이 모두 성공, `fridgeo.pages.dev`가 Neon Auth 주소로 세션을 확인하는지 네트워크 기록으로 확인 |
+| 계정 삭제 시 남는 데이터 (22번) | 테스트 계정 삭제 후 계정·세션·프로필·재료·북마크·리뷰·알림 0개 확인 |
+
