@@ -1,19 +1,11 @@
-import { useEffect, useState } from "react";
 import { Link } from "react-router";
-import { getRecipes } from "../../../api/recipes";
+import { useRecipes } from "../../../queries/recipes";
 import RecipeCard from "./RecipeCard";
 
 // 데스크탑 레시피 상세 맨 아래: 같은 분류의 다른 레시피 4개 (GET /api/recipes?category=). 없거나 실패하면 안 보임
 const SimilarRecipes = ({ categoryId, excludeId, categoryName }) => {
-    const [recipes, setRecipes] = useState([]);
-
-    useEffect(() => {
-        let alive = true;
-        getRecipes({ category: categoryId })
-            .then((data) => alive && setRecipes(data.items.filter((r) => r.id !== excludeId).slice(0, 4)))
-            .catch(() => {});
-        return () => { alive = false; };
-    }, [categoryId, excludeId]);
+    const { data } = useRecipes({ category: categoryId });
+    const recipes = data?.items.filter((r) => r.id !== excludeId).slice(0, 4) ?? [];
 
     if (recipes.length === 0) return null;
 

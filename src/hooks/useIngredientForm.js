@@ -1,7 +1,6 @@
 import { useState } from "react";
-import { createIngredient } from "../api/ingredients";
 import { addDays, getTodayKey } from "../utils/date";
-import { useIngredientCatalog } from "./useIngredientCatalog";
+import { useCreateIngredient, useIngredientCatalog } from "../queries/ingredients";
 
 const DEFAULT_SHELF_LIFE = 7; // 재료 사전에 없는 재료의 기본 보관 일수
 
@@ -18,7 +17,7 @@ export function useIngredientForm() {
   const known = catalog.find((item) => item.name === ingredient.trim());
   const shelfLife = known?.shelf_life_days ?? DEFAULT_SHELF_LIFE;
   const expiryDate = pickedExpiry ?? addDays(today, shelfLife);
-  const [saving, setSaving] = useState(false); // 저장 중 두 번 눌러 두 개 생기지 않게
+  const create = useCreateIngredient(); // 저장 중(isPending)에는 버튼을 잠가 두 번 눌러 두 개 생기지 않게
 
   // DB(ingredients)에 저장
   const submit = async () => {
@@ -27,15 +26,12 @@ export function useIngredientForm() {
       alert("재료 이름을 입력해 주세요.");
       return false;
     }
-    setSaving(true);
     try {
-      await createIngredient({ name, quantity, unit, storage, expiryDate: expiryDate || null });
+      await create.mutateAsync({ name, quantity, unit, storage, expiryDate: expiryDate || null });
       return true;
     } catch (e) {
       alert(`재료를 추가하지 못했어요. ${e.message}`);
       return false;
-    } finally {
-      setSaving(false);
     }
   };
 
@@ -49,6 +45,6 @@ export function useIngredientForm() {
   return {
     today, catalog, known: Boolean(known), shelfLife,
     ingredient, setIngredient, quantity, setQuantity, unit, setUnit, storage, setStorage,
-    expiryDate, setPickedExpiry, saving, submit, reset,
+    expiryDate, setPickedExpiry, saving: create.isPending, submit, reset,
   };
 }

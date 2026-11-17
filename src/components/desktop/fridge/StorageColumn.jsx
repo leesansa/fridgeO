@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import { useIngredientPages } from "../../../hooks/useIngredientPages";
+import { useIngredientPages } from "../../../queries/ingredients";
+import { retryList, useInfiniteScroll } from "../../../hooks/useInfiniteScroll";
 import { getDaysLeft, getExpiryBadge } from "../../../utils/date";
 
 export const DRAG_TYPE = "application/x-fridgeo-ingredient";
@@ -16,7 +17,11 @@ const statusOf = (row, today) => {
 // 다른 칸의 카드를 여기로 끌어다 놓으면 onMove(행, 이 칸) → 보관 장소 변경
 const StorageColumn = ({ storage, params, today, selectedId, onSelect, onTotal, onMove }) => {
   const listRef = useRef(null);
-  const { items, total, error, setError, loaded, sentinelRef } = useIngredientPages({ sort: "expiry", storage, ...params }, listRef);
+  const list = useIngredientPages({ sort: "expiry", storage, ...params });
+  const sentinelRef = useInfiniteScroll(list, listRef);
+  const items = list.data?.items ?? [];
+  const total = list.data?.total ?? null;
+  const loaded = list.isSuccess && !list.hasNextPage;
   const [over, setOver] = useState(false);
 
   useEffect(() => {
@@ -75,9 +80,9 @@ const StorageColumn = ({ storage, params, today, selectedId, onSelect, onTotal, 
         <li ref={sentinelRef} aria-hidden="true" />
       </ul>
       {loaded && items.length === 0 && <p className="dfridge-empty">재료가 없어요.</p>}
-      {error && (
+      {list.isError && (
         <p className="dfridge-empty" role="alert">
-          {error} <button type="button" onClick={() => setError("")}>다시 시도</button>
+          {list.error.message} <button type="button" onClick={() => retryList(list)}>다시 시도</button>
         </p>
       )}
     </section>

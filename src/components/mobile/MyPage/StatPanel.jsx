@@ -1,24 +1,17 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router";
-import { getMyBookmarks, getMyFollows } from "../../../api/me";
+import { useMyBookmarks, useMyFollows } from "../../../queries/me";
 
 // 북마크·팔로우 숫자를 누르면 펼쳐지는 목록 (DB recipe_bookmarks / follows)
 const StatPanel = ({ kind, me }) => {
   const navigate = useNavigate();
   const [followType, setFollowType] = useState("following"); // 팔로잉 | 팔로워
-  const path = kind === "bookmarks" ? "bookmarks" : `follows:${followType}`;
-  // 응답을 어느 목록 것인지와 함께 보관 → 탭을 바꾸면 자동으로 "불러오는 중"
-  const [loaded, setLoaded] = useState({ path: null, rows: [], error: "" });
-
-  useEffect(() => {
-    let ignore = false;
-    (kind === "bookmarks" ? getMyBookmarks() : getMyFollows(followType))
-      .then((rows) => !ignore && setLoaded({ path, rows, error: "" }))
-      .catch((e) => !ignore && setLoaded({ path, rows: [], error: e.message }));
-    return () => { ignore = true; };
-  }, [path, kind, followType]);
-
-  const loading = loaded.path !== path;
+  // 탭을 바꾸면 그 목록의 캐시로 바뀜 (처음이면 "불러오는 중")
+  const bookmarks = useMyBookmarks({ enabled: kind === "bookmarks" });
+  const follows = useMyFollows(followType, { enabled: kind !== "bookmarks" });
+  const { data, error, isPending } = kind === "bookmarks" ? bookmarks : follows;
+  const loaded = { rows: data ?? [], error: error?.message ?? "" };
+  const loading = isPending && !error;
   const empty = kind === "bookmarks"
     ? "아직 북마크한 레시피가 없어요. 레시피 사진 아래 북마크를 눌러 보세요."
     : followType === "following" ? "아직 팔로우한 사람이 없어요." : "아직 나를 팔로우한 사람이 없어요.";

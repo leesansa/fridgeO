@@ -5,18 +5,19 @@ import EditQuantityField from "../../components/mobile/Ingredient/Fields/EditQua
 import StorageSelect from "../../components/mobile/Ingredient/Fields/StorageSelect";
 import ExpiryField from "../../components/mobile/Ingredient/Fields/ExpiryField";
 import SubmitButton from "../../components/mobile/Ingredient/Frame/SubmitButton";
-import { useEditableIngredient, useIngredientEditForm } from "../../hooks/useIngredientEditForm";
+import { useIngredientEditForm } from "../../hooks/useIngredientEditForm";
+import { useIngredient } from "../../queries/ingredients";
 import "../../styles/mobile/Ingredient.css";
 import "../../styles/mobile/IngredientEdit.css";
 
 // /ingredient/edit/:id — DB(ingredients)의 내 재료를 불러와 고치고 저장 (로그인은 router 에서 확인)
 export default function IngredientEdit() {
   const { id } = useParams();
-  const { loading, item, error } = useEditableIngredient(id);
+  const { data: item, error, isPending: loading } = useIngredient(id);
 
   if (loading) return <p className="ingredient-edit-status">재료를 불러오는 중...</p>;
   if (!item) {
-    return <p className="ingredient-edit-status" role="alert">{error} <Link to="/fridge">냉장고로 돌아가기</Link></p>;
+    return <p className="ingredient-edit-status" role="alert">{error?.message} <Link to="/fridge">냉장고로 돌아가기</Link></p>;
   }
 
   return <IngredientEditForm key={item.id} item={item} />;

@@ -1,22 +1,13 @@
-import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
-import { getRecommendedRecipes } from "../../../api/recipes";
+import { useRecommendedRecipes } from "../../../queries/recipes";
 import chevron from "../../../assets/main/chevron.png";
 
 // 메인 추천 레시피 5개 (GET /api/recipes/recommend): 내 냉장고 재료로 만들 수 있는 것 먼저, 없으면 인기순
 // 가로로 스크롤해서 보고, 누르면 레시피 상세로. 스타일은 MainPage.css
 const Recommends = () => {
     const navigate = useNavigate();
-    const [recipes, setRecipes] = useState(null); // 불러오기 전 null
-    const [error, setError] = useState("");
-
-    useEffect(() => {
-        let alive = true;
-        getRecommendedRecipes()
-            .then((rows) => alive && setRecipes(rows))
-            .catch((e) => alive && setError(e.message));
-        return () => { alive = false; };
-    }, []);
+    const { data, error } = useRecommendedRecipes();
+    const recipes = data ?? null; // 불러오기 전 null
 
     return (
         <section className="main-section recommend-section">

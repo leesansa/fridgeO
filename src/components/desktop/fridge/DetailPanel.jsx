@@ -1,6 +1,5 @@
-import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
-import { getRecipes } from "../../../api/recipes";
+import { useRecipes } from "../../../queries/recipes";
 import { formatDate, getDaysLeft, getExpiryBadge } from "../../../utils/date";
 
 const STORAGES = ["냉장", "냉동", "실온"];
@@ -10,17 +9,10 @@ const shortDate = (key) => key.slice(5).replace("-", ".");
 // 재료가 바뀌면 부모가 key 로 새로 만듦 (레시피 다시 받기)
 const DetailPanel = ({ row, today, busy, onUpdate, onRemove }) => {
   const navigate = useNavigate();
-  const [recipes, setRecipes] = useState(null);
   const name = row.name ?? "이름 없음";
-
-  useEffect(() => {
-    let alive = true;
-    // 레시피 검색은 제목 또는 재료 이름으로 찾음
-    getRecipes({ q: name })
-      .then((data) => alive && setRecipes(data.items.slice(0, 3)))
-      .catch(() => alive && setRecipes([]));
-    return () => { alive = false; };
-  }, [name]);
+  // 레시피 검색은 제목 또는 재료 이름으로 찾음. 받기 전 null, 실패하면 빈 목록
+  const { data, isError } = useRecipes({ q: name });
+  const recipes = data ? data.items.slice(0, 3) : isError ? [] : null;
 
   const badge = getExpiryBadge(row.expiry_date, today);
   const stored = getDaysLeft(today, row.created_at); // 등록하고 지난 날

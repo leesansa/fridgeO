@@ -1,25 +1,8 @@
-import { useEffect, useState } from "react";
-import { deleteIngredient, getIngredient, updateIngredient } from "../api/ingredients";
+import { useState } from "react";
+import { useDeleteIngredient, useIngredientCatalog, useUpdateIngredient } from "../queries/ingredients";
 import { getTodayKey } from "../utils/date";
-import { useIngredientCatalog } from "./useIngredientCatalog";
 
-// /ingredient/edit/:id 재료 편집 (모바일·데스크탑 공통)
-
-// 고칠 내 재료 (GET /api/ingredients/:id). 응답을 어느 id 것인지와 함께 보관 → 주소의 id 가 바뀌면 자동으로 "불러오는 중"
-export function useEditableIngredient(id) {
-  const [loaded, setLoaded] = useState({ id: null, item: null, error: "" });
-
-  useEffect(() => {
-    let ignore = false;
-    getIngredient(id)
-      .then((item) => !ignore && setLoaded({ id, item, error: "" }))
-      .catch((e) => !ignore && setLoaded({ id, item: null, error: e.message }));
-    return () => { ignore = true; };
-  }, [id]);
-
-  return { loading: loaded.id !== id, item: loaded.id === id ? loaded.item : null, error: loaded.id === id ? loaded.error : "" };
-}
-
+// /ingredient/edit/:id 재료 편집 (모바일·데스크탑 공통). 고칠 재료는 queries 의 useIngredient 로 받음
 // 편집 입력값 + 저장(PATCH)·삭제(DELETE). 성공하면 true, 이동은 화면이 정함. 재료가 바뀌면 부모가 key 로 새로 만듦
 export function useIngredientEditForm(item) {
   const [today] = useState(getTodayKey);
@@ -29,7 +12,8 @@ export function useIngredientEditForm(item) {
   const [unit, setUnit] = useState(item.unit); // 모바일은 그대로, 데스크탑은 바꿀 수 있음
   const [storage, setStorage] = useState(item.storage);
   const [expiryDate, setExpiryDate] = useState(item.expiry_date ?? "");
-  const [saving, setSaving] = useState(false); // 저장 중 연타 방지
+  const update = useUpdateIngredient();
+  const del = useDeleteIngredient();
 
   const save = async () => {
     const name = ingredient.trim();
@@ -43,35 +27,30 @@ export function useIngredientEditForm(item) {
       alert("수량은 0 이상의 숫자로 입력해 주세요.");
       return false;
     }
-    setSaving(true);
     try {
-      await updateIngredient(item.id, { name, quantity: amount, unit, storage, expiryDate });
+      await update.mutateAsync({ id: item.id, body: { name, quantity: amount, unit, storage, expiryDate } });
       return true;
     } catch (e) {
       alert(`편집 내용을 저장하지 못했어요. ${e.message}`);
       return false;
-    } finally {
-      setSaving(false);
     }
   };
 
   const remove = async () => {
     if (!window.confirm(`'${item.name}'을(를) 냉장고에서 삭제할까요? 되돌릴 수 없어요.`)) return false;
-    setSaving(true);
     try {
-      await deleteIngredient(item.id);
+      await del.mutateAsync(item.id);
       return true;
     } catch (e) {
       alert(`삭제하지 못했어요. ${e.message}`);
       return false;
-    } finally {
-      setSaving(false);
     }
   };
 
   return {
     today, catalog,
     ingredient, setIngredient, quantity, setQuantity, unit, setUnit, storage, setStorage, expiryDate, setExpiryDate,
-    saving, save, remove,
+    saving: update.isPending || del.isPending, // 저장·삭제 중 연타 방지
+    save, remove,
   };
 }

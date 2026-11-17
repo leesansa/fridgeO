@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router";
-import { createRecipe, deleteRecipe, getCategories, getRecipe, updateRecipe } from "../api/recipes";
-import { useIngredientCatalog } from "./useIngredientCatalog";
+import { useCategories, useCreateRecipe, useDeleteRecipe, useRecipe, useUpdateRecipe } from "../queries/recipes";
+import { useIngredientCatalog } from "../queries/ingredients";
 import { uploadImage } from "../api/images";
 
 // 레시피 작성·수정 화면 상태 (모바일·데스크탑 공통). 화면 모양만 pages/{mobile,desktop}/RecipeWrite.jsx 가 그림
@@ -18,25 +18,12 @@ const release = (p) => p?.file && URL.revokeObjectURL(p.preview); // 임시 주�
 const toPhoto = (file) => (file ? { file, preview: URL.createObjectURL(file) } : null);
 
 // /recipe/:id/edit 에서 고칠 레시피 (내 것만). id 가 없으면(새로 작성) 아무것도 안 받음
-// 응답을 어느 id 것인지와 함께 보관 (다른 레시피 수정으로 바로 옮겨 가도 이전 내용이 채워지지 않게)
+// 상세와 같은 캐시를 써서 상세에서 "수정"을 누르면 바로 채워짐
 export function useEditableRecipe(id) {
-  const [loaded, setLoaded] = useState({ id: null, recipe: null, error: "" });
-
-  useEffect(() => {
-    if (!id) return;
-    let ignore = false;
-    getRecipe(id)
-      .then((data) => !ignore && setLoaded(data.mine
-        ? { id, recipe: data, error: "" }
-        : { id, recipe: null, error: "내가 쓴 레시피만 수정할 수 있어요" }))
-      .catch((e) => !ignore && setLoaded({ id, recipe: null, error: e.message }));
-    return () => { ignore = true; };
-  }, [id]);
-
-  return {
-    recipe: loaded.id === id ? loaded.recipe : null,
-    error: loaded.id === id ? loaded.error : "",
-  };
+  const { data, error } = useRecipe(id);
+  if (error) return { recipe: null, error: error.message };
+  if (data && !data.mine) return { recipe: null, error: "내가 쓴 레시피만 수정할 수 있어요" };
+  return { recipe: data ?? null, error: "" };
 }
 
 // recipe 가 있으면 그 내용으로 채워서 수정, 없으면 새로 작성. 레시피가 바뀌면 부모가 key 로 새로 만듦
@@ -44,7 +31,7 @@ export function useEditableRecipe(id) {
 export function useRecipeForm(recipe) {
   const navigate = useNavigate();
   const catalog = useIngredientCatalog(); // 재료 이름 자동완성
-  const [categories, setCategories] = useState([]);
+  const categories = useCategories().data ?? []; // 실패하면 분류 없이 저장
   const [title, setTitle] = useState(recipe?.title ?? "");
   const [description, setDescription] = useState(recipe?.description ?? "");
   const [categoryId, setCategoryId] = useState(recipe?.category_id ?? "");
@@ -57,11 +44,10 @@ export function useRecipeForm(recipe) {
   const [steps, setSteps] = useState(() =>
     recipe?.steps.length ? recipe.steps.map((s) => ({ key: nextKey++, text: s.text, photo: savedPhoto(s.image_url) })) : [newStep()]);
   const [error, setError] = useState("");
-  const [saving, setSaving] = useState(false);
-
-  useEffect(() => {
-    getCategories().then(setCategories).catch(() => {}); // 실패하면 분류 없이 저장
-  }, []);
+  const [saving, setSaving] = useState(false); // 사진 올리기부터 저장까지 (사진 올리는 동안도 잠금)
+  const createRecipe = useCreateRecipe();
+  const updateRecipe = useUpdateRecipe();
+  const deleteRecipe = useDeleteRecipe();
 
   // 미리보기 주소는 사진을 바꾸거나 화면을 나갈 때 메모리에서 해제
   useEffect(() => () => release(photo), [photo]);
@@ -99,7 +85,7 @@ export function useRecipeForm(recipe) {
     setSaving(true);
     setError("");
     try {
-      await deleteRecipe(recipe.id);
+      await deleteRecipe.mutateAsync(recipe.id);
       navigate("/recipe", { replace: true });
     } catch (e) {
       setError(e.message);
@@ -123,7 +109,7 @@ export function useRecipeForm(recipe) {
         ingredients: filledIngredients,
         steps: filledSteps.map((row, i) => ({ text: row.text, imageUrl: stepImages[i] })),
       };
-      const { id } = await (recipe ? updateRecipe(recipe.id, body) : createRecipe(body));
+      const { id } = await (recipe ? updateRecipe.mutateAsync({ id: recipe.id, body }) : createRecipe.mutateAsync(body));
       navigate(`/recipe/${id}`, { replace: true });
     } catch (e) {
       setError(e.message);

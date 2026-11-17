@@ -1,10 +1,11 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router";
 import Navigation from "./mobile/Navigation";
 import DesktopHeader from "./desktop/DesktopHeader";
 import Loading from "../pages/mobile/Loading";
 import { authClient } from "../utils/auth";
-import { clearNotifications, getNotifications, markNotificationsRead } from "../api/notifications";
+import { clearAccountData } from "../queries/queryClient";
+import { useClearNotifications, useMarkNotificationsRead, useNotifications } from "../queries/notifications";
 import { getExpiryBadge, getTodayKey } from "../utils/date";
 
 // shortcut: 실제로 불러올 데이터가 없어 고정 시간만 보여줌, 데이터 로딩이 생기면 그 완료 시점으로 교체
@@ -36,9 +37,7 @@ const toCard = (n) => ({
 
 const Layout = () => {
     const [loading, setLoading] = useState(true);
-    // 페이지를 옮겨 다녀도 Layout은 유지되므로 알림 상태를 여기 두고 Outlet context로 나눠준다
-    const [notifications, setNotifications] = useState([]);
-    const [hasUnread, setHasUnread] = useState(false);
+    // 페이지를 옮겨 다녀도 Layout은 유지되므로 알림을 여기서 받아 Outlet context로 나눠준다
     const { pathname } = useLocation();
 
     // DB 알림(notifications). 페이지를 옮길 때마다 다시 받아서, 냉장고에 기한 임박 재료를 넣고 오면 바로 종에 표시됨
@@ -47,43 +46,34 @@ const Layout = () => {
     const loggedIn = Boolean(session?.session);
     const navigate = useNavigate();
 
+    // 로그아웃하거나 다른 계정으로 바뀌면 이전 계정의 캐시(내 정보·재료·북마크 등)를 지운다
+    const userId = isPending ? undefined : session?.user.id ?? null;
+    const prevUserId = useRef(undefined);
+    useEffect(() => {
+        if (userId === undefined) return;
+        if (prevUserId.current !== undefined && prevUserId.current !== userId) clearAccountData();
+        prevUserId.current = userId;
+    }, [userId]);
+
     // 가입 1단계만 하고 나간 계정(휴대폰 번호 없음)은 어느 페이지에서든 가입 2단계로 돌려보낸다
     useEffect(() => {
         if (loggedIn && !session.user.phoneNumber && pathname !== "/signup") navigate("/signup", { replace: true });
     }, [loggedIn, session, pathname, navigate]);
+    const { data: noti, refetch } = useNotifications();
+    // 페이지를 옮길 때마다 다시 받음 (서버가 받을 때 그날 기한 임박 알림을 만들기 때문). 로그아웃이면 받지 않음
     useEffect(() => {
-        if (isPending) return;
-        let ignore = false;
-        (async () => {
-            const data = loggedIn ? await getNotifications() : { items: [], unread: 0 };
-            if (ignore) return;
-            setNotifications(data.items.map(toCard));
-            setHasUnread(data.unread > 0);
-        })().catch((e) => console.error("알림을 불러오지 못했습니다", e));
-        return () => { ignore = true; };
-    }, [pathname, isPending, loggedIn]);
+        if (loggedIn) refetch();
+    }, [pathname, loggedIn, refetch]);
+    const notifications = useMemo(() => (loggedIn && noti ? noti.items.map(toCard) : []), [loggedIn, noti]);
+    const hasUnread = loggedIn && noti?.unread > 0;
 
     // 알림센터를 열면 모두 읽음으로 저장하고 메인의 빨간 점을 끈다
-    const markAllRead = useCallback(async () => {
-        try {
-            await markNotificationsRead();
-            setHasUnread(false);
-        } catch (e) {
-            console.error("읽음 처리 실패", e);
-        }
-    }, []);
+    const { mutate: markRead } = useMarkNotificationsRead();
+    const markAllRead = useCallback(() => markRead(undefined, { onError: (e) => console.error("읽음 처리 실패", e) }), [markRead]);
 
     // 전체삭제: 화면에서 먼저 비우고 DB 에 지운 시각 기록, 실패하면 되돌림
-    const clearAll = useCallback(async () => {
-        const before = notifications;
-        setNotifications([]);
-        try {
-            await clearNotifications();
-        } catch (e) {
-            setNotifications(before);
-            alert(`알림을 지우지 못했어요. ${e.message}`);
-        }
-    }, [notifications]);
+    const { mutate: clear } = useClearNotifications();
+    const clearAll = useCallback(() => clear(undefined, { onError: (e) => alert(`알림을 지우지 못했어요. ${e.message}`) }), [clear]);
 
     useEffect(() => {
         const timer = setTimeout(() => setLoading(false), LOADING_MS);

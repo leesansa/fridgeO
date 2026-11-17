@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Header from "../../components/mobile/Header";
 import ProfileCard from "../../components/mobile/MyPage/ProfileCard.jsx";
 import StatSummary from "../../components/mobile/MyPage/StatSummary.jsx";
@@ -6,19 +6,15 @@ import StatPanel from "../../components/mobile/MyPage/StatPanel.jsx";
 import RecentRecipes from "../../components/mobile/MyPage/RecentRecipes.jsx";
 import MyRecipes from "../../components/mobile/MyPage/MyRecipes.jsx";
 import MenuList from "../../components/mobile/MyPage/MenuList.jsx";
-import { getMe } from "../../api/me";
+import { useMe } from "../../queries/me";
 import "../../styles/mobile/MyPage.css";
 
 // 마이페이지: 내 정보(GET /api/me)와 펼친 목록만 여기서 관리하고, 각 영역은 components/MyPage
 const MyPage = () => {
   const [searchQuery, setSearchQuery] = useState("");
   // 내 프로필(users 테이블) + 북마크·팔로잉·팔로워 수 + 임박 재료. 불러오기 전·실패 시엔 null
-  const [me, setMe] = useState(null);
+  const me = useMe().data ?? null;
   const [openStat, setOpenStat] = useState(null); // "bookmarks" | "follows" | null (펼친 목록)
-
-  useEffect(() => {
-    getMe().then(setMe).catch(() => setMe(null));
-  }, []);
 
   const toggleStat = (kind) => setOpenStat((current) => (current === kind ? null : kind));
 
@@ -29,7 +25,7 @@ const MyPage = () => {
         <Header backTo="/" value={searchQuery} onChange={setSearchQuery} />
 
         <main className="mypage-main">
-          <ProfileCard me={me} onImageSaved={(url) => setMe((prev) => ({ ...prev, profile_image_url: url }))} />
+          <ProfileCard me={me} />
           <StatSummary me={me} openStat={openStat} onToggle={toggleStat} />
           {me && openStat && <StatPanel key={openStat} kind={openStat} me={me} />}
           <MyRecipes />

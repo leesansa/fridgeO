@@ -1,17 +1,12 @@
-import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
-import { getCondiments } from "../../../api/ingredients";
+import { useCondiments } from "../../../queries/ingredients";
 import chevron from "../../../assets/main/chevron.png";
 
 // 메인 "내 조미료들": 내 냉장고에 있는 조미료만 (DB 재료 사전의 분류 = 조미료). 스타일은 MainPage.css
 // 하나도 없거나 로그인 전이면 이 영역을 아예 안 보여 줌. 아이콘을 누르면 냉장고에서 그 조미료만, 더보기는 조미료 전체
 const Condiments = () => {
     const navigate = useNavigate();
-    const [condiments, setCondiments] = useState([]); // [{ name, icon_url }]
-
-    useEffect(() => {
-        getCondiments().then(setCondiments).catch(() => {});
-    }, []);
+    const condiments = useCondiments().data ?? []; // [{ name, icon_url }]. 로그인 전이면 받지 않음
 
     if (condiments.length === 0) return null;
 

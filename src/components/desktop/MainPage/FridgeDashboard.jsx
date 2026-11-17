@@ -1,7 +1,6 @@
-import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
-import { updateIngredient } from "../../../api/ingredients";
-import { getRecommendedRecipes } from "../../../api/recipes";
+import { useUpdateIngredient } from "../../../queries/ingredients";
+import { useRecommendedRecipes } from "../../../queries/recipes";
 import { addDays, getDaysLeft, getExpiryBadge } from "../../../utils/date";
 
 const WEEKDAYS = ["일", "월", "화", "수", "목", "금", "토"];
@@ -14,19 +13,14 @@ const dayLabel = (key, i) => {
 };
 
 // 데스크탑 메인 "지금 확인해야할 내 재료들" 아래: 급한 재료 목록 + 활용 레시피 + 이번 주 유통기한 달력
-// items = summary.soon (기한 지남 ~ 6일 뒤, 수량 > 0), onChange = 재료를 바꾼 뒤 요약 다시 받기
-const FridgeDashboard = ({ items, today, onChange }) => {
+// items = summary.soon (기한 지남 ~ 6일 뒤, 수량 > 0). 재료를 바꾸면 요약은 queries/ingredients 가 다시 받음
+const FridgeDashboard = ({ items, today }) => {
   const navigate = useNavigate();
-  const [recipes, setRecipes] = useState(null);
-  const [busyId, setBusyId] = useState(null);
-
-  useEffect(() => {
-    let alive = true;
-    getRecommendedRecipes()
-      .then((rows) => alive && setRecipes(rows.slice(0, 3)))
-      .catch(() => alive && setRecipes([]));
-    return () => { alive = false; };
-  }, []);
+  // 메인 모바일 추천과 같은 캐시. 받기 전 null, 실패하면 빈 목록
+  const { data: recommended, isError } = useRecommendedRecipes();
+  const recipes = recommended ? recommended.slice(0, 3) : isError ? [] : null;
+  const { mutate: update, isPending, variables } = useUpdateIngredient();
+  const busyId = isPending ? variables.id : null;
 
   // 기한 지남·D-day·임박(5일 이하)만. 서버가 기한 순으로 줌
   const urgent = items.filter((item) => getExpiryBadge(item.expiry_date, today).className === "is-urgent");
@@ -36,17 +30,11 @@ const FridgeDashboard = ({ items, today, onChange }) => {
   });
 
   // 다 먹었어요 = 수량 0 (다 떨어진 상품으로 옮겨감, 수정 화면에서 되돌릴 수 있음)
-  const finish = async (item) => {
-    setBusyId(item.id);
-    try {
-      await updateIngredient(item.id, { name: item.name, quantity: 0, unit: item.unit, storage: item.storage, expiryDate: item.expiry_date });
-      await onChange();
-    } catch (e) {
-      alert(`재료를 바꾸지 못했어요. ${e.message}`);
-    } finally {
-      setBusyId(null);
-    }
-  };
+  const finish = (item) =>
+    update(
+      { id: item.id, body: { name: item.name, quantity: 0, unit: item.unit, storage: item.storage, expiryDate: item.expiry_date } },
+      { onError: (e) => alert(`재료를 바꾸지 못했어요. ${e.message}`) },
+    );
 
   return (
     <div className="dash">

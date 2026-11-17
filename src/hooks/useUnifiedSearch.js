@@ -1,28 +1,23 @@
-import { useEffect, useState } from "react";
+import { useIngredientSearch } from "../queries/ingredients";
+import { useRecipes } from "../queries/recipes";
 import { authClient } from "../utils/auth";
-import { getIngredients } from "../api/ingredients";
-import { getRecipes } from "../api/recipes";
 
 // 통합 검색 (모바일·데스크탑 공통): 레시피(제목·재료 이름) + 내 냉장고 재료(로그인 시)를 한 번에. 각 목록은 첫 페이지만
-// result = { q, recipes, ingredients(로그인 안 했으면 null) } | { q, error }
+// result = { recipes, ingredients(로그인 안 했거나 30자 넘으면 null) } | { error }
 export function useUnifiedSearch(q) {
-  // 검색어별 결과. 결과의 q 가 지금 q 와 다르면 "찾는 중"
-  const [result, setResult] = useState({ q: null });
-  const { data: session, isPending } = authClient.useSession();
-  const loggedIn = Boolean(session?.session);
+  const { data: session, isPending: sessionPending } = authClient.useSession();
+  // 재료 검색은 30자까지, 로그인한 사람 것만
+  const searchIngredients = Boolean(q) && Boolean(session?.session) && q.length <= 30;
+  const recipes = useRecipes({ q }, { enabled: Boolean(q) });
+  const ingredients = useIngredientSearch(q, { enabled: searchIngredients });
 
-  useEffect(() => {
-    if (!q || isPending) return;
-    let alive = true;
-    Promise.all([
-      getRecipes({ q }),
-      // 재료 검색은 30자까지, 로그인한 사람 것만
-      loggedIn && q.length <= 30 ? getIngredients({ q }) : null,
-    ])
-      .then(([recipes, ingredients]) => alive && setResult({ q, recipes, ingredients }))
-      .catch((e) => alive && setResult({ q, error: e.message }));
-    return () => { alive = false; };
-  }, [q, isPending, loggedIn]);
+  const error = recipes.error ?? (searchIngredients ? ingredients.error : null);
+  const loading = Boolean(q) && !error && (sessionPending || recipes.isPending || (searchIngredients && ingredients.isPending));
 
-  return { loading: Boolean(q) && result.q !== q, result };
+  return {
+    loading,
+    result: error
+      ? { error: error.message }
+      : { recipes: recipes.data, ingredients: searchIngredients ? ingredients.data : null },
+  };
 }

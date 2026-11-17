@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router";
 import StorageColumn from "../../components/desktop/fridge/StorageColumn";
 import DetailPanel from "../../components/desktop/fridge/DetailPanel";
-import { deleteIngredient, getCondiments, updateIngredient } from "../../api/ingredients";
+import { useCondiments, useDeleteIngredient, useUpdateIngredient } from "../../queries/ingredients";
 import { getTodayKey } from "../../utils/date";
 import "../../styles/desktop/fridge.css";
 
@@ -20,16 +20,13 @@ const Fridge = () => {
   const [status, setStatus] = useState(null);
   const [byName, setByName] = useState(false); // 이름순 (끄면 기본 유통기한순)
   const [condimentOnly, setCondimentOnly] = useState(() => searchParams.get("category") === "조미료");
-  const [hasCondiments, setHasCondiments] = useState(false);
+  const hasCondiments = (useCondiments().data?.length ?? 0) > 0;
   const [totals, setTotals] = useState({});
   const [selected, setSelected] = useState(null); // 고른 재료 (DB 행)
-  const [version, setVersion] = useState(0); // 재료를 바꾸면 +1 → 세 칸을 처음부터 다시 받음
-  const [busy, setBusy] = useState(false);
+  const updateIngredient = useUpdateIngredient();
+  const deleteIngredient = useDeleteIngredient();
+  const busy = updateIngredient.isPending || deleteIngredient.isPending;
   const [today] = useState(getTodayKey);
-
-  useEffect(() => {
-    getCondiments().then((rows) => setHasCondiments(rows.length > 0)).catch(() => {});
-  }, []);
 
   useEffect(() => {
     const timer = setTimeout(() => setQ(keyword.trim()), 300);
@@ -41,34 +38,26 @@ const Fridge = () => {
   // PATCH 는 등록과 같은 전체 값을 받으므로 행 값에 바뀐 것만 덮어써서 보냄
   const update = async (row, changes) => {
     const next = { ...row, ...changes };
-    setBusy(true);
     try {
-      await updateIngredient(row.id, { name: next.name, quantity: next.quantity, unit: next.unit, storage: next.storage, expiryDate: next.expiry_date });
-      setSelected((s) => (s?.id === row.id ? next : s));
-      setVersion((v) => v + 1);
+      await updateIngredient.mutateAsync({ id: row.id, body: { name: next.name, quantity: next.quantity, unit: next.unit, storage: next.storage, expiryDate: next.expiry_date } });
+      setSelected((s) => (s?.id === row.id ? next : s)); // 세 칸 목록은 queries/ingredients 가 다시 받음
     } catch (e) {
       alert(`재료를 바꾸지 못했어요. ${e.message}`);
-    } finally {
-      setBusy(false);
     }
   };
 
   const remove = async (row) => {
     if (!confirm(`'${row.name}'을(를) 삭제할까요? 되돌릴 수 없어요.`)) return;
-    setBusy(true);
     try {
-      await deleteIngredient(row.id);
+      await deleteIngredient.mutateAsync(row.id);
       setSelected(null);
-      setVersion((v) => v + 1);
     } catch (e) {
       alert(`삭제하지 못했어요. ${e.message}`);
-    } finally {
-      setBusy(false);
     }
   };
 
   const params = { q, status, sort: byName ? "name" : "expiry", category: condimentOnly ? "조미료" : null };
-  const listKey = `${q}|${status}|${byName}|${condimentOnly}|${version}`;
+  const listKey = `${q}|${status}|${byName}|${condimentOnly}`;
   const sum = STORAGES.reduce((n, s) => n + (totals[s] ?? 0), 0);
 
   return (

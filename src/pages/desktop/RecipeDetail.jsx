@@ -1,11 +1,10 @@
-import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router";
 import DetailSummary from "../../components/desktop/recipe/DetailSummary";
 import SimilarRecipes from "../../components/desktop/recipe/SimilarRecipes";
 import IngredientChecklist from "../../components/mobile/Recipe/Detail/IngredientChecklist.jsx";
 import ReviewSummary from "../../components/mobile/Recipe/Review/ReviewSummary.jsx";
 import ReviewList from "../../components/mobile/Recipe/Review/ReviewList.jsx";
-import { getCategories } from "../../api/recipes";
+import { useCategories } from "../../queries/recipes";
 import { useRecipeDetail } from "../../hooks/useRecipeDetail";
 import "../../styles/mobile/recipe-detail.css"; // 준비물·리뷰는 모바일 컴포넌트와 스타일을 그대로 씀
 import "../../styles/desktop/recipes.css"; // 같은 분류 레시피 카드
@@ -16,11 +15,7 @@ import "../../styles/desktop/recipe-detail.css";
 const RecipeDetail = () => {
     const { id } = useParams();
     const { recipe, error } = useRecipeDetail(id);
-    const [categories, setCategories] = useState([]);
-
-    useEffect(() => {
-        getCategories().then(setCategories).catch(() => {}); // 없으면 분류 이름만 안 보임
-    }, []);
+    const categories = useCategories().data ?? []; // 없으면 분류 이름만 안 보임
 
     if (!recipe) {
         return (

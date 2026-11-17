@@ -2,7 +2,7 @@ import { useEffect, useId, useRef, useState } from "react";
 import { Link, useLocation, useSearchParams } from "react-router";
 import "../../vendor/lucian-icons/menu.js";
 import CategoryIcon from "../mobile/Recipe/List/CategoryIcon.jsx";
-import { getCategories } from "../../api/recipes";
+import { useCategories } from "../../queries/recipes";
 
 const ALL = { id: null, name: "전체" };
 
@@ -10,7 +10,9 @@ const ALL = { id: null, name: "전체" };
 // 처음 열 때 분류를 한 번 받음. 항목 클릭·Esc·바깥 클릭·Tab 으로 벗어나면 닫힘. 스타일은 DesktopHeader.css
 const CategoryMenu = () => {
     const [open, setOpen] = useState(false);
-    const [categories, setCategories] = useState(null); // 받기 전 null
+    // 처음 열 때 받음. 실패해도 "전체"로는 갈 수 있게
+    const { data: rows, isError } = useCategories({ enabled: open });
+    const categories = rows ? [ALL, ...rows] : isError ? [ALL] : null; // 받기 전 null
     const rootRef = useRef(null);
     const buttonRef = useRef(null);
     const iconRef = useRef(null);
@@ -24,13 +26,6 @@ const CategoryMenu = () => {
     useEffect(() => {
         iconRef.current.setState(open ? "open" : "closed");
     }, [open]);
-
-    useEffect(() => {
-        if (!open || categories) return;
-        getCategories()
-            .then((rows) => setCategories([ALL, ...rows]))
-            .catch(() => setCategories([ALL])); // 실패해도 "전체"로는 갈 수 있게
-    }, [open, categories]);
 
     useEffect(() => {
         if (!open) return;

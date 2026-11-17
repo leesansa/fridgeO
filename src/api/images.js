@@ -1,5 +1,5 @@
 // 사진 올리기 (server/routes/images.js). 로그인 필요
-import { API_URL, authHeader } from "./client";
+import { API_URL, sendWithAuth } from "./client";
 
 const MAX_PX = 1200; // 긴 변 기준. 화면 폭(최대 430px)의 2배 남짓이라 선명하고 용량은 수백 KB
 
@@ -15,11 +15,11 @@ export async function uploadImage(file) {
   bitmap.close();
   const blob = await new Promise((resolve) => canvas.toBlob(resolve, "image/jpeg", 0.85));
 
-  const res = await fetch(`${API_URL}/api/images`, {
+  const res = await sendWithAuth((auth) => fetch(`${API_URL}/api/images`, {
     method: "POST",
-    headers: { "Content-Type": "image/jpeg", ...(await authHeader()) },
+    headers: { "Content-Type": "image/jpeg", ...auth },
     body: blob,
-  });
+  }));
   const data = await res.json().catch(() => null);
   if (!res.ok) throw new Error(data?.error ?? "사진을 올리지 못했습니다");
   return data.url;

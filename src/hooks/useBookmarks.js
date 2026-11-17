@@ -1,41 +1,20 @@
-import { useCallback, useEffect, useState } from "react";
-import { getMyBookmarks } from "../api/me";
-import { setBookmark } from "../api/reviews";
+import { useMyBookmarks } from "../queries/me";
+import { useSetBookmark } from "../queries/reviews";
 
-// 내 북마크 (GET /api/me/bookmarks, 최근 저장한 순 최대 50개) + 해제. 모바일·데스크탑 북마크 화면이 같이 씀
+// 내 북마크 화면 (GET /api/me/bookmarks, 최근 저장한 순 최대 50개) + 해제. 모바일·데스크탑 북마크 화면이 같이 씀
+// 해제하면 목록에서 먼저 빼고 저장, 실패하면 되돌리고 alert
 export function useBookmarks() {
-  const [recipes, setRecipes] = useState(null); // 불러오기 전 null
-  const [error, setError] = useState("");
-  const [removingId, setRemovingId] = useState(null);
+  const { data, error, refetch } = useMyBookmarks();
+  const { mutate, isPending, variables } = useSetBookmark();
 
-  const load = useCallback(
-    () => getMyBookmarks().then(setRecipes).catch((e) => setError(e.message)),
-    [],
-  );
+  const remove = (id) =>
+    mutate({ recipeId: id, on: false }, { onError: (e) => alert(`북마크를 해제하지 못했어요. ${e.message}`) });
 
-  useEffect(() => { load(); }, [load]);
-
-  // 다시 시도: "불러오는 중"으로 돌린 뒤 다시 받기
-  const retry = () => {
-    setError("");
-    setRecipes(null);
-    load();
+  return {
+    recipes: data ?? null, // 불러오기 전 null
+    error: error?.message ?? "",
+    removingId: isPending ? variables.recipeId : null,
+    retry: () => refetch(),
+    remove,
   };
-
-  // 화면에서 먼저 빼고 DB 에서 해제, 실패하면 되돌림
-  const remove = async (id) => {
-    const before = recipes;
-    setRemovingId(id);
-    setRecipes((prev) => prev.filter((r) => r.id !== id));
-    try {
-      await setBookmark(id, false);
-    } catch (e) {
-      setRecipes(before);
-      alert(`북마크를 해제하지 못했어요. ${e.message}`);
-    } finally {
-      setRemovingId(null);
-    }
-  };
-
-  return { recipes, error, removingId, retry, remove };
 }

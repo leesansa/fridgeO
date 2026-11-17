@@ -1,18 +1,19 @@
 import { Link, useNavigate, useParams } from "react-router";
 import IngredientFields from "../../components/desktop/ingredient/IngredientFields";
 import IngredientPreview from "../../components/desktop/ingredient/IngredientPreview";
-import { useEditableIngredient, useIngredientEditForm } from "../../hooks/useIngredientEditForm";
+import { useIngredientEditForm } from "../../hooks/useIngredientEditForm";
+import { useIngredient } from "../../queries/ingredients";
 import "../../styles/desktop/ingredient.css";
 
 // 데스크탑 재료 편집: 등록 화면과 같은 입력 칸·미리보기 + 바꾸기 전 값 비교
-// 모바일보다 단위 바꾸기·"다 떨어졌어요"·삭제가 더 있음. 불러오기·저장은 모바일과 같은 useEditableIngredient·useIngredientEditForm
+// 모바일보다 단위 바꾸기·"다 떨어졌어요"·삭제가 더 있음. 불러오기·저장은 모바일과 같은 useIngredient(queries)·useIngredientEditForm
 export default function IngredientEdit() {
     const { id } = useParams();
-    const { loading, item, error } = useEditableIngredient(id);
+    const { data: item, error, isPending: loading } = useIngredient(id);
 
     if (loading) return <div className="ding"><p className="ding-hint">재료를 불러오는 중...</p></div>;
     if (!item) {
-        return <div className="ding"><p className="ding-hint" role="alert">{error} <Link to="/fridge">냉장고로 돌아가기</Link></p></div>;
+        return <div className="ding"><p className="ding-hint" role="alert">{error?.message} <Link to="/fridge">냉장고로 돌아가기</Link></p></div>;
     }
     return <IngredientEditForm key={item.id} item={item} />;
 }

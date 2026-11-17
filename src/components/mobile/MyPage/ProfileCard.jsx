@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { updateMe } from "../../../api/me";
+import { useUpdateMe } from "../../../queries/me";
 
 const AVATAR_PX = 160; // 프로필 사진 저장 크기 (화면에는 72px, 선명하게 2배 남짓)
 
@@ -19,8 +19,9 @@ async function toAvatarDataUrl(file) {
 }
 
 // 프로필 카드: 사과(프로필)를 누르면 사진 고르기 → 줄여서 DB 에 저장. 사진이 없으면 계속 🍏
-const ProfileCard = ({ me, onImageSaved }) => {
+const ProfileCard = ({ me }) => {
   const [uploading, setUploading] = useState(false);
+  const updateMe = useUpdateMe();
   const fileRef = useRef(null);
 
   const handlePhoto = async (event) => {
@@ -30,8 +31,7 @@ const ProfileCard = ({ me, onImageSaved }) => {
     setUploading(true);
     try {
       const profileImage = await toAvatarDataUrl(file);
-      const saved = await updateMe({ profileImage });
-      onImageSaved(saved.profile_image_url);
+      await updateMe.mutateAsync({ profileImage }); // 저장되면 내 정보(me)를 다시 받아 사진이 바뀜
     } catch (e) {
       alert(`프로필 사진을 바꾸지 못했어요. ${e.message}`);
     } finally {

@@ -1,12 +1,14 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import { authClient, authErrorMessage, getSession, PHONE_FORMAT_MESSAGE, toE164 } from "../utils/auth";
-import { getMe, updateMe } from "../api/me";
+import { getMe } from "../api/me";
+import { useUpdateMe } from "../queries/me";
 
 // 개인정보 관리 (모바일·데스크탑 공통): 비밀번호를 다시 확인한 뒤에만 내 정보를 보여 준다 (화면을 나가면 다시 확인)
 // 닉네임은 바로, 휴대폰은 새 번호로 받은 인증번호를 확인한 뒤 바꾼다. message = 실패·안내 문구 (ok 면 성공 안내)
 export function usePrivacyInfo() {
   const navigate = useNavigate();
+  const updateMe = useUpdateMe(); // 닉네임 저장 → 마이페이지의 내 정보도 다시 받음
   const [user, setUser] = useState(null); // 확인 전 null. 확인 후 Neon Auth 계정 + nickname(앱 프로필)
   const [message, setMessage] = useState({ text: "", ok: false });
   const [pending, setPending] = useState(false);
@@ -46,7 +48,7 @@ export function usePrivacyInfo() {
   };
 
   const changeNickname = (name) => run(async () => {
-    const saved = await updateMe({ name: name.trim() });
+    const saved = await updateMe.mutateAsync({ name: name.trim() });
     setUser((u) => ({ ...u, nickname: saved.name }));
     done("닉네임을 변경했습니다.");
   });

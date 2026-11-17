@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { authClient } from "../../../utils/auth";
-import { getFridgeSummary } from "../../../api/ingredients";
+import { useFridgeSummary } from "../../../queries/ingredients";
 import { useIsDesktop } from "../../../hooks/useIsDesktop";
 import { getExpiryBadge, getTodayKey } from "../../../utils/date";
 import FridgeDashboard from "../../desktop/MainPage/FridgeDashboard.jsx";
@@ -58,26 +58,13 @@ const FridgeAlerts = () => {
   const navigate = useNavigate();
   const { data: session, isPending } = authClient.useSession();
   const loggedIn = isPending ? null : Boolean(session?.session); // 확인 전 null
-  const [summary, setSummary] = useState(null);
-  const [failed, setFailed] = useState(false); // 요약을 못 받았으면 "불러오는 중"에 멈춰 있지 않고 오류로 표시
+  // 요약을 못 받았으면 "불러오는 중"에 멈춰 있지 않고 오류로 표시
+  const { data: summary = null, isError: failed } = useFridgeSummary();
   const [today] = useState(getTodayKey);
 
   const isDesktop = useIsDesktop(); // 데스크탑에서만 대시보드를 그리고 레시피를 받음
 
-  useEffect(() => {
-    if (!loggedIn) return;
-    let alive = true;
-    getFridgeSummary()
-      .then((data) => alive && setSummary(data))
-      .catch((e) => {
-        console.error("냉장고 요약을 불러오지 못했습니다:", e);
-        if (alive) setFailed(true);
-      });
-    return () => { alive = false; };
-  }, [loggedIn]);
-
   // 대시보드에서 재료를 바꾼 뒤 카드·목록을 새 값으로
-  const reload = async () => setSummary(await getFridgeSummary());
 
   return (
     <section className="main-section fridge-section">
@@ -107,7 +94,7 @@ const FridgeAlerts = () => {
         </button>
       )}
       </div>
-      {isDesktop && summary && <FridgeDashboard items={summary.soon} today={today} onChange={reload} />}
+      {isDesktop && summary && <FridgeDashboard items={summary.soon} today={today} />}
       <img className="divider" src={line} alt="" />
       <Link to="/fridge" className="fridge-more">
         <span className="fridge-more-text">

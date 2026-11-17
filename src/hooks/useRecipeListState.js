@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router";
-import { getCategories } from "../api/recipes";
+import { useCategories } from "../queries/recipes";
 
 const ALL = { id: null, name: "전체" };
 
@@ -8,7 +8,9 @@ const ALL = { id: null, name: "전체" };
 // 검색어는 주소 ?q=, 고른 분류 id 는 ?category= 에 둔다 → 상세에서 뒤로 오거나 새로고침해도 유지,
 // 상세 페이지 Enter 검색·데스크탑 헤더 "전체 카테고리"도 주소로 들어옴
 export function useRecipeListState() {
-  const [categories, setCategories] = useState([ALL]);
+  // DB 분류 목록. 실패하면 "전체"만 남고 레시피 목록은 그대로 동작
+  const { data: rows } = useCategories();
+  const categories = useMemo(() => [ALL, ...(rows ?? [])], [rows]);
   const [searchParams, setSearchParams] = useSearchParams();
   const q = searchParams.get("q")?.trim() ?? "";
   const [text, setText] = useState(q); // 입력창 글자 (타자 칠 때마다 바뀜)
@@ -32,13 +34,6 @@ export function useRecipeListState() {
     }, 300);
     return () => clearTimeout(timer);
   }, [text, q, setParam]);
-
-  // DB 분류 목록. 실패하면 "전체"만 남고 레시피 목록은 그대로 동작
-  useEffect(() => {
-    getCategories()
-      .then((rows) => setCategories([ALL, ...rows]))
-      .catch((e) => console.error("분류를 불러오지 못했습니다", e));
-  }, []);
 
   const selectCategory = useCallback((id) => setParam("category", id), [setParam]);
 
