@@ -231,12 +231,14 @@
 }
 
 .detail-ing-name {
-  flex: 1;
+  flex: 1 1 auto; /* 0에서 시작하면 긴 분량에 밀려 이름이 한 글자씩 세로로 쌓임 */
   font-weight: 700;
+  word-break: keep-all;
 }
 
 .detail-ing-amount {
   color: var(--text-sub);
+  text-align: right;
 }
 
 .detail-ing.lack .detail-ing-name,
