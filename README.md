@@ -40,6 +40,26 @@ fridgeO는 이 두 가지를 한 번에 해결해 보려고 만든 웹 서비스
 
 ---
 
+## 기술 스택
+
+| 구분 | 사용한 기술 |
+| --- | --- |
+| **프론트엔드** | <img src="https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=black" alt="React"> <img src="https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white" alt="Vite"> <img src="https://img.shields.io/badge/React_Router-CA4245?style=for-the-badge&logo=reactrouter&logoColor=white" alt="React Router"> <img src="https://img.shields.io/badge/TanStack_Query-FF4154?style=for-the-badge&logo=reactquery&logoColor=white" alt="TanStack Query"> |
+| **백엔드** | <img src="https://img.shields.io/badge/Hono-E36002?style=for-the-badge&logo=hono&logoColor=white" alt="Hono"> <img src="https://img.shields.io/badge/Cloudflare_Workers-F38020?style=for-the-badge&logo=cloudflareworkers&logoColor=white" alt="Cloudflare Workers"> |
+| **DB** | <img src="https://img.shields.io/badge/Neon_Postgres-00E599?style=for-the-badge&logo=neon&logoColor=black" alt="Neon Postgres"> <img src="https://img.shields.io/badge/Drizzle-C5F74F?style=for-the-badge&logo=drizzle&logoColor=black" alt="Drizzle"> |
+| **로그인** | <img src="https://img.shields.io/badge/Neon_Auth-00E599?style=for-the-badge&logo=neon&logoColor=black" alt="Neon Auth"> <img src="https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white" alt="JWT"> |
+| **사진 저장** | <img src="https://img.shields.io/badge/Cloudflare_R2-F38020?style=for-the-badge&logo=cloudflare&logoColor=white" alt="Cloudflare R2"> |
+| **배포** | <img src="https://img.shields.io/badge/Cloudflare_Pages-F38020?style=for-the-badge&logo=cloudflarepages&logoColor=white" alt="Cloudflare Pages"> <img src="https://img.shields.io/badge/GitHub_Actions-2088FF?style=for-the-badge&logo=githubactions&logoColor=white" alt="GitHub Actions"> |
+| **AI 도구** | <img src="https://img.shields.io/badge/Gemini-8E75B2?style=for-the-badge&logo=googlegemini&logoColor=white" alt="Gemini"> <img src="https://img.shields.io/badge/ChatGPT-74AA9C?style=for-the-badge" alt="ChatGPT"> <img src="https://img.shields.io/badge/Claude-D97757?style=for-the-badge&logo=claude&logoColor=white" alt="Claude"> |
+
+화면은 Cloudflare Pages에, 서버는 Cloudflare Workers에 올라가 있습니다. main 브랜치에 push하면 GitHub Actions가 lint와 테스트를 돌린 뒤 자동으로 배포합니다.
+
+화면 폭이 1024px 이상이면 데스크탑 화면을, 그보다 작으면 모바일 화면을 보여 줍니다. 화면 배치만 다르고 데이터를 불러오고 저장하는 코드는 같이 씁니다.
+
+AI 도구는 기획을 정리하거나 코드를 작성하고 리뷰할 때, 문서를 정리할 때 함께 사용했습니다.
+
+---
+
 ## 화면
 
 ### 모바일
@@ -107,23 +127,6 @@ fridgeO는 이 두 가지를 한 번에 해결해 보려고 만든 웹 서비스
   <img src="public/condiments/chili.png" width="44" alt="고추">
   <img src="public/condiments/herbs.png" width="44" alt="허브">
 </p>
-
----
-
-## 기술 스택
-
-- **프론트엔드**: React, Vite, React Router, TanStack Query
-- **백엔드**: Hono (Cloudflare Workers)
-- **DB**: Neon Postgres, Drizzle (테이블 구조 관리용)
-- **로그인**: Neon Auth
-- **사진 저장**: Cloudflare R2
-- **배포**: Cloudflare Pages, GitHub Actions
-
-화면은 Cloudflare Pages에, 서버는 Cloudflare Workers에 올라가 있습니다. main 브랜치에 push하면 GitHub Actions가 lint와 테스트를 돌린 뒤 자동으로 배포합니다.
-
-화면 폭이 1024px 이상이면 데스크탑 화면을, 그보다 작으면 모바일 화면을 보여 줍니다. 화면 배치만 다르고 데이터를 불러오고 저장하는 코드는 같이 씁니다.
-
-기획을 정리하거나 코드를 작성하고 리뷰할 때, 문서를 정리할 때는 Gemini, ChatGPT, Claude를 함께 사용했습니다.
 
 ---
 
