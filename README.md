@@ -9,7 +9,7 @@
 <p align="center">
   <a href="https://fridgeo.pages.dev">🔗 서비스 바로가기 (fridgeo.pages.dev)</a>
   <br>
-  2026.11.04 – 11.17 (14일) · 팀원 4명 · 모바일 · 데스크탑 웹
+  2026.11.04 – 11.20 (17일) · 팀원 4명 · 모바일 · 데스크탑 웹
 </p>
 
 ---
