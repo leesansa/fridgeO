@@ -12,16 +12,6 @@
   2026.11.04 ~ 11.20 (17일), 4인 팀 프로젝트
 </p>
 
----
-
-## 팀원
-
-| 황건영 | 성시원 | 김미래 | 홍순법 |
-| :---: | :---: | :---: | :---: |
-| **서버, DB, 배포** | **프로젝트 세팅, 냉장고** | **마이페이지, 재료 입력** | **레시피, 리뷰** |
-| 메인 화면, 알림, 하단 메뉴<br>로그인/회원가입/문자 인증<br>북마크, 전체 페이지 DB 연동<br>데스크탑 화면<br>Hono 전환, 자동 배포 | React + Vite 초기 구조<br>냉장고 목록과 기한 표시<br>임박순 정렬, 편집, 삭제 | 마이페이지, 상단 헤더<br>재료 등록/편집 달력<br>프로필 사진 | 레시피 목록, 분류 아이콘<br>레시피 상세 페이지<br>리뷰 작성/수정/삭제 |
-
-처음에는 각자 맡은 화면을 따로 만들었고, 11월 11일부터 서버를 붙이면서 하나의 데이터로 합쳤습니다.
 
 ---
 
@@ -38,30 +28,38 @@ fridgeO는 이 두 가지를 한 번에 해결해 보려고 만든 웹 서비스
 
 주로 1인 가구나 자취생을 생각하고 만들었고, 휴대폰 화면을 기준으로 디자인한 뒤 데스크탑 화면도 따로 만들었습니다.
 
+[기획안](docs/PROJECT_PLAN.md)
+
 ---
 
 ## 기술 스택
 
 | 구분 | 사용한 기술 |
 | --- | --- |
-| **언어** | <img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white" alt="HTML5"> <img src="https://img.shields.io/badge/CSS-663399?style=for-the-badge&logo=css&logoColor=white" alt="CSS"> <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black" alt="JavaScript"> <img src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript"> |
-| **프론트엔드** | <img src="https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=black" alt="React"> <img src="https://img.shields.io/badge/React_Router-CA4245?style=for-the-badge&logo=reactrouter&logoColor=white" alt="React Router"> <img src="https://img.shields.io/badge/TanStack_Query-FF4154?style=for-the-badge&logo=reactquery&logoColor=white" alt="TanStack Query"> |
-| **백엔드** | <img src="https://img.shields.io/badge/Hono-E36002?style=for-the-badge&logo=hono&logoColor=white" alt="Hono"> <img src="https://img.shields.io/badge/Cloudflare_Workers-F38020?style=for-the-badge&logo=cloudflareworkers&logoColor=white" alt="Cloudflare Workers"> |
-| **DB** | <img src="https://img.shields.io/badge/Neon_Postgres-00E599?style=for-the-badge&logo=neon&logoColor=black" alt="Neon Postgres"> <img src="https://img.shields.io/badge/Drizzle-C5F74F?style=for-the-badge&logo=drizzle&logoColor=black" alt="Drizzle"> |
-| **로그인** | <img src="https://img.shields.io/badge/Neon_Auth-00E599?style=for-the-badge&logo=neon&logoColor=black" alt="Neon Auth"> <img src="https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white" alt="JWT"> |
-| **사진 저장** | <img src="https://img.shields.io/badge/Cloudflare_R2-F38020?style=for-the-badge&logo=cloudflare&logoColor=white" alt="Cloudflare R2"> |
-| **배포** | <img src="https://img.shields.io/badge/Cloudflare_Pages-F38020?style=for-the-badge&logo=cloudflarepages&logoColor=white" alt="Cloudflare Pages"> <img src="https://img.shields.io/badge/GitHub_Actions-2088FF?style=for-the-badge&logo=githubactions&logoColor=white" alt="GitHub Actions"> |
+| **언어** | <img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white" alt="HTML5"> <img src="https://img.shields.io/badge/CSS-663399?style=for-the-badge&logo=css&logoColor=white" alt="CSS"> <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black" alt="JavaScript"> |
+| **프론트엔드** | <img src="https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=black" alt="React"> <img src="https://img.shields.io/badge/TanStack_Query-FF4154?style=for-the-badge&logo=reactquery&logoColor=white" alt="TanStack Query"> |
+| **백엔드** | <img src="https://img.shields.io/badge/Hono-E36002?style=for-the-badge&logo=hono&logoColor=white" alt="Hono"> |
+| **DB** | <img src="https://img.shields.io/badge/Neon-00E599?style=for-the-badge&logo=neon&logoColor=black" alt="Neon"> |
+| **배포** | <img src="https://img.shields.io/badge/Cloudflare-F38020?style=for-the-badge&logo=cloudflare&logoColor=white" alt="Cloudflare"> <img src="https://img.shields.io/badge/GitHub_Actions-2088FF?style=for-the-badge&logo=githubactions&logoColor=white" alt="GitHub Actions"> |
 | **AI 도구** | <img src="https://img.shields.io/badge/Gemini-8E75B2?style=for-the-badge&logo=googlegemini&logoColor=white" alt="Gemini"> <img src="https://img.shields.io/badge/ChatGPT-74AA9C?style=for-the-badge" alt="ChatGPT"> <img src="https://img.shields.io/badge/Claude-D97757?style=for-the-badge&logo=claude&logoColor=white" alt="Claude"> |
-
-화면은 Cloudflare Pages에, 서버는 Cloudflare Workers에 올라가 있습니다. main 브랜치에 push하면 GitHub Actions가 lint와 테스트를 돌린 뒤 자동으로 배포합니다.
-
-화면 폭이 1024px 이상이면 데스크탑 화면을, 그보다 작으면 모바일 화면을 보여 줍니다. 화면 배치만 다르고 데이터를 불러오고 저장하는 코드는 같이 씁니다.
 
 AI 도구는 기획을 정리하거나 코드를 작성하고 리뷰할 때, 문서를 정리할 때 함께 사용했습니다.
 
 ---
 
+## 구조 흐름
+
+<p align="center">
+  <b>브라우저</b> (React) &nbsp;➜&nbsp; <b>API 서버</b> (Hono) &nbsp;➜&nbsp; <b>DB</b> (Neon)
+</p>
+
+화면은 Cloudflare Pages에, 서버는 Cloudflare Workers에 올라가 있습니다. main 브랜치에 push하면 GitHub Actions가 lint와 테스트를 돌린 뒤 자동으로 배포합니다.
+
+---
+
 ## 화면
+
+화면 폭이 1024px 이상이면 데스크탑 화면을, 그보다 작으면 모바일 화면을 보여 줍니다. 화면 배치만 다르고 데이터를 불러오고 저장하는 코드는 같이 씁니다.
 
 ### 모바일
 
@@ -130,7 +128,14 @@ AI 도구는 기획을 정리하거나 코드를 작성하고 리뷰할 때, 문
 </p>
 
 ---
+## 팀원
 
+| 황건영 | 성시원 | 김미래 | 홍순법 |
+| :---: | :---: | :---: | :---: |
+| **서버, DB, 배포** | **프로젝트 세팅, 냉장고** | **마이페이지, 재료 입력** | **레시피, 리뷰** |
+| 메인 화면, 알림, 하단 메뉴<br>로그인/회원가입/문자 인증<br>북마크, 전체 페이지 DB 연동<br>데스크탑 화면<br>Hono 전환, 자동 배포 | React + Vite 초기 구조<br>냉장고 목록과 기한 표시<br>임박순 정렬, 편집, 삭제 | 마이페이지, 상단 헤더<br>재료 등록/편집 달력<br>프로필 사진 | 레시피 목록, 분류 아이콘<br>레시피 상세 페이지<br>리뷰 작성/수정/삭제 |
+
+---
 ## 개발 과정
 
 | 날짜 | 한 일 |
@@ -145,8 +150,11 @@ AI 도구는 기획을 정리하거나 코드를 작성하고 리뷰할 때, 문
 | 11.16 | 데스크탑 화면 추가 |
 | 11.17 | 서버를 Hono로 옮기고 자동 배포 설정 |
 | 11.20 | 개발 마무리 |
+[개발 일지](docs/DEVLOG.md)
 
 진행하면서 생긴 문제와 해결 방법은 트러블슈팅 문서에 정리해 두었습니다. 프론트엔드에서 39건, 서버에서 23건이 나왔습니다.
+[프론트엔드 트러블슈팅](docs/TROUBLESHOOTING-frontend.md)
+[서버 트러블슈팅](docs/TROUBLESHOOTING-server.md)
 
 ### 회고
 
@@ -168,4 +176,3 @@ AI 도구는 기획을 정리하거나 코드를 작성하고 리뷰할 때, 문
 - [개발 일지](docs/DEVLOG.md)
 - [프론트엔드 트러블슈팅](docs/TROUBLESHOOTING-frontend.md)
 - [서버 트러블슈팅](docs/TROUBLESHOOTING-server.md)
-- [DB 구조](docs/DB.md)
